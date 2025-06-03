@@ -1,4 +1,8 @@
+import { Navbar } from "../../components/shared/Navigation"
+
 export const Home = () => {
     return <>
-        THis is the Home Component</>
+        <Navbar />
+
+        <div className="text-white">THis is the Home Component</div></>
 }
