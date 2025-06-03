@@ -13,14 +13,14 @@ export const Home = () => {
 
                 </div>
                 <div className="absolute inset-0 z-10 w-[80.67%] h-[75%] mx-auto flex flex-col items-center">
-                    <div className="mt-3 w-[40%] text-center text-[33.3px]">
+                    <div className="mt-3 w-[20%] text-center text-[33.3px]">
                         <span>Make Your Meetings</span>
                         <span className="text-[#DB9C50]"> Swift & Hassle-free</span>
                     </div>
-                    <div className="text-center px-10">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas quaerat iste quibusdam quidem ullam nisi velit. Corporis cumque temporibus sint. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia fugit deserunt tempora mollitia perferendis recusandae, consectetur autem impedit porro modi? Quo, deserunt reprehenderit.
+                    <div className="text-center px-8 w-[80%] my-2">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas quaerat iste quibusdam quidem ullam nisi velit. Corporis cumque temporibus sint. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia fugit deserunt tempora mollitia perferendis recusandae.
                     </div>
-                    <div className="p-10 w-full flex flex-row justify-between">
+                    <div className="p-10 w-full flex flex-row justify-between w-[80%]">
                         <DarkButton name="Try Gethory Now!" onclick={() => {
                             console.log("I'm clicked")
                         }}
