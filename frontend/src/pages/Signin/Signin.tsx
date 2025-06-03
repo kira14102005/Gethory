@@ -1,10 +1,15 @@
-import { DarkLogo } from "../../components/shared/logo";
-import { ProfileIcon } from "../../components/shared/profile";
+import { SigninButton } from "../../components/shared/Buttons";
+import { LightNavbar } from "../../components/shared/Navigation";
+
 import './Signin.module.css'
+
 export function Signin() {
     return <>
-        <div className="flex flex-row justify-between w-100%">
-            <DarkLogo></DarkLogo>
+        <LightNavbar />
+        <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
+            <div className="text-[33.3px] text-[#1A202C]">WELCOME BACK</div>
+            <div className="text-[16px] text-[#4A5568]">Log in to your account to continue</div>
+            <SigninButton name="GitHub" path="/GitHub.png" onclick={() => { }} />
         </div>
     </>
 }
