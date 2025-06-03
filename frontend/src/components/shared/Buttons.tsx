@@ -1,7 +1,7 @@
 interface ButtonProps {
     onclick: () => void,
-    name: string
-
+    name: string,
+    path?: string
 }
 export function DarkButton(
     props: ButtonProps
@@ -20,4 +20,16 @@ export function LightButton(
             {props.name}
         </button>
     </>
+}
+
+export function SigninButton(props: ButtonProps) {
+    return <>
+        <button className="bg-[#D9D9D9] border border-black p-1 rounded-md flex flex-row justify-center items-center w-[75%]">
+            <div className="flex flex-row w-fit items-center ">
+                <img className="w-[24px] h-[24px] mx-2" src={props.path} alt="" />
+                <span className="text-[#1A202C]">{props.name}</span>
+            </div>
+        </button>
+    </>
+
 }
