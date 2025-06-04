@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom"
 import { Home } from "./pages/Home/Home"
-import { Navbar } from "./components/shared/Navigation"
 import { Signin } from "./pages/Signin/Signin"
+import { Register } from "./pages/Register/Register"
 function App() {
 
   return (
@@ -10,6 +10,7 @@ function App() {
 
           <Route element={<Home />} path="/" />
           <Route element={<Signin />} path="/signin" />
+          <Route element={<Register />} path="/register" />
 
       </Routes>
 
