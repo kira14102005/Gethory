@@ -11,33 +11,34 @@ export function Register() {
         <LightNavbar />
         <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
             <TitleCard title="WELCOME" subtitle="Create your account here!" />
-            <SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
-        </div>
+            <div className="my-3">
+                <SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
+            </div>
 
-        <SigninButton name="Google" path="/google.png" onclick={() => { }} />
+            <SigninButton name="Google" path="/google.png" onclick={() => { }} />
 
-        <div className="w-[80%]  flex flex-row mt-2 items-center">
-            <div className="w-[44%] h-[1px] border border-black">
+            <div className="w-[80%]  flex flex-row mt-2 items-center">
+                <div className="w-[44%] h-[1px] border border-black">
+
+                </div>
+                <span className="mx-1 text-[16px] text-[#A0AEC0]"> or </span>
+                <div className="w-[44%] h-[1px] border border-black">
+
+                </div>
+            </div>
+            <form action="" className="flex flex-col justify-between h-[230px]">
+                <SigninInput label="Phone Number" id="101" placeholder="Enter your number" />
+                <SigninInput label="Password" id="102" placeholder="Enter your password" />
+                <LoginSubmitButton name="Register" onclick={() => { }} />
+            </form>
+            <div>
 
             </div>
-            <span className="mx-1 text-[16px] text-[#A0AEC0]"> or </span>
-            <div className="w-[44%] h-[1px] border border-black">
-
+            <div className="flex flex-row w-[75%] justify-center my-2 items-center">
+                <span className="text-[#4A5568] text-[16px] ">Already have an account?</span>
+                <Link to={'/signin'} className="text-[#4A5568] text-[16px] underline mx-1"> Log in</Link>
             </div>
-        </div>
-        <form action="" className="flex flex-col justify-between h-[230px]">
-            <SigninInput label="Phone Number" id="101" placeholder="Enter your number" />
-            <SigninInput label="Password" id="102" placeholder="Enter your password" />
-            <LoginSubmitButton name="Register" onclick={() => { }} />
-        </form>
-        <div>
-
-        </div>
-        <div className="flex flex-row w-[75%] justify-center my-2 items-center">
-            <span className="text-[#4A5568] text-[16px] ">Already have an account?</span>
-            <Link to={'/signin'} className="text-[#4A5568] text-[16px] underline mx-1"> Log in</Link>
-        </div>
-    </div >
+        </div >
 
     </>
 }
