@@ -1,4 +1,5 @@
-import { SigninButton } from "../../components/shared/Buttons";
+import { LoginSubmitButton, SigninButton } from "../../components/shared/Buttons";
+import { SigninInput } from "../../components/shared/Input";
 import { LightNavbar } from "../../components/shared/Navigation";
 
 import './Signin.module.css'
@@ -22,6 +23,13 @@ export function Signin() {
                 <div className="w-[44%] h-[1px] border border-black">
 
                 </div>
+            </div>
+            <div>
+                <form action="">
+                    <SigninInput label="Phone Number" id="101" placeholder="Enter your number" />
+                    <SigninInput label="Password" id="102" placeholder="Enter your password" />
+                    <LoginSubmitButton name="Login" onclick={() => { }} />
+                </form>
             </div>
 
         </div>
