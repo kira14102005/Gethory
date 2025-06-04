@@ -33,3 +33,13 @@ export function SigninButton(props: ButtonProps) {
     </>
 
 }
+export function LoginSubmitButton(props: ButtonProps) {
+    return <>
+        <button className="bg-[#0B1D23] border border-[#4A5568] p-1 rounded-md flex flex-row justify-center items-center w-[75%]">
+            <div className="flex flex-row w-fit items-center ">
+                <span className="text-white">{props.name}</span>
+            </div>
+        </button>
+    </>
+
+}
