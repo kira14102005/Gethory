@@ -28,7 +28,7 @@ export function Register() {
             <form action="" className="flex flex-col justify-between h-[230px]">
                 <SigninInput label="Phone Number" id="101" placeholder="Enter your number" />
                 <SigninInput label="Password" id="102" placeholder="Enter your password" />
-                <LoginSubmitButton name="Login" onclick={() => { }} />
+                <LoginSubmitButton name="Register" onclick={() => { }} />
             </form>
             <div>
 
