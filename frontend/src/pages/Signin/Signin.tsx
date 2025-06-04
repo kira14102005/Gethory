@@ -4,13 +4,13 @@ import { SigninInput } from "../../components/shared/Input";
 import { LightNavbar } from "../../components/shared/Navigation";
 
 import './Signin.module.css'
+import { TitleCard } from "../../components/shared/TitleCard";
 
 export function Signin() {
     return <>
         <LightNavbar />
         <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
-            <div className="text-[33.3px] h-[35px] text-[#1A202C]">WELCOME BACK</div>
-            <div className="text-[16px] text-[#4A5568] mt-0">Log in to your account to continue</div>
+            <TitleCard subtitle="Log in to your account to continue" title="WELCOME BACK" />
             <div className="my-3"><SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
             </div>
 
@@ -35,7 +35,7 @@ export function Signin() {
             </div>
             <div className="flex flex-row w-[75%] justify-center my-2 items-center">
                 <span className="text-[#4A5568] text-[16px] ">Don't have an account?</span>
-                <Link to={'/register'}className="text-[#4A5568] text-[16px] underline mx-1"> Sign up</Link>
+                <Link to={'/register'} className="text-[#4A5568] text-[16px] underline mx-1"> Sign up</Link>
             </div>
         </div>
 
