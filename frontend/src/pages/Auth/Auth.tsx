@@ -13,7 +13,13 @@ export function Auth() {
             content = <MainCard setStep={setStep} />;
             break;
         case 1:
-            content = <Step2Card setStep />;
+            content = <Step2Card setStep={setStep} />;
+            break;
+        case 2:
+            content = <Step3Card setStep={setStep} />;
+            break;
+        case 3:
+            content = <Step4Card setStep={setStep} />;
             break;
         default:
             content = null;
@@ -58,6 +64,25 @@ export function Step2Card({ setStep }: { setStep: React.Dispatch<React.SetStateA
                     <div className="w-[16vh] h-[16vh] border-[3px] border-[#4A5568] bg-[#DB9C50] rounded-full"></div>
                     <div className="mt-3 text-[#7FACCF] text-[15px]">Choose a different avatar</div>
                 </div>
+                <div className="my-6 w-full flex flex-row justify-center w-[80%]">
+                    <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
+                    } />
+                </div>
+            </div>
+        </div>
+    </>
+}
+
+
+export function Step3Card({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) {
+
+    return <>
+        <div className="relative w-full h-full flex flex-col items-center justify-center ">
+            <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
+            </div>
+            <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
+                <LighttitleCard title="Pick a username" />
+                <DarkInput label="username" placeholder="Choose a username" id="u102" />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
                     <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
                     } />
