@@ -15,7 +15,7 @@ export function SigninInput(props: InputProps) {
 }
 export function DarkInput(props : InputProps ){
     return <>
-    <input className="text-white border border-white p-3 rounded-lg border-3px" type="text" name={props.label} id={props.id} placeholder={props.placeholder}/>
+    <input className="text-white border border-white w-[10rem] text-center mt-5 bg-transparent px-3 rounded-lg border-[3px]" type="text" name={props.label} id={props.id} placeholder={props.placeholder}/>
     </>
 }
 export function OtpInput({id} : {id : string}) {
