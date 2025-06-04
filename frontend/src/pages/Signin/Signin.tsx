@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { LoginSubmitButton, SigninButton } from "../../components/shared/Buttons";
 import { SigninInput } from "../../components/shared/Input";
 import { LightNavbar } from "../../components/shared/Navigation";
@@ -15,23 +16,28 @@ export function Signin() {
 
             <SigninButton name="Google" path="/google.png" onclick={() => { }} />
 
-            <div className="w-[80%]  flex flex-row my-2 items-center">
+            <div className="w-[80%]  flex flex-row mt-2 items-center">
                 <div className="w-[44%] h-[1px] border border-black">
 
                 </div>
-                <span className="mx-1 text-[20px] text-[#A0AEC0]"> or </span>
+                <span className="mx-1 text-[16px] text-[#A0AEC0]"> or </span>
                 <div className="w-[44%] h-[1px] border border-black">
 
                 </div>
             </div>
+            <form action="" className="flex flex-col justify-between h-[230px]">
+                <SigninInput label="Phone Number" id="101" placeholder="Enter your number" />
+                <SigninInput label="Password" id="102" placeholder="Enter your password" />
+                <LoginSubmitButton name="Login" onclick={() => { }} />
+            </form>
             <div>
-                <form action="">
-                    <SigninInput label="Phone Number" id="101" placeholder="Enter your number" />
-                    <SigninInput label="Password" id="102" placeholder="Enter your password" />
-                    <LoginSubmitButton name="Login" onclick={() => { }} />
-                </form>
-            </div>
 
+            </div>
+            <div className="flex flex-row w-[75%] justify-center my-2 items-center">
+                <span className="text-[#4A5568] text-[16px] ">Don't have an account?</span>
+                <Link to={'/register'}className="text-[#4A5568] text-[16px] underline mx-1"> Sign up</Link>
+            </div>
         </div>
+
     </>
 }
