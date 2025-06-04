@@ -94,7 +94,16 @@ export function Step3Card({ setStep }: { setStep: React.Dispatch<React.SetStateA
 
 
 export function Step4Card({ setStep, limit }: { setStep: React.Dispatch<React.SetStateAction<number>>, limit: number }) {
-    
+    const timer = useRef<null | number>(null)
+    useEffect(() => {
+        timer.current = setTimeout(() => {
+            setStep((c: number) => c + 1);
+        }, limit)
+        return () => {
+            if (timer.current)
+                clearInterval(timer.current)
+        }
+    }, [limit])
     return <>
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
             <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
