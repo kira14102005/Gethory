@@ -1,19 +1,33 @@
 
+import { useState } from "react";
 import { DarkButton } from "../../components/shared/Buttons";
 import { DarkInput } from "../../components/shared/Input";
 import { Navbar } from "../../components/shared/Navigation";
 import { LighttitleCard } from "../../components/shared/TitleCard";
 import './Auth.module.css'
-export function Auth(){
+export function Auth() {
+    const [step, setStep] = useState(0);
+    let content;
+    switch (step) {
+        case 0:
+            content = <MainCard setStep={setStep} />;
+            break;
+        case 1:
+            content = <Step2Card setStep />;
+            break;
+        default:
+            content = null;
+            break;
+    }
     return <>
-    <Navbar/>
-    <div className="w-full h-full flex flex-row justify-center items-center">
-    <MainCard />
-    </div>
+        <Navbar />
+        <div className="w-full h-full flex flex-row justify-center items-center">
+            {content}
+        </div>
     </>
 }
 
-export function MainCard() {
+export function MainCard({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) {
 
     return <>
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
@@ -23,7 +37,29 @@ export function MainCard() {
                 <LighttitleCard title="What Should We Call You?" />
                 <DarkInput label="name" placeholder="Enter Your Name" id="u101" />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
-                    <DarkButton  name="Next" onclick={() => { }
+                    <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
+                    } />
+                </div>
+            </div>
+        </div>
+    </>
+}
+
+
+export function Step2Card({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) {
+
+    return <>
+        <div className="relative w-full h-full flex flex-col items-center justify-center ">
+            <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
+            </div>
+            <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
+                <LighttitleCard title="Okay, XYZ" subtitle="How's this photo?" />
+                <div className="mt-5 flex flex-col items-center w-full">
+                    <div className="w-[16vh] h-[16vh] border-[3px] border-[#4A5568] bg-[#DB9C50] rounded-full"></div>
+                    <div className="mt-3 text-[#7FACCF] text-[15px]">Choose a different avatar</div>
+                </div>
+                <div className="my-6 w-full flex flex-row justify-center w-[80%]">
+                    <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
                     } />
                 </div>
             </div>
