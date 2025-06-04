@@ -7,10 +7,23 @@ export function Signin() {
     return <>
         <LightNavbar />
         <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
-            <div className="text-[33.3px] text-[#1A202C]">WELCOME BACK</div>
-            <div className="text-[16px] text-[#4A5568]">Log in to your account to continue</div>
-            <SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
+            <div className="text-[33.3px] h-[35px] text-[#1A202C]">WELCOME BACK</div>
+            <div className="text-[16px] text-[#4A5568] mt-0">Log in to your account to continue</div>
+            <div className="my-3"><SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
+            </div>
+
             <SigninButton name="Google" path="/google.png" onclick={() => { }} />
+
+            <div className="w-[80%]  flex flex-row my-2 items-center">
+                <div className="w-[44%] h-[1px] border border-black">
+
+                </div>
+                <span className="mx-1 text-[20px] text-[#A0AEC0]"> or </span>
+                <div className="w-[44%] h-[1px] border border-black">
+
+                </div>
+            </div>
+
         </div>
     </>
 }
