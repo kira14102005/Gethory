@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { DarkButton } from "../../components/shared/Buttons";
 import { DarkInput } from "../../components/shared/Input";
 import { Navbar } from "../../components/shared/Navigation";
-import { LighttitleCard } from "../../components/shared/TitleCard";
+import { LighttitleCard } from "../../components/shared/Card";
 import './Auth.module.css'
 export function Auth() {
     const [step, setStep] = useState(0);

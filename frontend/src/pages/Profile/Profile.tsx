@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './Profile.module.css'
 import { NavbarWithProfile } from '../../components/shared/Navigation'
-import { MenuCard } from '../../components/shared/TitleCard'
+import { MenuCard } from '../../components/shared/Card'
 import { ProfileBox } from '../../components/shared/profile'
 export function Profile() {
     const [name, setName] = useState("Harshit")

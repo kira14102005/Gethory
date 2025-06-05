@@ -4,7 +4,7 @@ import { SigninInput } from "../../components/shared/Input";
 import { LightNavbar } from "../../components/shared/Navigation";
 
 import './Signin.module.css'
-import { TitleCard } from "../../components/shared/TitleCard";
+import { TitleCard } from "../../components/shared/Card";
 
 export function Signin() {
     return <>

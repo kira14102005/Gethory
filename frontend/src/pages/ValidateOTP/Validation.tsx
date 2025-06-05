@@ -2,7 +2,7 @@
 import { LoginSubmitButton } from '../../components/shared/Buttons'
 import { OtpInput } from '../../components/shared/Input'
 import { LightNavbar } from '../../components/shared/Navigation'
-import { TitleCard } from '../../components/shared/TitleCard'
+import { TitleCard } from '../../components/shared/Card'
 import './Validation.module.css'
 
 export function ValidateOTP() {
