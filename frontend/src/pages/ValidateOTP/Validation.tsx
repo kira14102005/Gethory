@@ -8,11 +8,11 @@ import './Validation.module.css'
 export function ValidateOTP() {
     return <>
 
-        <div className='flex flex-row w-screen h-full'>
-            <div className='w-[60%] h-full'>
-                <LightNavbar />
-                <div className="ml-[40px] my-2 w-[90%] h-full flex flex-col" >
-                    <TitleCard title='Enter the OTP' subtitle='Please enter the 6-digit Verification Code we just texted you' />
+        <div className='flex flex-row w-screen min-h-screen'>
+                <div className='w-[60%]'>
+                    <LightNavbar />
+                    <div className="ml-[40px] my-2 w-[90%] flex flex-col">
+                        <TitleCard title='Enter the OTP' subtitle='Please enter the 6-digit Verification Code we just texted you' />
                     <form action="">
                         <div className='flex flex-row w-[80%] h-[6vw] justify-between my-3'>
                             <OtpInput id='otp1' />
