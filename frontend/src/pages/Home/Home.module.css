@@ -5,15 +5,3 @@ body {
     background-color: #090A15;
 }
 
-.custom-blur-border::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 0.5rem;
-    filter: blur(6px);
-    z-index: -1;
-}
