@@ -1,5 +1,5 @@
 import { DarkLogo, Logo } from "./logo";
-import { ProfileIcon } from "./profile";
+import { ProfileIcon } from "./UserUI";
 
 export function Navbar() {
     return <>
