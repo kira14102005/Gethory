@@ -33,7 +33,7 @@ export function MenuCard(props: CardProps) {
 
 export function CustomBox({ name, count }: { name: string, count: number }) {
     return <>
-        <div className="mx-1 rounded-lg bg-[#414A5B] bg-opacity-60 flex flex-col items-center justify-center">
+        <div className="mx-1 aspect-square rounded-lg bg-[#414A5B] max-w-[100px] max-h-[100px] bg-opacity-60 flex flex-col items-center justify-center">
             <span className="text-[27px] text-white">{count}</span>
             <span className="text-[13px] text-white opacity-[60%]">
                 {name}

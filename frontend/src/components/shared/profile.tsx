@@ -24,7 +24,7 @@ export interface UserInfo {
 
 export function ProfileBox(props: UserInfo) {
     return <>
-        <div className="w-full md:w-[40%] p-3 flex flex-col">
+        <div className="w-full flex flex-col">
             <div className="w-full flex flex-row md:justify-around justify-evenly">
                 <div className="w-[20vw] h-[20vw] md:w-[10vw] md:h-[10vw]  border-[3px] border-[#4A5568] bg-[#DB9C50] rounded-full"></div>
                 <div className="h-full flex flex-col justify-center ">
@@ -44,10 +44,10 @@ type FollowerCountType = Pick<UserInfo, 'followers' | 'following'>;
 
 export function FollowersBox(props: FollowerCountType) {
     return <>
-        <div className="flex flex-row">
+        <div className="flex flex-row w-full justify-center">
             <CustomBox name="Followers" count={props.followers}  />
             <CustomBox name="Following" count={props.following}  />
-        
+
         </div>
     </>
 }
