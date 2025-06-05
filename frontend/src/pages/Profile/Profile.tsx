@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './Profile.module.css'
 import { NavbarWithProfile } from '../../components/shared/Navigation'
 import { MenuCard } from '../../components/shared/Card'
-import { FollowersBox, ProfileBox } from '../../components/shared/profile'
+import { FollowersBox, ProfileBox, UserDescBox } from '../../components/shared/profile'
 export function Profile() {
     const [name, setName] = useState("Harshit")
 
@@ -16,6 +16,7 @@ export function Profile() {
                 <div className='absolute text-white z-10 w-full grid grid-cols-1 md:grid-cols-2 justify-between p-4'>
                     <ProfileBox name='Harshit Rai' username='rrai21' followers={15} following={12} />
                     <FollowersBox followers={12} following={33} />
+                    <UserDescBox desc='Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium cumque dignissimos architecto minima ea adipisci ex sequi dolorum. Consectetur, vitae.'/>
                 </div>
             </div>
         </div>
