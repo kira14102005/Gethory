@@ -1,6 +1,7 @@
 import { DarkButton, LightButton } from "../../components/shared/Buttons"
 import { Navbar } from "../../components/shared/Navigation"
 import './Home.module.css'
+import { Link } from "react-router-dom"
 
 export const Home = () => {
     return <>
@@ -21,14 +22,19 @@ export const Home = () => {
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas quaerat iste quibusdam quidem ullam nisi velit. Corporis cumque temporibus sint. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia fugit deserunt tempora mollitia perferendis recusandae.
                     </div>
                     <div className="p-10 w-full flex flex-row justify-between w-[80%]">
-                        <DarkButton name="Try Gethory Now!" onclick={() => {
-                            console.log("I'm clicked")
-                        }}
-                        />
-                        <LightButton name="Sign in" onclick={() => {
-                            console.log("I'm clicked")
-                        }}
-                        />
+                        <Link to={'/register'}>
+                            <DarkButton name="Try Gethory Now!"
+                                onclick={() => {
+                                    console.log("I'm clicked")
+                                }}
+                            />
+                        </Link>
+                        
+                        <Link to={'/signin'}>
+                            <LightButton name="Sign in" onclick={() => {
+                                console.log("I'm clicked")
+                            }}
+                            /></Link>
                     </div>
                 </div>
             </div>
