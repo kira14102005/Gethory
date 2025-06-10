@@ -26,7 +26,19 @@ img {
   max-width: 100%;
   height: auto;
 }
-body{
+
+body {
   background-color: #090A15;
 
+}
+
+.btn:hover {
+  background: #0E6B5C;
+  transition: all 0.3s ease-in-out;
+}
+
+.lightBtn:hover {
+  background: #d9d9d978;
+  transition: all 0.3s ease-in-out;
+  color: #71ffe7;
 }
