@@ -5,6 +5,8 @@ import { DarkInput } from "../../components/shared/Input";
 import { Navbar } from "../../components/shared/Navigation";
 import { LighttitleCard } from "../../components/shared/Card";
 import './Auth.module.css'
+import { user } from "../../routes/protected/ProtectedRoute";
+import { Navigate } from "react-router-dom";
 export function Auth() {
     const [step, setStep] = useState(0);
     let content;
@@ -22,7 +24,7 @@ export function Auth() {
             content = <Step4Card setStep={setStep} limit={3000} />;
             break;
         default:
-            content = null;
+            content = <Navigate to={'/profile'} />;
             break;
     }
     return <>
@@ -97,11 +99,12 @@ export function Step4Card({ setStep, limit }: { setStep: React.Dispatch<React.Se
     const timer = useRef<null | number>(null)
     useEffect(() => {
         timer.current = setTimeout(() => {
-            setStep((c: number) => c + 1);
+            user.activated = true;
+            setStep((c) => c + 1)
         }, limit)
         return () => {
             if (timer.current)
-                clearInterval(timer.current)
+                clearTimeout(timer.current)
         }
     }, [limit])
     return <>
