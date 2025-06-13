@@ -12,8 +12,8 @@ const Section = ({ children }: {
                 <div className='m-5'>
                     <MenuCard title='Profile' />
                 </div>
-                <div className='relative h-[80%] w-full '>
-                    <div className='absolute inset-0 opacity-75 z-0  h-[100%] w-full bg-[#0B1D23]'></div>
+                <div className='relative h-[80%] w-full bg-[#0B1D23]/75 p-5'>
+                    {/* <div className='absolute inset-0 opacity-75 z-0  h-[100%] w-full bg-[#0B1D23]'></div> */}
                     {children}
                 </div>
             </div>
