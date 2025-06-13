@@ -46,7 +46,7 @@ export function CustomBox({ name, count }: { name: string, count: number }) {
     </>
 }
 
-interface MeetingDetailsProps {
+export interface MeetingDetailsProps {
     title: string,
     authors: string[],
     count: number
@@ -71,13 +71,12 @@ export function MeetingCard(props: MeetingDetailsProps) {
         count = `${mul}k+`
     }
     return <>
-        <div className="col-span-1 flex flex-col place-items-center p-5 bg-[#1A202C] h-fit rounded-2xl">
+        <div className="col-span-1 flex flex-col place-items-center p-5 m-3 bg-[#1A202C] h-[250px] rounded-2xl gap-2">
             <h1 className="text-lg text-white">{props.title}</h1>
-            <div className="flex w-full justify-between px-5 items-center h-[100px]">
+            <div className="flex w-full justify-between px-2 items-center h-[100px]">
                 <div className="relative -top-8">
                     <div className='absolute w-[50px] h-[50px] bg-[#566AA6] z-0 rounded-full bg- top-0 left-0'></div>
-                    <div className='absolute w-[50px] h-[50px] z-10 bg-[#DB9C50] rounded-full top-5 left-4'>
-                    </div>
+                    <div className='absolute w-[50px] h-[50px] z-10 bg-[#DB9C50] rounded-full top-5 left-4'></div>
                 </div>
                 <div className='flex flex-col'>
                     <span className='flex gap-1 items-center text-[14px]'>
@@ -90,15 +89,11 @@ export function MeetingCard(props: MeetingDetailsProps) {
                     </span>
                 </div>
             </div>
-            <div className='w-full flex justify-end'>
+            <div className='w-full flex justify-end text-[14px]'>
                 <span className='flex items-center gap-1'><p>{count}</p>
                     <PersonIcon fontSize='' />
                 </span>
             </div>
-            <div>
-
-            </div>
-
         </div>
     </>
 
