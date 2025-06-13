@@ -5,7 +5,7 @@ interface RouteProps {
 }
 export const user = {
     authenticated: true,
-    activated: false
+    activated: true
 };
 const ProtectedRoute = (props: RouteProps) => {
     let component: ReactNode = null;
