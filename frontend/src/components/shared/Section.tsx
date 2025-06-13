@@ -8,11 +8,11 @@ const Section = ({ children }: {
     return (
         <>
             <NavbarWithProfile />
-            <div className='justify-between flex flex-col w-full h-[90%]'>
+            <div className='justify-between flex flex-col w-full h-fit'>
                 <div className='m-5'>
                     <MenuCard title='Profile' />
                 </div>
-                <div className='relative h-[80%] w-full bg-[#0B1D23]/75 p-5'>
+                <div className='relative h-fit w-full bg-[#0B1D23]/75 p-5'>
                     {children}
                 </div>
             </div>
