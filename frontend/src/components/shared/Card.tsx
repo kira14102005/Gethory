@@ -1,3 +1,4 @@
+import ForumIcon from '@mui/icons-material/Forum';
 interface CardProps {
     title: string,
     subtitle?: string
@@ -42,4 +43,38 @@ export function CustomBox({ name, count }: { name: string, count: number }) {
 
         </div>
     </>
+}
+
+interface MeetingDetailsProps {
+    title: string,
+    authors: string,
+    count: number
+}
+export function MeetingCard(props : MeetingDetailsProps) {
+    return <>
+    <div className="col-span-1 flex flex-col place-items-center p-5 bg-[#1A202C] h-fit rounded-2xl">
+        <h1 className="text-lg text-white">{props.title}</h1>
+        <div className="flex w-full justify-between px-5 items-center h-[100px]">
+            <div className="relative -top-8">
+                <div className='absolute w-[50px] h-[50px] bg-[#566AA6] z-0 rounded-full bg- top-0 left-0'></div>
+                <div className='absolute w-[50px] h-[50px] z-10 bg-[#DB9C50] rounded-full top-5 left-4'></div>
+            </div>
+            <div className='flex flex-col'>
+                <span className='flex gap-3 items-center text-[14px]'>
+                    <p>Author</p>
+                    <ForumIcon fontSize='' />
+                </span>
+                <span className='flex gap-3 items-center text-[14px]'>
+                    <p>Author</p>
+                    <ForumIcon fontSize='' />
+                </span>
+            </div>
+        </div>
+        <div>
+
+        </div>
+
+    </div>
+    </>
+
 }
