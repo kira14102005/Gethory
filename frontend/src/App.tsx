@@ -7,6 +7,7 @@ import { Auth } from "./pages/Auth/Auth"
 import { Profile } from "./pages/Profile/Profile"
 import ProtectedRoute from "./routes/protected/ProtectedRoute.tsx"
 import SemiProtected from "./routes/protected/SemiProtected.tsx"
+import Room from "./pages/Room/Room.tsx"
 function App() {
 
   return (
@@ -23,6 +24,11 @@ function App() {
         <Route path="/profile" element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>}>
+        </Route>
+        <Route path="/room" element={
+          <ProtectedRoute>
+            <Room />
           </ProtectedRoute>}>
         </Route>
       </Routes>
