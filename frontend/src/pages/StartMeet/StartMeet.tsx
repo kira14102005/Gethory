@@ -4,6 +4,8 @@ import PublicIcon from '@mui/icons-material/Public';
 import PeopleIcon from '@mui/icons-material/People';
 import LockIcon from '@mui/icons-material/Lock';
 import { DarkButton } from '../../components/shared/Buttons';
+import { Link } from 'react-router-dom';
+import { GreyInput } from '../../components/shared/Input';
 const StartMeet = () => {
     return (
         <>
@@ -11,10 +13,12 @@ const StartMeet = () => {
                 <div className='absolute top-0 left-0 w-full h-fit opacity-20'>
                     <Room />
                 </div>
-                <div className='w-[70%] lg:w-[50%]  md:w-[60%] rounded-2xl flex flex-col relative bg-[#1A202C] py-5 px-6 gap-2 text-[20px]'>
+                <div className='fixed w-[70%] lg:w-[50%]  md:w-[60%] rounded-2xl flex flex-col bg-[#1A202C] py-5 px-6 gap-2 text-[20px]'>
                     <h1 className='text-[20px]'>Enter the topic to be discovered</h1>
-                    <div className='absolute top-2 right-2 cursor-pointer'><CloseIcon fontSize='small' /></div>
-                    <input type="text" className='bg-[#414A5B] opacity-60 rounded-lg p-1' />
+                    <Link to={'/room'} className='absolute top-2 right-2 cursor-pointer' >
+                        <CloseIcon fontSize='small' />
+                    </Link>
+                    <GreyInput />
                     <div className='bg-[#d9d9d9] h-[1px] opacity-60 w-full'></div>
                     <div className='flex flex-col gap-4'>
                         <h1>Room Type</h1>
