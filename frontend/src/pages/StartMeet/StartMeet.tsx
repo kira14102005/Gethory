@@ -6,7 +6,33 @@ import LockIcon from '@mui/icons-material/Lock';
 import { DarkButton } from '../../components/shared/Buttons';
 import { Link } from 'react-router-dom';
 import { GreyInput } from '../../components/shared/Input';
+import { useState, type ReactElement } from 'react';
+
+interface roomDetails {
+    roomType: string,
+    emoji: ReactElement
+}
+
+const roomArr: roomDetails[] = [
+    {
+        roomType: 'Public',
+        emoji: <PublicIcon />
+    }
+    ,
+    {
+        roomType: 'Group',
+        emoji: <PeopleIcon />
+    }
+    ,
+    {
+        roomType: 'Private',
+        emoji: <LockIcon />
+    }
+    ,
+
+]
 const StartMeet = () => {
+    const [room, setRoom] = useState(0)
     return (
         <>
             <div className='w-full h-full flex place-items-center justify-center relative'>
@@ -23,18 +49,25 @@ const StartMeet = () => {
                     <div className='flex flex-col gap-4'>
                         <h1>Room Type</h1>
                         <div className='w-full  grid grid-cols-3'>
-                            <div className='flex flex-col place-items-center'>
-                                <PublicIcon fontSize='large' />
-                                <p className='text-[16px] text-[#d9d9d9] opacity-50'>Open</p>
-                            </div>
-                            <div className='flex flex-col place-items-center'>
-                                <PeopleIcon fontSize='large' />
-                                <p className='text-[16px] text-[#d9d9d9] opacity-50'>Social</p>
-                            </div>
-                            <div className='flex flex-col place-items-center'>
-                                <LockIcon fontSize='large' />
-                                <p className='text-[16px] text-[#d9d9d9] opacity-50'>Private</p>
-                            </div>
+                            {roomArr.map((roomType: string, i: number) => {
+                                if (i != room)
+                                    return <>
+                                        <div className='flex flex-col place-items-center' onClick={() => {
+                                            setRoom(i)
+                                        }}>
+                                            <PublicIcon fontSize='large' />
+                                            <p className='text-[16px] text-[#d9d9d9] opacity-50'>{roomType}</p>
+                                        </div>
+                                    </>
+                                else return <>
+                                    <div className='flex flex-col place-items-center border-white border-[3px] rounded-lg' onClick={() => {
+                                        setRoom(i)
+                                    }}>
+                                        <PublicIcon fontSize='large' />
+                                        <p className='text-[16px] text-[#d9d9d9] opacity-50'>{roomType}</p>
+                                    </div>
+                                </>
+                            })}
 
                         </div>
                         <div className='w-full flex justify-center text-[16px] text-[#d9d9d9] opacity-50'>Start a room, open to everyone</div>
