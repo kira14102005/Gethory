@@ -67,7 +67,7 @@ export function MeetingCard(props: MeetingDetailsProps) {
     else if (props.count < 1000)
         count = "500+"
     else {
-        let mul = props.count / 1000
+        let mul = Math.floor(props.count / 1000);
         count = `${mul}k+`
     }
     return <>
