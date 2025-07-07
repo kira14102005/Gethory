@@ -49,22 +49,23 @@ const StartMeet = () => {
                     <div className='flex flex-col gap-4'>
                         <h1>Room Type</h1>
                         <div className='w-full  grid grid-cols-3'>
-                            {roomArr.map((roomType: string, i: number) => {
+                            {roomArr.map((elem : roomDetails, i : number) => {
+                                let Emoji = elem.emoji;
                                 if (i != room)
                                     return <>
                                         <div className='flex flex-col place-items-center' onClick={() => {
                                             setRoom(i)
                                         }}>
-                                            <PublicIcon fontSize='large' />
-                                            <p className='text-[16px] text-[#d9d9d9] opacity-50'>{roomType}</p>
+                                            {Emoji}
+                                            <p className='text-[16px] text-[#d9d9d9] opacity-50'>{elem.roomType}</p>
                                         </div>
                                     </>
                                 else return <>
-                                    <div className='flex flex-col place-items-center border-white border-[3px] rounded-lg' onClick={() => {
+                                    <div className='flex flex-col place-items-center border-white border-[3px] rounded-lg py-2' onClick={() => {
                                         setRoom(i)
                                     }}>
-                                        <PublicIcon fontSize='large' />
-                                        <p className='text-[16px] text-[#d9d9d9] opacity-50'>{roomType}</p>
+                                        {Emoji}
+                                        <p className='text-[16px] text-[#d9d9d9] opacity-50'>{elem.roomType}</p>
                                     </div>
                                 </>
                             })}

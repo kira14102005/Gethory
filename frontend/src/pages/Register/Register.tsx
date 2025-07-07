@@ -5,8 +5,11 @@ import { LightNavbar } from "../../components/shared/Navigation";
 
 import './Register.module.css'
 import { TitleCard } from "../../components/shared/Card";
+import { useState } from "react";
 
 export function Register() {
+    const [email , setEmail] = useState('')
+    const [password , setPassword] = useState('')
     return <>
         <LightNavbar />
         <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
@@ -27,8 +30,8 @@ export function Register() {
                 </div>
             </div>
             <form action="" className="flex flex-col justify-between h-[230px]">
-                <SigninInput label="Phone Number" id="101" placeholder="Enter your number" />
-                <SigninInput label="Password" id="102" placeholder="Enter your password" />
+                <SigninInput value={email}  setValue={setEmail} label="Phone Number" id="101" placeholder="Enter your number" />
+                <SigninInput value={password}  setValue={setPassword} label="Password" id="102" placeholder="Enter your password" />
                 <LoginSubmitButton name="Register" onclick={() => { }} />
             </form>
             <div>
