@@ -43,7 +43,7 @@ export function MainCard({ setStep }: { setStep: React.Dispatch<React.SetStateAc
             </div>
             <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
                 <LighttitleCard title="What Should We Call You?" />
-                <DarkInput label="name" placeholder="Enter Your Name" id="u101" />
+                <DarkInput label="name" value="name" placeholder="Enter Your Name" id="u101" setValue={() => { console.log("Dark Input Handler") }} />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
                     <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
                     } />
@@ -84,7 +84,7 @@ export function Step3Card({ setStep }: { setStep: React.Dispatch<React.SetStateA
             </div>
             <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
                 <LighttitleCard title="Pick a username" />
-                <DarkInput label="username" placeholder="Choose a username" id="u102" />
+                <DarkInput value="username" label="username" placeholder="Choose a username" id="u102" setValue={() => { console.log("Dark Input Handler") }} />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
                     <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
                     } />
