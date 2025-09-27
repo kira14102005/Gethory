@@ -25,14 +25,14 @@ export const Home = () => {
                         <Link to={'/register'}>
                             <DarkButton name="Try Gethory Now!"
                                 onclick={() => {
-                                    console.log("I'm clicked")
+                                    console.log("Register Process Started")
                                 }}
                             />
                         </Link>
-                        
+
                         <Link to={'/signin'}>
                             <LightButton name="Sign in" onclick={() => {
-                                console.log("I'm clicked")
+                                console.log("Sign in Process started")
                             }}
                             /></Link>
                     </div>

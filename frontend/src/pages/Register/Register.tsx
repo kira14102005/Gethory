@@ -6,7 +6,7 @@ import { LightNavbar } from "../../components/shared/Navigation";
 import './Register.module.css'
 import { TitleCard } from "../../components/shared/Card";
 import { useState, type FormEvent } from "react";
-
+import axios from "axios";
 export function Register() {
     const [userInfo, setUserinfo] = useState({
         email: "",
@@ -16,8 +16,14 @@ export function Register() {
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
         console.log(userInfo)
-        setTimeout(()=>{}, 3000)
-        navigate('/submitotp', {  })
+        // setTimeout(()=>{}, 3000)
+        axios.post('http://localhost:3000/auth/register', { ...userInfo, confirmpassword: userInfo.password }).then((res) => {
+            console.log(res.data)
+            navigate('/submitotp', {})
+
+        }).catch((err) => {
+            console.log(err)
+        })
     }
     return <>
         <LightNavbar />

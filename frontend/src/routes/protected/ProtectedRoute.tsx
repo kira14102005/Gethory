@@ -4,13 +4,13 @@ interface RouteProps {
     children: ReactNode
 }
 export const user = {
-    authenticated: true,
+    authenticated: false,
     activated: true
 };
 const ProtectedRoute = (props: RouteProps) => {
     let component: ReactNode = null;
     if (!user.authenticated)
-        component = <Navigate to={'/signin'} />
+        component = <Navigate to={'/'} />
     else if (!user.activated)
         component = <Navigate to={'/auth'} />
     else component = props.children
