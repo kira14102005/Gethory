@@ -1,4 +1,4 @@
-import { APP_ORIGIN, JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env"
+import { APP_ORIGIN, EMAIL_SENDER, JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env"
 import z from 'zod'
 import { HTTP } from "../constants/http"
 import { VerificationCodeType } from "../constants/VerificationCodeType"
@@ -37,6 +37,7 @@ export const CreateAccount = async (data: CreateAccountParams) => {
     })
     //Send this Verification Code to the User Mail
     const verifyURL = `${APP_ORIGIN}/email/verify?code=${code._id}`
+    console.log(EMAIL_SENDER);
     const { error } = await sendMail({
         to: user.email, subject: "Verify email", text: "Check this link to verify your email",
         html: `<h2>Click this link to verify Email</h2><br/><a href=${verifyURL} target = "_blank">Click to verify</a>`

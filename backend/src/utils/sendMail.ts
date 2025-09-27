@@ -9,7 +9,7 @@ type Params = {
 }
 
 const getFromEmail = () => {
-    return NODE_ENV === 'development' ? "Acme <onboarding@resend.dev>" : EMAIL_SENDER
+    return NODE_ENV === 'development' ? "Acme <onboarding@resend.dev>" : "Acme <onboarding@resend.dev>"
 }
 const getToEmail = (to: string) =>
     NODE_ENV === 'development' ? 'delivered@resend.dev' : to

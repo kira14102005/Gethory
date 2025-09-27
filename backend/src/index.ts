@@ -13,8 +13,8 @@ import { authenticate } from "./midwares/authenticate";
 import { sessionRouter } from "./router/sessionRouter";
 const app = express();
 app.use(cors({
-    origin: APP_ORIGIN,
-    credentials: true
+    // origin: APP_ORIGIN,
+    // credentials: true
 }))
 app.use(express.json())
 app.use(cookieParser())
