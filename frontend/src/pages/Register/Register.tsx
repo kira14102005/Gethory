@@ -1,15 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginSubmitButton, SigninButton } from "../../components/shared/Buttons";
 import { SigninInput } from "../../components/shared/Input";
 import { LightNavbar } from "../../components/shared/Navigation";
 
 import './Register.module.css'
 import { TitleCard } from "../../components/shared/Card";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 export function Register() {
-    const [email , setEmail] = useState('')
-    const [password , setPassword] = useState('')
+    const [userInfo, setUserinfo] = useState({
+        email: "",
+        password: ""
+    })
+    const navigate = useNavigate()
+    function handleSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        console.log(userInfo)
+        setTimeout(()=>{}, 3000)
+        navigate('/submitotp', {  })
+    }
     return <>
         <LightNavbar />
         <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
@@ -29,9 +38,9 @@ export function Register() {
 
                 </div>
             </div>
-            <form action="" className="flex flex-col justify-between h-[230px]">
-                <SigninInput value={email}  setValue={setEmail} label="Phone Number" id="101" placeholder="Enter your number" />
-                <SigninInput value={password}  setValue={setPassword} label="Password" id="102" placeholder="Enter your password" />
+            <form onSubmit={handleSubmit} className="flex flex-col justify-between h-[230px]">
+                <SigninInput value={'email'} setValue={setUserinfo} label="Phone Number" id="101" placeholder="Enter your number" />
+                <SigninInput value={'password'} setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
                 <LoginSubmitButton name="Register" onclick={() => { }} />
             </form>
             <div>

@@ -2,18 +2,30 @@ interface InputProps {
     label: string,
     placeholder?: string,
     id: string,
-    setValue  : React.Dispatch<React.SetStateAction<string>>,
-    value  : string,
+    setValue: React.Dispatch<React.SetStateAction<{
+        email: string;
+        password: string;
+    }>>,
+    value: string,
+}
+
+export interface UserInfoInterface {
+    email: string,
+    password: string
 }
 
 export function SigninInput(props: InputProps) {
+    function handleUserInfoChange(e: any) {
+        const field = props.value
+        props.setValue((u: UserInfoInterface) => {
+            return { ...u, [field]: e.target.value }
+        })
+    }
     return <>
         <div className="flex flex-col w-[75%]">
             <label className="text-black text-[22px]" htmlFor={props.label}>{props.label}</label>
-            <input type="text" value={props.value} name={props.label} id={props.id}
-            onClick={(e:any)=>{
-                props.setValue(e.target.value)
-            }} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] rounded-md text-black text-[16px] font-100" />
+            <input type="text" name={props.label} id={props.id}
+                onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] rounded-md text-black text-[16px] font-100" />
         </div>
     </>
 
