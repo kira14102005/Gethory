@@ -1,29 +1,42 @@
 
 import { LoginSubmitButton } from '../../components/shared/Buttons'
-import { OtpInput } from '../../components/shared/Input'
+import { CodeInput } from '../../components/shared/Input'
 import { LightNavbar } from '../../components/shared/Navigation'
 import { TitleCard } from '../../components/shared/Card'
 import './Validation.module.css'
-
+import { useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { user } from '../../routes/protected/ProtectedRoute'
+import axios from 'axios'
 export function ValidateOTP() {
+    const [codeState, setCode] = useState({ code: '' })
+    const navigate = useNavigate()
+    function verifyCode(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        console.log(codeState)
+        // setTimeout(()=>{}, 3000)
+        axios.post(`http://localhost:3000/auth/verify?code=${codeState.code}`).then((res) => {
+            console.log(res.data)
+            user.authenticated = true
+            navigate('/auth', {})
+
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
     return <>
 
         <div className='flex flex-row w-screen min-h-screen'>
-                <div className='w-[60%]'>
-                    <LightNavbar />
-                    <div className="ml-[40px] my-2 w-[90%] flex flex-col">
-                        <TitleCard title='Enter the OTP' subtitle='Please enter the 6-digit Verification Code we just texted you' />
-                    <form action="">
+            <div className='w-[60%]'>
+                <LightNavbar />
+                <div className="ml-[40px] my-2 w-[90%] flex flex-col">
+                    <TitleCard title='Enter the OTP' subtitle='Please enter the 6-digit Verification Code we just texted you' />
+                    <form onSubmit={verifyCode}>
                         <div className='flex flex-row w-[80%] h-[6vw] justify-between my-3'>
-                            <OtpInput id='otp1' />
-                            <OtpInput id='otp2' />
-                            <OtpInput id='otp3' />
-                            <OtpInput id='otp4' />
-                            <OtpInput id='otp5' />
-                            <OtpInput id='otp6' />
+                            <CodeInput id='103' value='code' setValue={setCode} />
 
                         </div>
-                        <LoginSubmitButton name='Submit OTP' onclick={() => { }} />
+                        <LoginSubmitButton name='Enter Code' onclick={() => { }} />
                     </form>
 
 
