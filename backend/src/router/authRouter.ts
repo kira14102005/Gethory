@@ -13,7 +13,7 @@ rt.get('/logout', logoutController)
 
 rt.get('/refresh', refreshController);
 
-rt.get('/email/verify', verifyController)
+rt.post('/email/verify', verifyController)
 
 rt.get('/password/forgot', sendPasswordResetEmailController);
 
