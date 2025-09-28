@@ -1,5 +1,5 @@
 import { HTTP } from "../constants/http";
-import { CreateAccount, loginUser, refreshUserAccessToken, resetPassordService, sendPasswordResetEmail, verifyEmail } from "../services/auth.service";
+import { CreateAccount, loginUser, refreshUserAccessToken, resetPassordService, sendPasswordResetEmail, verifyEmail, resendEmailVerification } from "../services/auth.service";
 import catchError from "../utils/catchErrorWrapper";
 import { clearAuthCookies, getAccessTokenCookieOptions, getRefreshTokenCookieOptions, setCookie } from "../utils/cookie";
 import { loginSchema, forgotPasswordSchema, registerSchema, verificationCodeSchema, resetPasswordSchema } from "./auth.schemas";
@@ -94,4 +94,13 @@ export const resetPasswordController = catchError(async (req, res, next) => {
     return clearAuthCookies(res).json({
         msg :  "Password Reset Successful"
     });
+})
+
+export const resendEmailVerificationController = catchError(async (req, res, next) => {
+    const email = forgotPasswordSchema.parse(req.body.email);
+    //Call the Service that handles resending email verification
+    await resendEmailVerification(email);
+    res.json({
+        msg: "Verification email sent successfully"
+    })
 })

@@ -78,6 +78,33 @@ export const loginUser = async ({ email, password, userAgent }: loginUserParams)
     // @ts-ignore
     const isValid = await user.isPasswordMatch(password)
     appAssert(isValid, HTTP.UNAUTHORIZED, "Wrong Password or Email")
+    
+    // Check if user email is verified
+    if (!user.verified) {
+        // Generate a new verification code
+        const code = await VerificationModel.create({
+            userID: user._id,
+            type: VerificationCodeType.EMAIL,
+            expiresAt: getOneYearFromNow()
+        });
+        
+        // Send verification email
+        const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`;
+        const { error } = await sendMail({
+            to: user.email, 
+            subject: "Verify your email to continue", 
+            text: "Please verify your email to complete login",
+            html: `<h2>Email Verification Required</h2>
+                   <p>Your email needs to be verified before you can login.</p>
+                   <br/>
+                   <a href=${verifyURL} target="_blank">Click here to verify your email</a>`
+        });
+
+        if (error) console.log("Error sending verification email:", error);
+        
+        appAssert(false, HTTP.FORBIDDEN, "Email not verified. A new verification code has been sent to your email.");
+    }
+    
     const userId = user._id;
 
     //Create a new session fro logging IN record
@@ -196,4 +223,39 @@ export const resetPassordService = async (code: string, password: string) => {
     await SessionModel.deleteMany({ userId });
     // @ts-ignore
     return updatedUser.omitPassword();   // Return the User After Ommitting the Password
+}
+
+export const resendEmailVerification = async (email: string) => {
+    const user = await User.findOne({ email });
+    appAssert(user, HTTP.NOT_FOUND, "User does not exist");
+    appAssert(!user.verified, HTTP.BAD_REQUEST, "Email is already verified");
+
+    // Check for rate limiting (optional)
+    const fiveMinsAgo = getFiveMinsAgo();
+    const numberOfRequestsInLast5Mins = await VerificationModel.countDocuments({
+        userID: user._id,
+        type: VerificationCodeType.EMAIL,
+        createdAt: { $gt: fiveMinsAgo }
+    });
+    appAssert(numberOfRequestsInLast5Mins <= 2, HTTP.TOO_MANY_REQUEST, "Too many verification requests. Please try again after 5 minutes");
+
+    // Create new verification code
+    const code = await VerificationModel.create({
+        userID: user._id,
+        type: VerificationCodeType.EMAIL,
+        expiresAt: getOneYearFromNow()
+    });
+
+    // Send verification email
+    const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`;
+    const { error } = await sendMail({
+        to: user.email,
+        subject: "Verify your email",
+        text: "Check this link to verify your email",
+        html: `<h2>Click this link to verify Email</h2><br/><a href=${verifyURL} target="_blank">Click to verify</a>`
+    });
+
+    if (error) console.log("Error sending verification email:", error);
+
+    return { message: "Verification email sent successfully" };
 }

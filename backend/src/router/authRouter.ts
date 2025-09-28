@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginController, logoutController, refreshController, registerController, resetPasswordController, sendPasswordResetEmailController, verifyController } from "../controllers/auth.controllers";
+import { loginController, logoutController, refreshController, registerController, resetPasswordController, sendPasswordResetEmailController, verifyController, resendEmailVerificationController } from "../controllers/auth.controllers";
 const rt = Router();
 
 rt.post('/register', registerController)
@@ -14,6 +14,8 @@ rt.get('/logout', logoutController)
 rt.get('/refresh', refreshController);
 
 rt.post('/email/verify', verifyController)
+
+rt.post('/email/resend-verification', resendEmailVerificationController)
 
 rt.get('/password/forgot', sendPasswordResetEmailController);
 
