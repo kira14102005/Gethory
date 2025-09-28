@@ -15,7 +15,7 @@ export function ValidateOTP() {
         e.preventDefault()
         console.log(codeState)
         // setTimeout(()=>{}, 3000)
-        axios.post(`http://localhost:3000/auth/verify?code=${codeState.code}`).then((res) => {
+        axios.post(`http://localhost:3000/auth/email/verify?code=${codeState.code}`).then((res) => {
             console.log(res.data)
             user.authenticated = true
             navigate('/auth', {})
