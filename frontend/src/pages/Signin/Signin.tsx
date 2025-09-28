@@ -1,12 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginSubmitButton, SigninButton } from "../../components/shared/Buttons";
 import { SigninInput } from "../../components/shared/Input";
 import { LightNavbar } from "../../components/shared/Navigation";
 
 import './Signin.module.css'
 import { TitleCard } from "../../components/shared/Card";
+import { useState } from "react";
 
 export function Signin() {
+    const [userInfo, setUserinfo] = useState({
+        email: "",
+        password: ""
+    })
+
+    const navigate = useNavigate()
+    function handleSignin(e: any) {
+        e.preventDefault()
+        console.log(userInfo)
+        // setTimeout(()=>{}, 3000)
+        axios.post('http://localhost:3000/auth/login', { ...userInfo }).then((res) => {
+            console.log(res.data)
+            navigate('/submitotp', {})
+
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
     return <>
         <LightNavbar />
         <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
@@ -25,9 +44,9 @@ export function Signin() {
 
                 </div>
             </div>
-            <form action="" className="flex flex-col justify-between h-[230px]">
-                <SigninInput label="Phone Number" id="101" placeholder="Enter your number" />
-                <SigninInput label="Password" id="102" placeholder="Enter your password" />
+            <form action={handleSignin} className="flex flex-col justify-between h-[230px]">
+                <SigninInput setValue={setUserinfo} label="Email" id="101" placeholder="Enter your email" value="email" />
+                <SigninInput value="password" setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
                 <LoginSubmitButton name="Login" onclick={() => { }} />
             </form>
             <div>
