@@ -36,7 +36,7 @@ export const CreateAccount = async (data: CreateAccountParams) => {
         expiresAt: getOneYearFromNow()
     })
     //Send this Verification Code to the User Mail
-    const verifyURL = `${APP_ORIGIN}/email/verify?code=${code._id}`
+    const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`
     console.log(EMAIL_SENDER);
     const { error } = await sendMail({
         to: user.email, subject: "Verify email", text: "Check this link to verify your email",
