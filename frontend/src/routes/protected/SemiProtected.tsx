@@ -6,9 +6,9 @@ interface RouteProps {
 }
 const SemiProtected = (props: RouteProps)  => {
       if (!user.authenticated)
-        return <Navigate to={'/signin'} />
+        return <Navigate to={'/signin'} replace/>
     else if(!user.activated) return props.children
-    else redirect('/profile')
+    else return <Navigate to={'/profile'} replace/>
 
 
 }
