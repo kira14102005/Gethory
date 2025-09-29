@@ -1,21 +1,36 @@
-import type { ReactNode } from "react"
+import { useEffect, type ReactNode } from "react"
 import { Navigate } from "react-router-dom"
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated, selectNeedsProfileSetup, selectAuthLoading } from '../../store/authSelectors';
+
 interface RouteProps {
     children: ReactNode
 }
-export const user = {
-    authenticated: true,
-    activated: false
-};
-const ProtectedRoute = (props: RouteProps) => {
-    let component: ReactNode = null;
-    if (!user.authenticated)
-        component = <Navigate to={'/'} replace/>
-    else if (!user.activated)
-        component = <Navigate to={'/auth'} replace/>
-    else component = props.children
 
-    return component
+const ProtectedRoute = (props: RouteProps) => {
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+    const needsSetup = useSelector(selectNeedsProfileSetup);
+    const isLoading = useSelector(selectAuthLoading);
+    useEffect(() => { 
+        console.log("Authenticatr", isAuthenticated) 
+        console.log("Loader", isLoading) 
+    },
+        [])
+    if (isLoading) {
+        return null; // The AppInitializer handles the main loading spinner
+    }
+
+    // 2. If NOT authenticated, redirect to Signin
+    if (!isAuthenticated) {
+        return <Navigate to={'/signin'} replace />
+    }
+
+    // 3. If authenticated BUT setup incomplete, redirect to /auth
+    if (needsSetup) {
+        return <Navigate to={'/auth'} replace />
+    }
+
+    return props.children;
 }
 
-export default ProtectedRoute   
+export default ProtectedRoute
