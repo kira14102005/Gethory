@@ -8,7 +8,7 @@ export interface User {
   displayName?: string | null;
   name?: string | null;
   verified: boolean;
-
+  username: string;
   profileCompleted: boolean;
   avatarUrl?: string | null;
   roles?: string[];
