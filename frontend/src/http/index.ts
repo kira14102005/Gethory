@@ -1,8 +1,13 @@
 import axios from 'axios'
-// import 'dotenv/config'
-export const api  = axios.create({
-    baseURL: "http://localhost:3000",
+const baseURL = import.meta.env.VITE_BACKEND_URL;
+export const api = axios.create({
+    baseURL: baseURL,
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
     }
 })
+
+export const sendVerificationCode = (data: string | null) => {
+    return api.post(`/auth/email/verify?code=${data}`)
+}
