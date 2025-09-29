@@ -6,9 +6,10 @@ import { LightNavbar } from "../../components/shared/Navigation";
 import './Signin.module.css'
 import { TitleCard } from "../../components/shared/Card";
 import { useState, type FormEvent, useEffect } from "react";
-// import { user } from "../../routes/protected/ProtectedRoute";
 import { api } from "../../http";
 import { Errorpopup } from "../../components/shared/Error";
+import { setUser, type User } from "../../store/authSlice";
+import { useDispatch } from "react-redux";
 
 export function Signin() {
     const [userInfo, setUserinfo] = useState({
@@ -16,7 +17,8 @@ export function Signin() {
         password: ""
     })
 
-    // Add error state
+
+    const dispatch = useDispatch()
     const [error, setError] = useState<string | null>(null);
     const [showError, setShowError] = useState(false);
 
@@ -28,7 +30,7 @@ export function Signin() {
             const timer = setTimeout(() => {
                 setShowError(false);
                 setError(null);
-                navigate('/'); // Redirect to home page
+                navigate('/'); 
             }, 5000);
 
             return () => clearTimeout(timer);
@@ -38,26 +40,24 @@ export function Signin() {
     function handleSignin(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
-        // Clear any existing errors
         setError(null);
         setShowError(false);
 
         console.log(userInfo)
 
         api.post('/auth/login', { ...userInfo }).then((res) => {
-            console.log(res.data)
+            //@ts-ignore
+            const data: { user: User } = res.data
+            const userPayload = data.user;
+            // const userPayload: User = mapUserResponseToRedux(rawUser);
 
+            dispatch(setUser(userPayload));
 
-            // user.authenticated = true;
-
-            // Check if profile is completed
-            // if (!user.activated) {
-            //     navigate('/auth');
-            // } else {
-                navigate('/profile', {});
-            // }
-
-
+            if (!userPayload.profileCompleted) {
+                navigate('/auth', { replace: true });
+            } else {
+                navigate('/profile', { replace: true });
+            }
         }).catch((err) => {
             console.log(err);
 
@@ -93,7 +93,7 @@ export function Signin() {
                 <Errorpopup message={error} />
             </div>
         )}
-    
+
         <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
             <TitleCard subtitle="Log in to your account to continue" title="WELCOME BACK" />
             <div className="my-3">
