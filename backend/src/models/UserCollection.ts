@@ -6,6 +6,9 @@ const userSchema = new mongoose.Schema(
         name: {
             type: String,
         },
+        username: {
+            type: String,
+        },
         email: {
             type: String,
             required: true,
@@ -16,6 +19,11 @@ const userSchema = new mongoose.Schema(
             required: true,
         },
         verified: {
+            type: Boolean,
+            default: false,
+            required: true,
+        },
+        profileCompleted: {
             type: Boolean,
             default: false,
             required: true,
@@ -43,7 +51,7 @@ userSchema.methods.omitPassword = function () {
     const user = this.toObject();
     delete user.password;
     return user;
-  };
-    
+};
+
 const User = mongoose.model("User", userSchema)
 export default User
