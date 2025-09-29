@@ -1,27 +1,92 @@
 
-import { useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { DarkButton } from "../../components/shared/Buttons";
-import { DarkInput } from "../../components/shared/Input";
+import { AuthInput } from "../../components/shared/Input";
 import { Navbar } from "../../components/shared/Navigation";
 import { LighttitleCard } from "../../components/shared/Card";
 import './Auth.module.css'
+import { Navigate, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/authSelectors";
+import { useDispatch } from "react-redux";
+import { api } from "../../http";
+import { updateUserProfile } from "../../store/authSlice";
+interface ProfileData {
+    name: string;
+    username: string;
+}
 
-import { Navigate } from "react-router-dom";
+
 export function Auth() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const currentUser = useSelector(selectUser);
+
+    // 2. Central State for Collected Data
+    const [profileData, setProfileData] = useState<ProfileData>({
+        name: currentUser?.name || "",
+        username: currentUser?.username || "",
+    });
+
     const [step, setStep] = useState(0);
+    const [error, setError] = useState<string | null>(null);
+    const [isUpdating, setIsUpdating] = useState(false);
+
+    // 3. Central Handler to update any field
+    const updateData = useCallback((field: keyof ProfileData, value: string) => {
+        setProfileData(prev => ({ ...prev, [field]: value }));
+    }, [setProfileData]);
+
+
+    // This handler runs when the user finishes all steps.
+    const handleUpdate = useCallback(async () => {
+        if (isUpdating) return;
+
+        setError(null);
+        setIsUpdating(true);
+
+        try {
+            // Send collected profileData (name, username) to the backend
+            const res = await api.put('/user/update_profile', profileData);
+            //@ts-ignore
+            const updatedUser = res.data.user;
+
+            // 1. SUCCESS: Dispatch action to update RTK store with the confirmed data
+            dispatch(updateUserProfile({
+                name: updatedUser.name,
+                username: updatedUser.username,
+                profileCompleted: updatedUser.profileCompleted
+            }));
+
+            // 2. Redirect to the main application page.
+            navigate('/profile', { replace: true });
+
+        } catch (err: any) {
+            // 3. FAILURE: Log and set error state
+            const errorMessage = err.response?.data?.Error || "Network or server error during update.";
+            setError(errorMessage);
+            console.error("Profile update failed:", err);
+            setIsUpdating(false);
+        }
+    }, [profileData, isUpdating, dispatch, navigate]);
+    // Navigate
     let content;
     switch (step) {
         case 0:
-            content = <MainCard setStep={setStep} />;
+            content = <MainCard setStep={setStep} updateData={updateData} currentName={profileData.name} />;
             break;
         case 1:
+            // Placeholder step (e.g., avatar, skips to next step)
             content = <Step2Card setStep={setStep} />;
             break;
         case 2:
-            content = <Step3Card setStep={setStep} />;
+            content = <Step3Card setStep={setStep} updateData={updateData} currentUsername={profileData.username} />;
             break;
         case 3:
-            content = <Step4Card setStep={setStep} limit={3000} />;
+            // Placeholder for the FINAL API SUBMISSION (Step 4)
+            // Passes collected data to the next stage
+            content = <Step4Card handleUpdate={handleUpdate} isUpdating={isUpdating} error={error} />;
             break;
         default:
             content = <Navigate to={'/profile'} />;
@@ -34,24 +99,40 @@ export function Auth() {
         </div>
     </>
 }
+interface StepProps {
+    setStep: React.Dispatch<React.SetStateAction<number>>;
+    updateData: (field: keyof ProfileData, value: string) => void;
+    currentName: string;
+}
 
-export function MainCard({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) {
+export const MainCard = memo(
+    ({ setStep, updateData, currentName }: StepProps) => {
+        const [localName, setLocalName] = useState(currentName);
 
-    return <>
-        <div className="relative w-full h-full flex flex-col items-center justify-center ">
-            <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
-            </div>
-            <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
-                <LighttitleCard title="What Should We Call You?" />
-                <DarkInput label="name" value="name" placeholder="Enter Your Name" id="u101" setValue={() => { console.log("Dark Input Handler") }} />
-                <div className="my-6 w-full flex flex-row justify-center w-[80%]">
-                    <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
-                    } />
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            setLocalName(value);
+            updateData('name', value); // Push data UP to Auth.tsx state immediately
+        }
+        return <>
+            <div className="relative w-full h-full flex flex-col items-center justify-center ">
+                <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
+                </div>
+                <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
+                    <LighttitleCard title="What Should We Call You?" />
+                    <AuthInput label="name" value={localName} field="name" placeholder="Enter Your Name" handleChange={handleChange} />
+                    <div className="my-6 w-full flex flex-row justify-center w-[80%]">
+                        <DarkButton name="Next" onclick={() => {
+                            if (localName.trim()) { // Simple validation check
+                                setStep((c: number) => c + 1)
+                            }
+                        }
+                        } />
+                    </div>
                 </div>
             </div>
-        </div>
-    </>
-}
+        </>
+    })
 
 
 export function Step2Card({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) {
@@ -75,16 +156,28 @@ export function Step2Card({ setStep }: { setStep: React.Dispatch<React.SetStateA
     </>
 }
 
+interface Step3Props {
+    setStep: React.Dispatch<React.SetStateAction<number>>;
+    updateData: (field: keyof ProfileData, value: string) => void;
+    currentUsername: string;
+}
 
-export function Step3Card({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) {
+export function Step3Card({ setStep, updateData, currentUsername }: Step3Props) {
 
+    const [username, setUserName] = useState(currentUsername);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setUserName(value);
+        updateData('username', value); // Push data UP to Auth.tsx state immediately
+    }
     return <>
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
             <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
             </div>
             <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
                 <LighttitleCard title="Pick a username" />
-                <DarkInput value="username" label="username" placeholder="Choose a username" id="u102" setValue={() => { console.log("Dark Input Handler") }} />
+                <AuthInput label="Username" value={username} field="username" placeholder="Enter Your Name" handleChange={handleChange} />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
                     <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
                     } />
@@ -93,20 +186,21 @@ export function Step3Card({ setStep }: { setStep: React.Dispatch<React.SetStateA
         </div>
     </>
 }
+interface Step4Props {
+    handleUpdate: () => Promise<void>;
+    isUpdating: boolean;
+    error: string | null;
+}
 
+export function Step4Card({ handleUpdate, isUpdating, error }: Step4Props) {
 
-export function Step4Card({ setStep, limit }: { setStep: React.Dispatch<React.SetStateAction<number>>, limit: number }) {
-    const timer = useRef<null |  NodeJS.Timeout>(null)
+    // Trigger the API call once the component mounts
     useEffect(() => {
-        timer.current = setTimeout(() => {
-            // user.activated = true;
-            setStep((c) => c + 1)
-        }, limit)
-        return () => {
-            if (timer.current)
-                clearTimeout(timer.current)
+        if (!isUpdating && !error) {
+            handleUpdate();
         }
-    }, [limit])
+    }, [handleUpdate, isUpdating, error]);
+
     return <>
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
             <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
