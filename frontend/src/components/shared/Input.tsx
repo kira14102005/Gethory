@@ -51,6 +51,21 @@ export function DarkInput(props: InputProps<UserInfoInterface>) {
         <input className="text-white border border-white w-[10rem] text-center mt-5 bg-transparent px-3 rounded-lg border-[3px]" type="text" name={props.label} id={props.id} placeholder={props.placeholder} />
     </>
 }
+
+interface AuthInputInterface {
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    value: string,
+    field: string,
+    label: string,
+    placeholder: string
+}
+export function AuthInput(props: AuthInputInterface) {
+
+    return <>
+        <input className="text-white border border-white w-[10rem] text-center mt-5 bg-transparent px-3 rounded-lg border-[3px]" type="text" name={props.label} placeholder={props.placeholder} onChange={props.handleChange} />
+    </>
+}
+
 export function OtpInput({ id }: { id: string }) {
     return <>
         <input type="text" id={id} className='w-[6vw] lg:w-[5vw] lg:h-[5vw] lg:rounded-lg text-black text-[20px] lg:text-[30px]  bg-[#D9D9D9] rounded-md border border-[#4A5568] text-center  shadow-lg'></input>
