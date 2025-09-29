@@ -7,7 +7,7 @@ import './Validation.module.css'
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { user } from '../../routes/protected/ProtectedRoute'
-import axios from 'axios'
+import { sendVerificationCode } from '../../http'
 export function ValidateOTP() {
     const [codeState, setCode] = useState({ code: '' })
     const navigate = useNavigate()
@@ -15,7 +15,7 @@ export function ValidateOTP() {
         e.preventDefault()
         console.log(codeState)
         // setTimeout(()=>{}, 3000)
-        axios.post(`http://localhost:3000/auth/email/verify?code=${codeState.code}`).then((res) => {
+        sendVerificationCode(codeState.code).then((res) => {
             console.log(res.data)
             user.authenticated = true
             navigate('/auth', {})
