@@ -1,7 +1,9 @@
 import { HTTP } from "../constants/http";
 import User from "../models/UserCollection";
+import { updateUser } from "../services/user.service";
 import { appAssert } from "../utils/appAssert";
 import catchError from "../utils/catchErrorWrapper";
+import { UpdateUserSchema } from "./user.schema";
 
 export const getUserController = catchError(async (req, res, next) => {
     const { userId, sessionId } = req
@@ -10,7 +12,24 @@ export const getUserController = catchError(async (req, res, next) => {
     res.json({
         msg: "Your Details",
         // @ts-ignore
-        User: user.omitPassword()
+        user: user.omitPassword()
     })
+
+})
+
+export const updateuserProfileController = catchError(async function (req, res, next) {
+    const userId = req.userId;
+    appAssert(userId, HTTP.UNAUTHORIZED, "User ID not found in request (Auth token issue)");
+
+    const { name, username } = UpdateUserSchema.parse(req.body);
+
+    const updatedUser = updateUser(userId, username, name)
+
+
+    res.status(HTTP.OK).json({
+        msg: "Profile setup complete",
+        // @ts-ignore
+        user: updatedUser.omitPassword()
+    });
 
 })
