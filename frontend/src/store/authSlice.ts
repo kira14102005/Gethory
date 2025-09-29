@@ -1,14 +1,15 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import { api } from '../http';
 
 
 export interface User {
-  id: string;
+  _id: string;
   email: string;
   displayName?: string | null;
   name?: string | null;
   verified: boolean;
 
-  profileSetupComplete: boolean;
+  profileCompleted: boolean;
   avatarUrl?: string | null;
   roles?: string[];
 }
@@ -80,44 +81,34 @@ export const fetchCurrentUser = createAsyncThunk<User | null, void, { rejectValu
   'auth/fetchCurrentUser',
   async (_, { rejectWithValue }) => {
     try {
-      // 1. API Call: Sends cookies automatically (crucial for your session system)
-      const res = await fetch('http://localhost:3000/user', {
-        credentials: 'include'
-      });
+      const res = await api.get('/user', { withCredentials: true })
 
-      // 2. Authentication Failure Check
       if (res.status === 401 || res.status === 403) {
-        // If the server explicitly says "Unauthorized/Forbidden," the user is logged out.
-        // We return 'null' to signal the fulfilled state but with no user data.
         return null;
       }
 
-      if (!res.ok) {
+      if (res.status != 200) {
         // Handle other potential non-2xx errors (e.g., 500)
         throw new Error('Failed to fetch current user');
       }
 
-      const data = await res.json();
-      const fetchedUser = data.User as Partial<User>;
+      const data = res.data;
+      //@ts-ignore
+      const fetchedUser = data.user as Partial<User>;
 
-      // 3. Profile Setup Status Check (Mapping your model to our Redux flag)
-      // If 'name' is present (which is set during the /auth flow), the profile is complete.
-      const isProfileComplete = !!fetchedUser.name;
-
-      // 4. Return Normalized Payload
       return {
-        id: fetchedUser.id as string, // Map backend _id to frontend id
+        _id: fetchedUser._id as string,
         email: fetchedUser.email as string,
         name: fetchedUser.name,
         verified: fetchedUser.verified as boolean,
-        profileSetupComplete: isProfileComplete,
-      } as User;
+        profileCompleted: fetchedUser.profileCompleted as boolean
+      } as User
 
     } catch (err) {
       // 5. Thunk Rejection
       // If an error is thrown (e.g., network error, internal server error), 
       // we use rejectWithValue to trigger the 'rejected' action and set the error message.
-      return rejectWithValue((err as Error).message);
+      return rejectWithValue(`Network Error during session check: ${(err as Error).message}`);
     }
   }
 );
