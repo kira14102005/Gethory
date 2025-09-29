@@ -135,7 +135,7 @@ export const MainCard = memo(
     })
 
 
-export function Step2Card({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) {
+export const Step2Card = memo(({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) => {
 
     return <>
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
@@ -154,22 +154,21 @@ export function Step2Card({ setStep }: { setStep: React.Dispatch<React.SetStateA
             </div>
         </div>
     </>
-}
-
+})
 interface Step3Props {
     setStep: React.Dispatch<React.SetStateAction<number>>;
     updateData: (field: keyof ProfileData, value: string) => void;
     currentUsername: string;
 }
 
-export function Step3Card({ setStep, updateData, currentUsername }: Step3Props) {
+export const Step3Card = memo(({ setStep, updateData, currentUsername }: Step3Props) => {
 
     const [username, setUserName] = useState(currentUsername);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setUserName(value);
-        updateData('username', value); // Push data UP to Auth.tsx state immediately
+        updateData('username', value);
     }
     return <>
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
@@ -179,20 +178,24 @@ export function Step3Card({ setStep, updateData, currentUsername }: Step3Props) 
                 <LighttitleCard title="Pick a username" />
                 <AuthInput label="Username" value={username} field="username" placeholder="Enter Your Name" handleChange={handleChange} />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
-                    <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
+                    <DarkButton name="Next" onclick={() => {
+                        if (username.trim().length
+                            >= 3) setStep((c: number) => c + 1)
+
+                    }
                     } />
                 </div>
             </div>
         </div>
     </>
-}
+})
 interface Step4Props {
     handleUpdate: () => Promise<void>;
     isUpdating: boolean;
     error: string | null;
 }
 
-export function Step4Card({ handleUpdate, isUpdating, error }: Step4Props) {
+export const Step4Card = memo(({ handleUpdate, isUpdating, error }: Step4Props) => {
 
     // Trigger the API call once the component mounts
     useEffect(() => {
@@ -214,5 +217,5 @@ export function Step4Card({ handleUpdate, isUpdating, error }: Step4Props) {
             </div>
         </div>
     </>
-}
+})
 
