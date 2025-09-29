@@ -10,8 +10,8 @@ export const updateUser = async (userId: any, username: string, name: string) =>
             profileCompleted: true
         }
     }, { new: true })
-
+    console.log(updatedUser)
     appAssert(updatedUser, HTTP.NOT_FOUND, "User not found or update failed");
     return updatedUser
-    
+
 }

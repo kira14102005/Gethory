@@ -23,9 +23,9 @@ export const updateuserProfileController = catchError(async function (req, res, 
 
     const { name, username } = UpdateUserSchema.parse(req.body);
 
-    const updatedUser = updateUser(userId, username, name)
+    const updatedUser = await updateUser(userId, username, name)
 
-
+    console.log('@nd')
     res.status(HTTP.OK).json({
         msg: "Profile setup complete",
         // @ts-ignore
