@@ -6,7 +6,7 @@ import { TitleCard } from '../../components/shared/Card'
 import './Validation.module.css'
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { user } from '../../routes/protected/ProtectedRoute'
+
 import { sendVerificationCode } from '../../http'
 export function ValidateOTP() {
     const [codeState, setCode] = useState({ code: '' })
@@ -17,7 +17,7 @@ export function ValidateOTP() {
         // setTimeout(()=>{}, 3000)
         sendVerificationCode(codeState.code).then((res) => {
             console.log(res.data)
-            user.authenticated = true
+            // user.authenticated = true
             navigate('/auth', {})
 
         }).catch((err) => {

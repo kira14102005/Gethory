@@ -6,7 +6,7 @@ import { LightNavbar } from "../../components/shared/Navigation";
 import './Signin.module.css'
 import { TitleCard } from "../../components/shared/Card";
 import { useState, type FormEvent, useEffect } from "react";
-import { user } from "../../routes/protected/ProtectedRoute";
+// import { user } from "../../routes/protected/ProtectedRoute";
 import { api } from "../../http";
 import { Errorpopup } from "../../components/shared/Error";
 
@@ -48,14 +48,15 @@ export function Signin() {
             console.log(res.data)
 
 
-            user.authenticated = true;
+            // user.authenticated = true;
 
             // Check if profile is completed
-            if (!user.activated) {
-                navigate('/auth');
-            } else {
+            // if (!user.activated) {
+            //     navigate('/auth');
+            // } else {
                 navigate('/profile', {});
-            }
+            // }
+
 
         }).catch((err) => {
             console.log(err);

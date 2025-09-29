@@ -5,7 +5,7 @@ import { DarkInput } from "../../components/shared/Input";
 import { Navbar } from "../../components/shared/Navigation";
 import { LighttitleCard } from "../../components/shared/Card";
 import './Auth.module.css'
-import { user } from "../../routes/protected/ProtectedRoute";
+
 import { Navigate } from "react-router-dom";
 export function Auth() {
     const [step, setStep] = useState(0);
@@ -96,10 +96,10 @@ export function Step3Card({ setStep }: { setStep: React.Dispatch<React.SetStateA
 
 
 export function Step4Card({ setStep, limit }: { setStep: React.Dispatch<React.SetStateAction<number>>, limit: number }) {
-    const timer = useRef<null | number>(null)
+    const timer = useRef<null |  NodeJS.Timeout>(null)
     useEffect(() => {
         timer.current = setTimeout(() => {
-            user.activated = true;
+            // user.activated = true;
             setStep((c) => c + 1)
         }, limit)
         return () => {
