@@ -3,7 +3,7 @@ interface InputProps<T> {
     placeholder?: string,
     id: string,
     setValue: React.Dispatch<React.SetStateAction<T>>,
-    value: string,
+    value: string | null,
 }
 
 export interface UserInfoInterface {
@@ -13,7 +13,7 @@ export interface UserInfoInterface {
 
 export function SigninInput(props: InputProps<UserInfoInterface>) {
     function handleUserInfoChange(e: any) {
-        const field = props.value
+        const field = props.value ?? ''
         props.setValue((u: UserInfoInterface) => {
             return { ...u, [field]: e.target.value }
         })
@@ -32,7 +32,7 @@ export type CodeInterface = {
 }
 export function CodeInput(props: InputProps<CodeInterface>) {
     function handleUserInfoChange(e: any) {
-        const field = props.value
+        const field = props.value ?? ''
         props.setValue((u: CodeInterface) => {
             return { ...u, [field]: e.target.value }
         })
@@ -54,7 +54,7 @@ export function DarkInput(props: InputProps<UserInfoInterface>) {
 
 interface AuthInputInterface {
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-    value: string,
+    value: string | undefined,
     field: string,
     label: string,
     placeholder: string
@@ -62,7 +62,7 @@ interface AuthInputInterface {
 export function AuthInput(props: AuthInputInterface) {
 
     return <>
-        <input className="text-white border border-white w-[10rem] text-center mt-5 bg-transparent px-3 rounded-lg border-[3px]" type="text" name={props.label} placeholder={props.placeholder} onChange={props.handleChange} />
+        <input className="text-white border border-white w-[10rem] text-center mt-5 bg-transparent px-3 rounded-lg border-[3px]" type="text" value={props.value} name={props.label} placeholder={props.placeholder} onChange={props.handleChange} />
     </>
 }
 
