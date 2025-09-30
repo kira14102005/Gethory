@@ -1,12 +1,11 @@
 import { APP_ORIGIN, EMAIL_SENDER, JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env"
-import z from 'zod'
-import { HTTP } from "../constants/http"
+import { SignOptions } from "jsonwebtoken";import { HTTP } from "../constants/http"
 import { VerificationCodeType } from "../constants/VerificationCodeType"
 import SessionModel from "../models/SessionModel"
 import User from "../models/UserCollection"
 import VerificationModel from "../models/verificationCodeModel"
 import { appAssert } from "../utils/appAssert"
-import { get30daysfromNow, getFiveMinsAgo, getOneHourFromNow, getOneYearFromNow, ONE_DAY_MILIS } from "../utils/date"
+import { get30daysfromNow, get7daysfromNow, getFiveMinsAgo, getOneHourFromNow, getOneYearFromNow, ONE_DAY_MILIS } from "../utils/date"
 import jwt from "jsonwebtoken"
 import { accessTokenPayload, accessTokenSignOptions, refereshTokenSignOptions, refreshTokenPayload, signToken, verifyTokens } from "../utils/jwt"
 import { sendMail } from "../utils/sendMail"
@@ -78,49 +77,71 @@ export const loginUser = async ({ email, password, userAgent }: loginUserParams)
     // @ts-ignore
     const isValid = await user.isPasswordMatch(password)
     appAssert(isValid, HTTP.UNAUTHORIZED, "Wrong Password or Email")
-    
+    // const userId  = user._id
     // Check if user email is verified
-    if (!user.verified) {
-        // Generate a new verification code
-        const code = await VerificationModel.create({
-            userID: user._id,
-            type: VerificationCodeType.EMAIL,
-            expiresAt: getOneYearFromNow()
-        });
-        
-        // Send verification email
-        const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`;
-        const { error } = await sendMail({
-            to: user.email, 
-            subject: "Verify your email to continue", 
-            text: "Please verify your email to complete login",
-            html: `<h2>Email Verification Required</h2>
-                   <p>Your email needs to be verified before you can login.</p>
-                   <br/>
-                   <a href=${verifyURL} target="_blank">Click here to verify your email</a>`
-        });
+    // if (!user.verified) {
+    //     // Generate a new verification code
+    //     const code = await VerificationModel.create({
+    //         userID: user._id,
+    //         type: VerificationCodeType.EMAIL,
+    //         expiresAt: getOneYearFromNow()
+    //     });
 
-        if (error) console.log("Error sending verification email:", error);
-        
-        appAssert(false, HTTP.FORBIDDEN, "Email not verified. A new verification code has been sent to your email.");
+    //     // Send verification email
+    //     const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`;
+    //     const { error } = await sendMail({
+    //         to: user.email, 
+    //         subject: "Verify your email to continue", 
+    //         text: "Please verify your email to complete login",
+    //         html: `<h2>Email Verification Required</h2>
+    //                <p>Your email needs to be verified before you can login.</p>
+    //                <br/>
+    //                <a href=${verifyURL} target="_blank">Click here to verify your email</a>`
+    //     });
+
+    //     if (error) console.log("Error sending verification email:", error);
+
+    //     appAssert(false, HTTP.FORBIDDEN, "Email not verified. A new verification code has been sent to your email.");
+    // }
+    const isFullyComplete = user.verified && user.profileCompleted;
+    const isVerified = user.verified;
+
+    let sessionExpiryDate: Date;
+    let tokenExpiryString: SignOptions["expiresIn"] ;
+    if (isFullyComplete) {
+        // C. FULL SESSION (Verified + Profile Complete)
+        sessionExpiryDate = get30daysfromNow();
+        tokenExpiryString = "30d";
+    } else if (isVerified) {
+        // B. MEDIUM SESSION (Verified, but Profile Incomplete/Mid-Onboarding)
+        sessionExpiryDate = get7daysfromNow();
+        tokenExpiryString = "7d";
+    } else {
+        // A. SHORT SESSION (Unverified - Default upon new registration)
+        sessionExpiryDate = getOneHourFromNow();
+        tokenExpiryString = "1h";
     }
-    
+
     const userId = user._id;
 
     //Create a new session fro logging IN record
     const sess = await SessionModel.create({
         userId,
-        userAgent
+        userAgent,
+        expiresAt: sessionExpiryDate
     })
     // Create tokens
     const refreshToken = signToken({ sessionId: sess._id }, {
         secret: JWT_REFRESH_SECRET,
+        expiresIn: tokenExpiryString,
         ...refereshTokenSignOptions
     })
 
 
     const accessToken = signToken({ userId, sessionId: sess._id }, {
         secret: JWT_SECRET,
+        expiresIn: tokenExpiryString,
+
         ...accessTokenSignOptions
     })
 
@@ -130,7 +151,7 @@ export const loginUser = async ({ email, password, userAgent }: loginUserParams)
 
 
 export const refreshUserAccessToken = async (refreshToken: string) => {
-    const {payload, error} = verifyTokens<refreshTokenPayload>(refreshToken, { secret: JWT_REFRESH_SECRET, ...refereshTokenSignOptions });
+    const { payload, error } = verifyTokens<refreshTokenPayload>(refreshToken, { secret: JWT_REFRESH_SECRET, ...refereshTokenSignOptions });
     appAssert(payload, HTTP.UNAUTHORIZED, "Refresh Token is Invalid or malformed")
     const session = await SessionModel.findById(payload.sessionId)
     const currTime = new Date(Date.now());
@@ -174,8 +195,29 @@ export const verifyEmail = async (code: string) => {
     },
         { new: true });
     //Here attribute new : true to send the updated Record to the uSer or NULL
+
     appAssert(updatedUser, HTTP.NOT_FOUND, "No Valid User found")
-    return updatedUser
+    await SessionModel.deleteMany({ userId: updatedUser._id });
+    await SessionModel.deleteMany({ userId: updatedUser._id });
+
+    // 2. Create new session with MEDIUM expiry (7 days)
+    const session = await SessionModel.create({
+        userId: updatedUser._id,
+        expiresAt: get7daysfromNow(),
+    });
+
+    // 3. Create new tokens with MEDIUM expiry
+    const refreshToken = signToken({ sessionId: session._id }, {
+        secret: JWT_REFRESH_SECRET,
+        expiresIn: "7d",
+        ...refereshTokenSignOptions
+    });
+    const accessToken = signToken({ userId: updatedUser._id, sessionId: session._id }, {
+        secret: JWT_SECRET,
+        ...accessTokenSignOptions
+    });
+
+    return { updatedUser, accessToken, refreshToken };
 
 }
 
