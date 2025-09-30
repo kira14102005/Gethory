@@ -16,7 +16,7 @@ export function TitleCard(props: CardProps) {
 }
 export function LighttitleCard(props: CardProps) {
     return <>
-        <div className="text-[33.3px] h-[35px] text-[30px] mt-[5%]">
+        <div className="text-[33.3px] h-[35px] text-[30px] mt-[5%] text-center">
             {props.title}
         </div>
         <div className="text-[16px] text-[#9E9E9E] mt-0">
@@ -81,17 +81,17 @@ export function MeetingCard(props: MeetingDetailsProps) {
                 <div className='flex flex-col'>
                     <span className='flex gap-1 items-center text-[14px]'>
                         <p>{props.authors[0]}</p>
-                        <ForumIcon fontSize='' />
+                        <ForumIcon fontSize='small' />
                     </span>
                     <span className='flex gap-1 items-center text-[14px]'>
                         <p>{props.authors[1]}</p>
-                        <ForumIcon fontSize='' />
+                        <ForumIcon fontSize='small' />
                     </span>
                 </div>
             </div>
             <div className='w-full flex justify-end text-[14px]'>
                 <span className='flex items-center gap-1'><p>{count}</p>
-                    <PersonIcon fontSize='' />
+                    <PersonIcon fontSize='small' />
                 </span>
             </div>
         </div>
