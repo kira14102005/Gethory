@@ -7,36 +7,26 @@ import { LighttitleCard } from "../../components/shared/Card";
 import './Auth.module.css'
 import { Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../store/authSelectors";
 import { useDispatch } from "react-redux";
 import { api } from "../../http";
 import { updateUserProfile } from "../../store/authSlice";
-interface ProfileData {
-    name: string;
-    username: string;
-}
+import { selectActivate, selectName, selectUsername } from "../../store/activateSelectors";
+import { setName, setUsername } from "../../store/activateSlice";
+
 
 
 export function Auth() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const currentUser = useSelector(selectUser);
+    const currentActiveState = useSelector(selectActivate);
 
-    // 2. Central State for Collected Data
-    const [profileData, setProfileData] = useState<ProfileData>({
-        name: currentUser?.name || "",
-        username: currentUser?.username || "",
-    });
+
 
     const [step, setStep] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const [isUpdating, setIsUpdating] = useState(false);
 
-    // 3. Central Handler to update any field
-    const updateData = useCallback((field: keyof ProfileData, value: string) => {
-        setProfileData(prev => ({ ...prev, [field]: value }));
-    }, [setProfileData]);
 
 
     // This handler runs when the user finishes all steps.
@@ -47,7 +37,7 @@ export function Auth() {
         setIsUpdating(true);
 
         try {
-            const res = await api.put('/user/update_profile', profileData);
+            const res = await api.put('/user/update_profile', currentActiveState);
             //@ts-ignore
             const updatedUser = res.data.user;
 
@@ -68,18 +58,18 @@ export function Auth() {
             console.error("Profile update failed:", err);
             setIsUpdating(false);
         }
-    }, [profileData, isUpdating, dispatch, navigate]);
+    }, [currentActiveState, isUpdating, dispatch, navigate]);
     // Navigate
     let content;
     switch (step) {
         case 0:
-            content = <MainCard setStep={setStep} updateData={updateData} currentName={profileData.name} />;
+            content = <MainCard setStep={setStep} />;
             break;
         case 1:
             content = <Step2Card setStep={setStep} />;
             break;
         case 2:
-            content = <Step3Card setStep={setStep} updateData={updateData} currentUsername={profileData.username} />;
+            content = <Step3Card setStep={setStep} />;
             break;
         case 3:
             // Placeholder for the FINAL API SUBMISSION (Step 4)
@@ -98,19 +88,20 @@ export function Auth() {
 }
 interface StepProps {
     setStep: React.Dispatch<React.SetStateAction<number>>;
-    updateData: (field: keyof ProfileData, value: string) => void;
-    currentName: string;
+
 }
 
 export const MainCard = memo(
-    ({ setStep, updateData, currentName }: StepProps) => {
-        const [localName, setLocalName] = useState(currentName);
+    ({ setStep }: StepProps) => {
+        const dispatch = useDispatch()
+        const currName = useSelector(selectName)
+        const [localName, setLocalName] = useState(currName);
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             const value = e.target.value;
             setLocalName(value);
-            updateData('name', value); // Push data UP to Auth.tsx state immediately
         }
+
         return <>
             <div className="relative w-full h-full flex flex-col items-center justify-center ">
                 <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
@@ -120,7 +111,8 @@ export const MainCard = memo(
                     <AuthInput label="name" value={localName} field="name" placeholder="Enter Your Name" handleChange={handleChange} />
                     <div className="my-6 w-full flex flex-row justify-center w-[80%]">
                         <DarkButton name="Next" onclick={() => {
-                            if (localName.trim()) { 
+                            if (localName.trim()) {
+                                dispatch(setName(localName))
                                 setStep((c: number) => c + 1)
                             }
                         }
@@ -145,27 +137,25 @@ export const Step2Card = memo(({ setStep }: { setStep: React.Dispatch<React.SetS
                     <div className="mt-3 text-[#7FACCF] text-[15px]">Choose a different avatar</div>
                 </div>
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
-                    <DarkButton name="Next" onclick={() => { setStep((c: number) => c + 1) }
+                    <DarkButton name="Next" onclick={() => {
+
+                        setStep((c: number) => c + 1)
+                    }
                     } />
                 </div>
             </div>
         </div>
     </>
 })
-interface Step3Props {
-    setStep: React.Dispatch<React.SetStateAction<number>>;
-    updateData: (field: keyof ProfileData, value: string) => void;
-    currentUsername: string;
-}
 
-export const Step3Card = memo(({ setStep, updateData, currentUsername }: Step3Props) => {
+export const Step3Card = memo(({ setStep }: StepProps) => {
 
-    const [username, setUserName] = useState(currentUsername);
-
+    const currentUsername = useSelector(selectUsername)
+    const [localusername, setlocalUserName] = useState(currentUsername);
+    const dispatch = useDispatch()
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setUserName(value);
-        updateData('username', value);
+        setlocalUserName(value);
     }
     return <>
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
@@ -173,11 +163,15 @@ export const Step3Card = memo(({ setStep, updateData, currentUsername }: Step3Pr
             </div>
             <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
                 <LighttitleCard title="Pick a username" />
-                <AuthInput label="Username" value={username} field="username" placeholder="Enter Your Name" handleChange={handleChange} />
+                <AuthInput label="Username" value={localusername} field="username" placeholder="Enter Your Name" handleChange={handleChange} />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
                     <DarkButton name="Next" onclick={() => {
-                        if (username.trim().length
-                            >= 3) setStep((c: number) => c + 1)
+                        if (localusername.trim().length
+                            >= 3) {
+
+                            dispatch(setUsername(localusername))
+                            setStep((c: number) => c + 1)
+                        }
 
                     }
                     } />
