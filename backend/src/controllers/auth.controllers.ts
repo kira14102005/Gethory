@@ -41,7 +41,7 @@ export const loginController = catchError(async (req, res, next) => {
 
 export const logoutController = catchError(async (req, res, next) => {
     const accessToken = req.cookies.accessToken
-    const {payload, error} = verifyTokens<accessTokenPayload>(accessToken, { secret: JWT_SECRET })
+    const { payload, error } = verifyTokens<accessTokenPayload>(accessToken, { secret: JWT_SECRET })
     if (payload) {
         const session = await SessionModel.findByIdAndDelete(payload.sessionId)
     }
@@ -67,10 +67,13 @@ export const refreshController = catchError(async (req, res, next) => {
 
 export const verifyController = catchError(async (req, res, next) => {
     const verifyCode = verificationCodeSchema.parse(req.query.code);
-    //Call a Service
-    const updatedUser = await verifyEmail(verifyCode);
+    const { updatedUser, accessToken, refreshToken } = await verifyEmail(verifyCode);
+    setCookie({ res, accessToken, refreshToken }); 
+    
     return res.json({
-        msg: "Email Was Successfully Verified"
+        msg: "Email Was Successfully Verified",
+        // @ts-ignore
+        user: updatedUser.omitPassword() 
     })
 })
 
@@ -92,7 +95,7 @@ export const resetPasswordController = catchError(async (req, res, next) => {
     await resetPassordService(code, password);
     //Clear the COokies before Returning
     return clearAuthCookies(res).json({
-        msg :  "Password Reset Successful"
+        msg: "Password Reset Successful"
     });
 })
 
