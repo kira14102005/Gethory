@@ -12,10 +12,8 @@ const AccountPendingPanel: React.FC = () => {
     const user = useSelector(selectUser);
     const email = user?.email || 'your account';
 
-    // Handler to log out and fully clear the local session
     const handleLogoutAndRestart = async () => {
         try {
-            // Backend will clear the secure cookies
             await api.get('/auth/logout'); 
         } catch (e) {
             console.error("Logout API failed, forcing local clear.");
@@ -24,10 +22,8 @@ const AccountPendingPanel: React.FC = () => {
         navigate('/signin', { replace: true });
     };
 
-    // Handler to resend the verification email
     const handleResendCode = async () => {
         try {
-            // Calls the backend resend endpoint
             await api.post('/auth/email/resend-verification', { email: user?.email }); 
             alert("New verification code sent! Please check your email.");
             navigate('/submitotp', { replace: true });

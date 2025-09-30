@@ -19,6 +19,8 @@ export function ValidateOTP() {
         e.preventDefault()
         console.log(codeState)
         sendVerificationCode(codeState.code).then((res) => {
+            //@ts-ignore
+            const verifiedUser = res.data.user;             
             dispatch(updateUserProfile({ verified: true }));
             navigate('/auth', {})
 
