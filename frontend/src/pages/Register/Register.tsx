@@ -25,7 +25,7 @@ export function Register() {
             const data: { user: User } = res.data
             const userPayload = data.user
             dispatch(setUser(userPayload))
-            navigate('/submitotp', {})
+            navigate('/submitotp', {replace : true})
 
         }).catch((err) => {
             console.log(err)

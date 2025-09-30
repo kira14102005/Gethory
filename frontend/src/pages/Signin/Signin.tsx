@@ -65,7 +65,7 @@ export function Signin() {
                 // Email not verified - redirect to OTP page
                 api.post('/auth/email/resend-verification', { email: userInfo.email }).then((res) => {
                     console.log(res.data)
-                    navigate('/submitotp', {
+                    navigate('/verify-status', {
                         state: {
                             email: userInfo.email,
                             message: "Please verify your email. A new verification code has been sent."
