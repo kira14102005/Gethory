@@ -1,13 +1,14 @@
 import type { ReactNode } from "react"
 import { Navigate } from "react-router-dom"
 import { useSelector } from 'react-redux';
-import { selectIsAuthenticated, selectNeedsProfileSetup, selectAuthLoading } from '../../store/authSelectors'; 
+import { selectIsAuthenticated, selectNeedsProfileSetup, selectAuthLoading, selectUser } from '../../store/authSelectors';
 
 interface RouteProps {
     children: ReactNode
 }
 
 const OnboardingRoute = (props: RouteProps) => {
+    const user = useSelector(selectUser)
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const needsSetup = useSelector(selectNeedsProfileSetup);
     const isLoading = useSelector(selectAuthLoading);
@@ -16,12 +17,14 @@ const OnboardingRoute = (props: RouteProps) => {
         return null;
     }
 
-    if (!isAuthenticated) {
-        return <Navigate to={'/signin'} replace/>
+    if (!isAuthenticated || user === null) {
+        return <Navigate to={'/signin'} replace />
     }
-
+    if (!user.verified) {
+        return <Navigate to={'/submitotp'} replace />
+    }
     if (!needsSetup) {
-        return <Navigate to={'/profile'} replace/>
+        return <Navigate to={'/profile'} replace />
     }
 
     return props.children;
