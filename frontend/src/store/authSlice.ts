@@ -23,7 +23,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  loading: false,
+  loading: true,
   error: null,
   isAuthenticated: false,
 };
@@ -81,7 +81,8 @@ export const fetchCurrentUser = createAsyncThunk<User | null, void, { rejectValu
   'auth/fetchCurrentUser',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get('/user', { withCredentials: true })
+      await new Promise((e) => { setTimeout(e, 3000) })
+      const res = await api.get('/user')
 
       if (res.status === 401 || res.status === 403) {
         return null;
