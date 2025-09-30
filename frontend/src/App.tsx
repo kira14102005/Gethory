@@ -20,17 +20,18 @@ function App() {
       <AppInitializer>
         <Routes>
           <Route element={<Home />} path="/" />
-  
+          {/* VerifiedGuard routes*/}
           <Route element={
             <VerificationGuard>
               <VerificationStatusPage />
             </VerificationGuard>
           } path="/verify-status" />
+          <Route element={<VerificationGuard><ValidateOTP /></VerificationGuard>} path="/submitotp" />
           {/* Guest Routes: Use SemiProtected to redirect logged-in users away */}
 
           <Route element={<SemiProtected><Signin /></SemiProtected>} path="/signin" />
           <Route element={<SemiProtected><Register /></SemiProtected>} path="/register" />
-          <Route element={<ValidateOTP />} path="/submitotp" />
+
 
 
           {/* Onboarding Route: Must be logged in, but profile is incomplete.
