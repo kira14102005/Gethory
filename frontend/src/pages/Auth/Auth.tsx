@@ -2,7 +2,7 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { DarkButton } from "../../components/shared/Buttons";
 import { AuthInput } from "../../components/shared/Input";
-import { Navbar } from "../../components/shared/Navigation";
+import { NavbarWithLogout } from "../../components/shared/Navigation";
 import { LighttitleCard } from "../../components/shared/Card";
 import './Auth.module.css'
 import { Navigate, useNavigate } from "react-router-dom";
@@ -47,7 +47,6 @@ export function Auth() {
         setIsUpdating(true);
 
         try {
-            // Send collected profileData (name, username) to the backend
             const res = await api.put('/user/update_profile', profileData);
             //@ts-ignore
             const updatedUser = res.data.user;
@@ -77,7 +76,6 @@ export function Auth() {
             content = <MainCard setStep={setStep} updateData={updateData} currentName={profileData.name} />;
             break;
         case 1:
-            // Placeholder step (e.g., avatar, skips to next step)
             content = <Step2Card setStep={setStep} />;
             break;
         case 2:
@@ -85,7 +83,6 @@ export function Auth() {
             break;
         case 3:
             // Placeholder for the FINAL API SUBMISSION (Step 4)
-            // Passes collected data to the next stage
             content = <Step4Card handleUpdate={handleUpdate} isUpdating={isUpdating} error={error} />;
             break;
         default:
@@ -93,7 +90,7 @@ export function Auth() {
             break;
     }
     return <>
-        <Navbar />
+        <NavbarWithLogout />
         <div className="w-full h-full flex flex-row justify-center items-center">
             {content}
         </div>
@@ -123,7 +120,7 @@ export const MainCard = memo(
                     <AuthInput label="name" value={localName} field="name" placeholder="Enter Your Name" handleChange={handleChange} />
                     <div className="my-6 w-full flex flex-row justify-center w-[80%]">
                         <DarkButton name="Next" onclick={() => {
-                            if (localName.trim()) { // Simple validation check
+                            if (localName.trim()) { 
                                 setStep((c: number) => c + 1)
                             }
                         }
