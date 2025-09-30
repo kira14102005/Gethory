@@ -89,7 +89,6 @@ export const fetchCurrentUser = createAsyncThunk<User | null, void, { rejectValu
       }
 
       if (res.status != 200) {
-        // Handle other potential non-2xx errors (e.g., 500)
         throw new Error('Failed to fetch current user');
       }
 
