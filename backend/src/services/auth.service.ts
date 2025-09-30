@@ -261,10 +261,9 @@ export const resetPassordService = async (code: string, password: string) => {
         $set: { password: hashedPassword }
     })
     appAssert(updatedUser, HTTP.INTERNAL_SERVER_ERROR, "Failed to reset the password");
-    //Now we need to delete all the Sessions of current User(Means Logout from all devices)
     await SessionModel.deleteMany({ userId });
     // @ts-ignore
-    return updatedUser.omitPassword();   // Return the User After Ommitting the Password
+    return updatedUser.omitPassword();   
 }
 
 export const resendEmailVerification = async (email: string) => {
@@ -272,7 +271,6 @@ export const resendEmailVerification = async (email: string) => {
     appAssert(user, HTTP.NOT_FOUND, "User does not exist");
     appAssert(!user.verified, HTTP.BAD_REQUEST, "Email is already verified");
 
-    // Check for rate limiting (optional)
     const fiveMinsAgo = getFiveMinsAgo();
     const numberOfRequestsInLast5Mins = await VerificationModel.countDocuments({
         userID: user._id,
