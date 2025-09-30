@@ -1,5 +1,5 @@
 import { APP_ORIGIN, EMAIL_SENDER, JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env"
-import { SignOptions } from "jsonwebtoken";import { HTTP } from "../constants/http"
+import { SignOptions } from "jsonwebtoken"; import { HTTP } from "../constants/http"
 import { VerificationCodeType } from "../constants/VerificationCodeType"
 import SessionModel from "../models/SessionModel"
 import User from "../models/UserCollection"
@@ -43,24 +43,27 @@ export const CreateAccount = async (data: CreateAccountParams) => {
     })
 
     if (error) console.log(error);
-
+    const sessionExpiryDate = getOneHourFromNow()
     // Session Handling
     const session = await SessionModel.create({
         userId: user._id,
+        expiresAt : sessionExpiryDate,
         userAgent: data.userAgent,
     });
     const refreshToken = signToken({ sessionId: session._id }, {
         secret: JWT_SECRET,
+        expiresIn : '1h',
         ...refereshTokenSignOptions
     })
 
 
     const accessToken = signToken({ userId: user._id, sessionId: session._id }, {
         secret: JWT_SECRET,
+        expiresIn : '1h',
         ...accessTokenSignOptions
     })
 
-    return { user, refreshToken, accessToken, code }
+    return { user, refreshToken, accessToken, code, refreshTokenExpiry: sessionExpiryDate }
 }
 
 export type loginUserParams = {
@@ -107,7 +110,7 @@ export const loginUser = async ({ email, password, userAgent }: loginUserParams)
     const isVerified = user.verified;
 
     let sessionExpiryDate: Date;
-    let tokenExpiryString: SignOptions["expiresIn"] ;
+    let tokenExpiryString: SignOptions["expiresIn"];
     if (isFullyComplete) {
         // C. FULL SESSION (Verified + Profile Complete)
         sessionExpiryDate = get30daysfromNow();
@@ -124,13 +127,11 @@ export const loginUser = async ({ email, password, userAgent }: loginUserParams)
 
     const userId = user._id;
 
-    //Create a new session fro logging IN record
     const sess = await SessionModel.create({
         userId,
         userAgent,
         expiresAt: sessionExpiryDate
     })
-    // Create tokens
     const refreshToken = signToken({ sessionId: sess._id }, {
         secret: JWT_REFRESH_SECRET,
         expiresIn: tokenExpiryString,
@@ -146,7 +147,7 @@ export const loginUser = async ({ email, password, userAgent }: loginUserParams)
     })
 
 
-    return { accessToken, refreshToken, user }
+    return { accessToken, refreshToken, user, refreshTokenExpiry: sessionExpiryDate }
 }
 
 
@@ -263,7 +264,7 @@ export const resetPassordService = async (code: string, password: string) => {
     appAssert(updatedUser, HTTP.INTERNAL_SERVER_ERROR, "Failed to reset the password");
     await SessionModel.deleteMany({ userId });
     // @ts-ignore
-    return updatedUser.omitPassword();   
+    return updatedUser.omitPassword();
 }
 
 export const resendEmailVerification = async (email: string) => {

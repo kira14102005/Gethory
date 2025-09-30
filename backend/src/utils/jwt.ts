@@ -15,10 +15,8 @@ type SignOptionsAndSecret = SignOptions & {
     secret: string
 }
 export const accessTokenSignOptions: SignOptions = {
-    expiresIn: "1h",
 }
 export const refereshTokenSignOptions: SignOptions = {
-    expiresIn: "1h",
     audience: ['user']
 }
 const defaults: SignOptionsAndSecret = {
