@@ -24,7 +24,6 @@ const SemiProtected = (props: RouteProps)  => {
         // A. Profile is NOT Verified: 
         if (user && !user.verified) { 
             // Only render the warning panel on Guest pages (/signin, /register, /home)
-            // We return the custom panel instead of Navigating.
             return <AccountPendingPanel />;
         }
         
