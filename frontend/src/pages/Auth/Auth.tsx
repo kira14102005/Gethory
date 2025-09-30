@@ -111,7 +111,7 @@ export const MainCard = memo(
                     <AuthInput label="name" value={localName} field="name" placeholder="Enter Your Name" handleChange={handleChange} />
                     <div className="my-6 w-full flex flex-row justify-center w-[80%]">
                         <DarkButton name="Next" onclick={() => {
-                            if (localName.trim()) {
+                            if (localName && localName.trim()) {
                                 dispatch(setName(localName))
                                 setStep((c: number) => c + 1)
                             }
@@ -125,13 +125,14 @@ export const MainCard = memo(
 
 
 export const Step2Card = memo(({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) => {
-
+    const name = useSelector(selectName)
+    const displayString = `Okay ${name}, how's this avatar?`
     return <>
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
             <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
             </div>
             <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
-                <LighttitleCard title="Okay, XYZ" subtitle="How's this photo?" />
+                <LighttitleCard title={displayString} />
                 <div className="mt-5 flex flex-col items-center w-full">
                     <div className="w-[16vh] h-[16vh] border-[3px] border-[#4A5568] bg-[#DB9C50] rounded-full"></div>
                     <div className="mt-3 text-[#7FACCF] text-[15px]">Choose a different avatar</div>
@@ -166,7 +167,7 @@ export const Step3Card = memo(({ setStep }: StepProps) => {
                 <AuthInput label="Username" value={localusername} field="username" placeholder="Enter Your Name" handleChange={handleChange} />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
                     <DarkButton name="Next" onclick={() => {
-                        if (localusername.trim().length
+                        if (localusername && localusername.trim().length
                             >= 3) {
 
                             dispatch(setUsername(localusername))
