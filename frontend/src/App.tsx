@@ -11,25 +11,34 @@ import Room from "./pages/Room/Room.tsx"
 import StartMeet from "./pages/StartMeet/StartMeet.tsx"
 import AppInitializer from "./components/shared/AppInitializer.tsx"
 import OnboardingRoute from "./routes/protected/OnboardingRoute.tsx"
+import VerificationGuard from "./routes/protected/VerificationGuard.tsx"
+import VerificationStatusPage from "./pages/VerifyStatus/VerificationStatus.tsx"
 function App() {
 
   return (
     <>
       <AppInitializer>
         <Routes>
-
-          {/* Guest Routes: Use SemiProtected to redirect logged-in users away */}
           <Route element={<Home />} path="/" />
+  
+          <Route element={
+            <VerificationGuard>
+              <VerificationStatusPage />
+            </VerificationGuard>
+          } path="/verify-status" />
+          {/* Guest Routes: Use SemiProtected to redirect logged-in users away */}
+
           <Route element={<SemiProtected><Signin /></SemiProtected>} path="/signin" />
           <Route element={<SemiProtected><Register /></SemiProtected>} path="/register" />
           <Route element={<ValidateOTP />} path="/submitotp" />
+
 
           {/* Onboarding Route: Must be logged in, but profile is incomplete.
           */}
           <Route element={
             <OnboardingRoute>
               <Auth />
-             </OnboardingRoute> 
+            </OnboardingRoute>
           } path="/auth" />
 
           {/* Fully Protected Routes: Require AUTHENTICATED AND PROFILE COMPLETE */}

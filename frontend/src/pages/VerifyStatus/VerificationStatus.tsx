@@ -6,7 +6,7 @@ import { selectUser } from '../../store/authSelectors';
 import { clearUser } from '../../store/authSlice';
 import { api } from '../../http';
 
-const AccountPendingPanel: React.FC = () => {
+const VerificationStatusPage: React.FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector(selectUser);
@@ -59,4 +59,4 @@ const AccountPendingPanel: React.FC = () => {
     );
 };
 
-export default AccountPendingPanel;
+export default VerificationStatusPage;
