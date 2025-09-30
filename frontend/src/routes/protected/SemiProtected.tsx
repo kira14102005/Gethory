@@ -2,7 +2,6 @@ import type { ReactNode } from "react"
 import { Navigate } from "react-router-dom"
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated, selectNeedsProfileSetup, selectAuthLoading,  selectUser } from '../../store/authSelectors'; 
-import AccountPendingPanel from "../../pages/Authcompletion/Authcompletion";
 
 interface RouteProps {
     children: ReactNode
@@ -23,8 +22,7 @@ const SemiProtected = (props: RouteProps)  => {
    if (isAuthenticated) {
         // A. Profile is NOT Verified: 
         if (user && !user.verified) { 
-            // Only render the warning panel on Guest pages (/signin, /register, /home)
-            return <AccountPendingPanel />;
+            return <Navigate to={'/verify-status'} replace />;
         }
         
         // B. Profile is Verified but Incomplete: Send to /auth

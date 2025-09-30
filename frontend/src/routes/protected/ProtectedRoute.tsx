@@ -2,7 +2,6 @@ import { useEffect, type ReactNode } from "react"
 import { Navigate } from "react-router-dom"
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated, selectNeedsProfileSetup, selectAuthLoading, selectUser } from '../../store/authSelectors';
-import AccountPendingPanel from "../../pages/Authcompletion/Authcompletion";
 
 interface RouteProps {
     children: ReactNode
@@ -27,7 +26,7 @@ const ProtectedRoute = (props: RouteProps) => {
         return <Navigate to={'/signin'} replace />
     }
     if (!user.verified) { 
-        return <AccountPendingPanel/>
+        return <Navigate to={'/verify-status'} replace />;
     }
 
     // 3. If authenticated BUT setup incomplete, redirect to /auth
