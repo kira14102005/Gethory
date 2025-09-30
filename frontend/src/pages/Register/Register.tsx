@@ -7,18 +7,24 @@ import './Register.module.css'
 import { TitleCard } from "../../components/shared/Card";
 import { useState, type FormEvent } from "react";
 import { api } from "../../http";
+import { setUser, type User } from "../../store/authSlice";
+import { useDispatch } from "react-redux";
 export function Register() {
     const [userInfo, setUserinfo] = useState({
         email: "",
         password: ""
     })
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
         console.log(userInfo)
-        // setTimeout(()=>{}, 3000)
         api.post('/auth/register', { ...userInfo, confirmpassword: userInfo.password }).then((res) => {
             console.log(res.data)
+            //@ts-ignore
+            const data: { user: User } = res.data
+            const userPayload = data.user
+            dispatch(setUser(userPayload))
             navigate('/submitotp', {})
 
         }).catch((err) => {

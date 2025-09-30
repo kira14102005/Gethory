@@ -8,16 +8,18 @@ import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { sendVerificationCode } from '../../http'
+import { useDispatch } from 'react-redux'
+import { updateUserProfile } from '../../store/authSlice'
 export function ValidateOTP() {
     const [codeState, setCode] = useState({ code: '' })
+    const dispatch  = useDispatch()
+    
     const navigate = useNavigate()
     function verifyCode(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
         console.log(codeState)
-        // setTimeout(()=>{}, 3000)
         sendVerificationCode(codeState.code).then((res) => {
-            console.log(res.data)
-            // user.authenticated = true
+            dispatch(updateUserProfile({ verified: true }));
             navigate('/auth', {})
 
         }).catch((err) => {
