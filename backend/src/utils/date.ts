@@ -8,7 +8,9 @@ export function getOneHourFromNow() {
     return new Date(Date.now() + 1000 * 60 * 60)
 }
 
-
+export function get7daysfromNow(){
+    return new Date(Date.now() + 1000 * 60 * 60*24*7)
+}
 export const ONE_DAY_MILIS = 24 * 60 * 60 * 1000;
 
 export const getFiveMinsAgo = () => new Date(Date.now() - 5 * 60 * 1000);
