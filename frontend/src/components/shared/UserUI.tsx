@@ -1,13 +1,17 @@
+import { useSelector } from "react-redux";
 import { DarkButton } from "./Buttons"
 import { CustomBox } from "./Card";
+import { selectUser } from "../../store/authSelectors";
 
 export const ProfileIcon = ({ name }: { name: string }) => {
+    const avatar = 'data:image/png;' + useSelector(selectUser)?.avatar 
+    console.log(avatar)
     return <>
         <div className="flex flex-row items-center ">
             <span className="text-[20px] text-[#1A202C] text-white mr-2">
                 Hello {name}
             </span>
-            <div className="w-[45px] h-[45px] rounded-full bg-white flex flex-row justify-center items-center"><img className="w-[45px]" src="/profile.png" alt="profile" /></div>
+            <div className="w-[45px] h-[45px] rounded-full bg-white flex items-center overflow-hidden justify-center items-center"><img className="w-[90%] h-[90%] object-cover" src={avatar} alt="profile" /></div>
 
         </div>
     </>
