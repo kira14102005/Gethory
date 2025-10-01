@@ -15,6 +15,6 @@ export const sendVerificationCode = (data: string | null) => {
 }
 
 export const activate = async (currentActiveState: ActivateState) => {
-    const res = await api.put('/user/update_profile', currentActiveState);
+    const res = await api.put('/user/update_profile',  currentActiveState );
     return res
 }
