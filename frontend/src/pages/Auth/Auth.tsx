@@ -46,6 +46,7 @@ export function Auth() {
             dispatch(updateUserProfile({
                 name: updatedUser.name,
                 username: updatedUser.username,
+                avatar : updatedUser.avatar,
                 profileCompleted: updatedUser.profileCompleted
             }));
 
