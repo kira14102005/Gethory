@@ -1,4 +1,4 @@
-import { APP_ORIGIN, EMAIL_SENDER, JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env"
+import { APP_ORIGIN, DEFAULT_AVATAR, EMAIL_SENDER, JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env"
 import { SignOptions } from "jsonwebtoken"; import { HTTP } from "../constants/http"
 import { VerificationCodeType } from "../constants/VerificationCodeType"
 import SessionModel from "../models/SessionModel"
@@ -26,6 +26,7 @@ export const CreateAccount = async (data: CreateAccountParams) => {
     const user = await User.create({
         email: data.email,
         password: data.password,
+        avatar: DEFAULT_AVATAR
     })
 
     //create verification code
@@ -36,7 +37,7 @@ export const CreateAccount = async (data: CreateAccountParams) => {
     })
     //Send this Verification Code to the User Mail
     const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`
-    console.log(EMAIL_SENDER);
+    console.log(code._id);
     const { error } = await sendMail({
         to: user.email, subject: "Verify email", text: "Check this link to verify your email",
         html: `<h2>Click this link to verify Email</h2><br/><a href=${verifyURL} target = "_blank">Click to verify</a>`
@@ -47,19 +48,19 @@ export const CreateAccount = async (data: CreateAccountParams) => {
     // Session Handling
     const session = await SessionModel.create({
         userId: user._id,
-        expiresAt : sessionExpiryDate,
+        expiresAt: sessionExpiryDate,
         userAgent: data.userAgent,
     });
     const refreshToken = signToken({ sessionId: session._id }, {
         secret: JWT_SECRET,
-        expiresIn : '1h',
+        expiresIn: '1h',
         ...refereshTokenSignOptions
     })
 
 
     const accessToken = signToken({ userId: user._id, sessionId: session._id }, {
         secret: JWT_SECRET,
-        expiresIn : '1h',
+        expiresIn: '1h',
         ...accessTokenSignOptions
     })
 
@@ -240,6 +241,7 @@ export const sendPasswordResetEmail = async (email: string) => {
         expiresAt: oneHourLater,
         type: VerificationCodeType.PASSWORD_RESET
     })
+    console.log(code._id)
     const url = `${APP_ORIGIN}/password/reset?code=${code._id}&exp=${oneHourLater.getTime()}`
     const { data, error } = await sendMail({ to: email, subject: `Reset Your Password ${user.name}`, text: "Here is your password reset", html: `<h2>Click this link to reset your password</h2><br/><a href=${url} target = "_blank">Click to verify</a>` })
     appAssert(data?.id, HTTP.INTERNAL_SERVER_ERROR, `${error?.name} - ${error?.message}`);
@@ -286,6 +288,7 @@ export const resendEmailVerification = async (email: string) => {
         type: VerificationCodeType.EMAIL,
         expiresAt: getOneYearFromNow()
     });
+    console.log(code._id)
 
     // Send verification email
     const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`;
