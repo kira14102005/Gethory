@@ -10,7 +10,7 @@ export interface User {
   verified: boolean;
   username: string;
   profileCompleted: boolean;
-  avatarUrl?: string | null;
+  avatar?: string | null;
   roles?: string[];
 }
 
@@ -81,7 +81,7 @@ export const fetchCurrentUser = createAsyncThunk<User | null, void, { rejectValu
   'auth/fetchCurrentUser',
   async (_, { rejectWithValue }) => {
     try {
-      await new Promise((e) => { setTimeout(e, 3000) })
+      // await new Promise((e) => { setTimeout(e, 3000) })
       const res = await api.get('/user')
 
       if (res.status === 401 || res.status === 403) {
@@ -100,6 +100,8 @@ export const fetchCurrentUser = createAsyncThunk<User | null, void, { rejectValu
         _id: fetchedUser._id as string,
         email: fetchedUser.email as string,
         name: fetchedUser.name,
+        username  : fetchedUser.username as string,
+        avatar :  fetchedUser.avatar as string,
         verified: fetchedUser.verified as boolean,
         profileCompleted: fetchedUser.profileCompleted as boolean
       } as User
