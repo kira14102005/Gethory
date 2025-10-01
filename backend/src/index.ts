@@ -16,7 +16,9 @@ app.use(cors({
     origin: APP_ORIGIN,
     credentials: true
 }))
-app.use(express.json())
+app.use(express.json({ limit: '10mb' })); 
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 app.use(cookieParser())
 app.get("/error", catchError(async (req: Request, res: Response, next: NextFunction) => {
     console.log("Hello")
