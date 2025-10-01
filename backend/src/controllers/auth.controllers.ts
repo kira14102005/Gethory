@@ -29,8 +29,8 @@ export const registerController = catchError(async (req, res, next) => {
 
 export const loginController = catchError(async (req, res, next) => {
     const response = loginSchema.parse({ ...req.body, userAgent: req.headers['user-agent'] })
-    const { accessToken, refreshToken, user , refreshTokenExpiry } = await loginUser(response)
-    return setCookie({ accessToken, refreshToken, res }).status(HTTP.OK).json({
+    const { accessToken, refreshToken, user, refreshTokenExpiry } = await loginUser(response)
+    return setCookie({ accessToken, refreshToken, res, refreshTokenExpiry }).status(HTTP.OK).json({
         msg: "LoggedIn Successfully",
         // @ts-ignore
         user: user.omitPassword()
@@ -67,12 +67,12 @@ export const refreshController = catchError(async (req, res, next) => {
 export const verifyController = catchError(async (req, res, next) => {
     const verifyCode = verificationCodeSchema.parse(req.query.code);
     const { updatedUser, accessToken, refreshToken } = await verifyEmail(verifyCode);
-    setCookie({ res, accessToken, refreshToken }); 
-    
+    setCookie({ res, accessToken, refreshToken });
+
     return res.json({
         msg: "Email Was Successfully Verified",
         // @ts-ignore
-        user: updatedUser.omitPassword() 
+        user: updatedUser.omitPassword()
     })
 })
 
