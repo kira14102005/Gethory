@@ -21,11 +21,9 @@ export const updateuserProfileController = catchError(async function (req, res, 
     const userId = req.userId;
     appAssert(userId, HTTP.UNAUTHORIZED, "User ID not found in request (Auth token issue)");
 
-    const { name, username } = UpdateUserSchema.parse(req.body);
+    const { name, username, avatar } = UpdateUserSchema.parse(req.body);
+    const updatedUser = await updateUser(userId, username, name, avatar)
 
-    const updatedUser = await updateUser(userId, username, name)
-
-    console.log('@nd')
     res.status(HTTP.OK).json({
         msg: "Profile setup complete",
         // @ts-ignore
