@@ -1,7 +1,7 @@
-
+import { SignOptions } from "jsonwebtoken";
 
 const getEnv = (name: string, defValue: string) => {
-    const data = process.env[name] || defValue;
+    const data = process.env[name] ?? defValue;
     return data
 }
 
@@ -15,3 +15,5 @@ export const APP_ORIGIN = getEnv("APP_ORIGIN", "http://localhost:5173")
 export const RESEND_API_KEY = getEnv("RESEND_KEY", "api221")
 export const EMAIL_SENDER = getEnv("EMAIL_SENDER", "sender@gmail.com")
 export const DEFAULT_AVATAR  = getEnv("DEFAULT_AVATAR", "...")
+//@ts-ignore
+export const ACCESS_TOKEN_EXPIRY : SignOptions['expiresIn'] = getEnv('ACCESS_TOKEN_EXPIRY' , '1m')

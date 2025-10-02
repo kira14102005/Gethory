@@ -1,4 +1,4 @@
-import { APP_ORIGIN, DEFAULT_AVATAR, EMAIL_SENDER, JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env"
+import { ACCESS_TOKEN_EXPIRY, APP_ORIGIN, DEFAULT_AVATAR, JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env"
 import { SignOptions } from "jsonwebtoken"; import { HTTP } from "../constants/http"
 import { VerificationCodeType } from "../constants/VerificationCodeType"
 import SessionModel from "../models/SessionModel"
@@ -6,10 +6,8 @@ import User from "../models/UserCollection"
 import VerificationModel from "../models/verificationCodeModel"
 import { appAssert } from "../utils/appAssert"
 import { get30daysfromNow, get7daysfromNow, getFiveMinsAgo, getOneHourFromNow, getOneYearFromNow, ONE_DAY_MILIS } from "../utils/date"
-import jwt from "jsonwebtoken"
-import { accessTokenPayload, accessTokenSignOptions, refereshTokenSignOptions, refreshTokenPayload, signToken, verifyTokens } from "../utils/jwt"
+import { accessTokenSignOptions, refereshTokenSignOptions, refreshTokenPayload, signToken, verifyTokens } from "../utils/jwt"
 import { sendMail } from "../utils/sendMail"
-import { resetPasswordSchema } from "../controllers/auth.schemas"
 import { hashValue } from "../utils/hash"
 export type CreateAccountParams = {
     email: string
@@ -60,7 +58,7 @@ export const CreateAccount = async (data: CreateAccountParams) => {
 
     const accessToken = signToken({ userId: user._id, sessionId: session._id }, {
         secret: JWT_SECRET,
-        expiresIn: '1h',
+        expiresIn: ACCESS_TOKEN_EXPIRY,
         ...accessTokenSignOptions
     })
 
@@ -142,7 +140,7 @@ export const loginUser = async ({ email, password, userAgent }: loginUserParams)
 
     const accessToken = signToken({ userId, sessionId: sess._id }, {
         secret: JWT_SECRET,
-        expiresIn: tokenExpiryString,
+        expiresIn: ACCESS_TOKEN_EXPIRY,
 
         ...accessTokenSignOptions
     })
@@ -171,9 +169,17 @@ export const refreshUserAccessToken = async (refreshToken: string) => {
 
 
     // If we have refreshed the Session to set expiry from 30 days from now we also need to renew refreshToken
-    const newRefreshToken = resetSessioncondition ? signToken({ sessionId: session._id }, { secret: JWT_REFRESH_SECRET, ...refereshTokenSignOptions }) : undefined
+    const newRefreshToken = resetSessioncondition ? signToken({ sessionId: session._id }, {
+        secret: JWT_REFRESH_SECRET,
+        expiresIn: '30d',
+        ...refereshTokenSignOptions
+    }) : undefined
 
-    const accessToken = signToken({ sessionId: session._id, userId: session.userId }, { secret: JWT_SECRET, ...accessTokenSignOptions });
+    const accessToken = signToken({ sessionId: session._id, userId: session.userId }, {
+        secret: JWT_SECRET,
+        expiresIn: ACCESS_TOKEN_EXPIRY,
+        ...accessTokenSignOptions
+    });
 
     return { accessToken, newRefreshToken }
 }
@@ -216,6 +222,7 @@ export const verifyEmail = async (code: string) => {
     });
     const accessToken = signToken({ userId: updatedUser._id, sessionId: session._id }, {
         secret: JWT_SECRET,
+        expiresIn : ACCESS_TOKEN_EXPIRY,
         ...accessTokenSignOptions
     });
 
