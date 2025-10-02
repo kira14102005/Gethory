@@ -19,6 +19,6 @@ export const activate = async (currentActiveState: ActivateState) => {
     return res
 }
 export const getAvatarImage = (path: string) => {
-    const url = process.env.VITE_BACKEND_URL + '/storage/' + path;
+    const url = baseURL + '/storage/' + path;
     return url
 }
