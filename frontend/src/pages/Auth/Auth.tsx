@@ -186,9 +186,9 @@ export const Step3Card = memo(({ setStep }: StepProps) => {
             </div>
             <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
                 <LighttitleCard title="Pick a username" />
-                <AuthInput label="Username" value={localusername} field="username" placeholder="Enter Your Name" handleChange={handleChange} />
+                <AuthInput label="Username" value={localusername} field="username" placeholder="Choose your username" handleChange={handleChange} />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
-                    <DarkButton name="Next" onclick={() => {
+                    <DarkButton name="Setup Profile" onclick={() => {
                         if (localusername && localusername.trim().length
                             >= 3) {
 
