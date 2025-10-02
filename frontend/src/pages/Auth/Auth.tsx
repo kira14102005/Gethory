@@ -13,6 +13,7 @@ import { updateUserProfile } from "../../store/authSlice";
 import { selectActivate, selectAvatar, selectName, selectUsername } from "../../store/activateSelectors";
 import { setAvatar, setName, setUsername } from "../../store/activateSlice";
 import AvatarComponent from "../../components/shared/Avatar";
+import { Loader1, Loader2, Loader3 } from "../../components/shared/LoaderOptions";
 
 
 
@@ -220,7 +221,7 @@ export const Step4Card = memo(({ handleUpdate, isUpdating, error }: Step4Props) 
 
     return <>
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
-            <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
+            {/* <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
             </div>
             <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center justify-between">
                 <LighttitleCard title="Seting up your Gethory account" />
@@ -228,7 +229,8 @@ export const Step4Card = memo(({ handleUpdate, isUpdating, error }: Step4Props) 
                     <div className="w-[23vh] h-[23vh] border-r-[#D9D9D9] animate-spin border-[2vh] border-[#71E8DF] bg-transparent rounded-full"></div>
                 </div>
 
-            </div>
+            </div> */}
+            <Loader3/>
         </div>
     </>
 })
