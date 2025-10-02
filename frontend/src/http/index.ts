@@ -10,17 +10,10 @@ export const api = axios.create({
   withCredentials: true
 })
 
-export const sendVerificationCode = (data: string | null) => {
-  return api.post(`/auth/email/verify?code=${data}`)
-}
 
 export const activate = async (currentActiveState: ActivateState) => {
   const res = await api.put('/user/update_profile', currentActiveState);
   return res
-}
-export const getAvatarImage = (path: string) => {
-  const url = baseURL + '/storage/' + path;
-  return url
 }
 import { store } from "../store";
 import { clearActivate } from "../store/activateSlice";
