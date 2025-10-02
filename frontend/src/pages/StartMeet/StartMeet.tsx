@@ -48,12 +48,12 @@ const StartMeet = () => {
                     <div className='bg-[#d9d9d9] h-[1px] opacity-60 w-full'></div>
                     <div className='flex flex-col gap-4'>
                         <h1>Room Type</h1>
-                        <div className='w-full  grid grid-cols-3'>
+                        <div className='w-full hover:cursor-pointer  grid grid-cols-3'>
                             {roomArr.map((elem : roomDetails, i : number) => {
                                 let Emoji = elem.emoji;
                                 if (i != room)
                                     return <>
-                                        <div className='flex flex-col place-items-center' onClick={() => {
+                                        <div className='flex flex-col place-items-center shadow-xl' onClick={() => {
                                             setRoom(i)
                                         }}>
                                             {Emoji}
@@ -61,7 +61,7 @@ const StartMeet = () => {
                                         </div>
                                     </>
                                 else return <>
-                                    <div className='flex flex-col place-items-center border-white border-[3px] rounded-lg py-2' onClick={() => {
+                                    <div className='flex flex-col place-items-center border-white border-[3px]  rounded-lg py-2' style={{borderStyle : 'ridge', boxShadow:'inset 0 0 4px 3px rgba(42, 48, 53, 1)' }} onClick={() => {
                                         setRoom(i)
                                     }}>
                                         {Emoji}

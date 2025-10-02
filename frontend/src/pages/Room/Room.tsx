@@ -1,5 +1,8 @@
-import { MeetingCard, type MeetingDetailsProps } from "../../components/shared/Card"
-import Section from "../../components/shared/Section"
+import { useNavigate } from "react-router-dom";
+import { CreateRoomButton } from "../../components/shared/Buttons";
+import { MeetingCard, MenuCard, type MeetingDetailsProps } from "../../components/shared/Card"
+import { SearchInput } from "../../components/shared/Input";
+import { SectionType2 } from "../../components/shared/Section"
 
 const MeetingArray: MeetingDetailsProps[] = [
     {
@@ -87,14 +90,28 @@ const MeetingArray: MeetingDetailsProps[] = [
 
 const Room = () => {
     return (
-        <Section>
-            <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 w-full h-full">
-                {MeetingArray.map((meet: MeetingDetailsProps) => {
-                    return <MeetingCard title={meet.title} count={meet.count} authors={meet.authors}></MeetingCard>
+        <SectionType2>
+            <VoiceBar />            <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 w-full h-full">
+                {MeetingArray.map((meet: MeetingDetailsProps, i) => {
+                    return <MeetingCard key={i} title={meet.title} count={meet.count} authors={meet.authors}></MeetingCard>
                 })}
 
             </div>
-        </Section>
+        </SectionType2>
+
+    )
+}
+
+export function VoiceBar() {
+    const navigate = useNavigate()
+    return (
+        <>
+            <div className="flex w-full h-fit flex-row items-center justify-between">
+                <MenuCard title="All voice rooms" />
+                <SearchInput />
+                <CreateRoomButton name="Start a room" onclick={() => { navigate('/createroom') }} />
+            </div>
+        </>
     )
 }
 
