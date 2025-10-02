@@ -6,10 +6,9 @@ import { TitleCard } from '../../components/shared/Card'
 import './Validation.module.css'
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-import { sendVerificationCode } from '../../http'
 import { useDispatch } from 'react-redux'
 import { updateUserProfile } from '../../store/authSlice'
+import { sendVerificationCode } from '../../http/utils'
 export function ValidateOTP() {
     const [codeState, setCode] = useState({ code: '' })
     const dispatch  = useDispatch()

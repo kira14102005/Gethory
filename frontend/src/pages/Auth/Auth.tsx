@@ -20,7 +20,7 @@ import { Loader1, Loader2, Loader3 } from "../../components/shared/LoaderOptions
 export function Auth() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const [unmounted, setUnmounted] = useState(false)
     const currentActiveState = useSelector(selectActivate);
 
 
@@ -39,17 +39,13 @@ export function Auth() {
         setIsUpdating(true);
 
         try {
-            const res =await activate(currentActiveState);
+            const res = await activate(currentActiveState);
             //@ts-ignore
             const updatedUser = res.data.user;
 
             // 1. SUCCESS: Dispatch action to update RTK store with the confirmed data
-            dispatch(updateUserProfile({
-                name: updatedUser.name,
-                username: updatedUser.username,
-                avatar : updatedUser.avatar,
-                profileCompleted: updatedUser.profileCompleted
-            }));
+            if (!unmounted)
+                dispatch(updateUserProfile(updatedUser));
 
             // 2. Redirect to the main application page.
             navigate('/profile', { replace: true });
@@ -62,7 +58,9 @@ export function Auth() {
             setIsUpdating(false);
         }
     }, [currentActiveState, isUpdating, dispatch, navigate]);
-    // Navigate
+    useEffect(() => {
+        return setUnmounted(true)
+    }, [])
     let content;
     switch (step) {
         case 0:
@@ -230,7 +228,7 @@ export const Step4Card = memo(({ handleUpdate, isUpdating, error }: Step4Props) 
                 </div>
 
             </div> */}
-            <Loader3/>
+            <Loader3 />
         </div>
     </>
 })
