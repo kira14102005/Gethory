@@ -21,10 +21,10 @@ const Room = () => {
     return (
         <SectionType2>
             <div className="flex h-full w-full justify-center">
-                <div className="flex flex-col w-full h-full place-items-center"  style={{ opacity: opacity }}>
+                <div className="flex flex-col w-full h-full place-items-center" style={{ opacity: opacity }}>
                     <VoiceBar onclick={handleClick} />
                     <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 w-full h-full">
-                        
+
                         {MeetingArray.map((meet: MeetingDetailsProps, i) => {
                             return <MeetingCard key={i} title={meet.title} count={meet.count} authors={meet.authors}></MeetingCard>
                         })}
@@ -55,14 +55,18 @@ export function VoiceBar({ onclick }: { onclick: () => void }) {
 
 const RoomModel = ({ onclose }: { onclose: () => void }) => {
     const [room, setRoom] = useState(0)
-
+    const [topic, setTopic] = useState('')
+    function handleChange(e: any) {
+        console.log(topic)
+        setTopic(e.target.value)
+    }
     return <>
         <div className='z-10 fixed w-[70%] lg:w-[50%]  md:w-[60%] rounded-2xl flex flex-col bg-[#1A202C] py-5 px-6 gap-2 text-[20px]'>
             <h1 className='text-[20px]'>Enter the topic to be discovered</h1>
             <button onClick={onclose} className='absolute top-2 right-2 cursor-pointer' >
                 <CloseIcon fontSize='small' />
             </button>
-            <GreyInput />
+            <GreyInput value={topic} onchange={handleChange} />
             <div className='bg-[#d9d9d9] h-[1px] opacity-60 w-full'></div>
             <div className='flex flex-col gap-4'>
                 <h1>Room Type</h1>
@@ -70,22 +74,21 @@ const RoomModel = ({ onclose }: { onclose: () => void }) => {
                     {roomArr.map((elem: roomDetails, i: number) => {
                         let Emoji = elem.emoji;
                         if (i != room)
-                            return <>
-                                <div className='flex flex-col place-items-center shadow-xl' onClick={() => {
+                            return (
+                                <div key={i} className='flex flex-col place-items-center shadow-xl' onClick={() => {
                                     setRoom(i)
                                 }}>
                                     {Emoji}
                                     <p className='text-[16px] text-[#d9d9d9] opacity-50'>{elem.roomType}</p>
-                                </div>
-                            </>
-                        else return <>
-                            <div className='flex flex-col place-items-center border-white border-[3px]  rounded-lg py-2' style={{ borderStyle: 'ridge', boxShadow: 'inset 0 0 4px 3px rgba(42, 48, 53, 1)' }} onClick={() => {
-                                setRoom(i)
-                            }}>
+                                </div>)
+                        else return (
+                            <div key={i} className='flex flex-col place-items-center rounded-lg py-2
+                            bg-[#161A22]' style={{ borderStyle: 'ridge', boxShadow: 'inset 0 0 4px 3px rgba(42, 48, 53, 1)' }} onClick={() => {
+                                    setRoom(i)
+                                }}>
                                 {Emoji}
                                 <p className='text-[16px] text-[#d9d9d9] opacity-50'>{elem.roomType}</p>
-                            </div>
-                        </>
+                            </div>)
                     })}
 
                 </div>

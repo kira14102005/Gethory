@@ -71,9 +71,9 @@ export function OtpInput({ id }: { id: string }) {
         <input type="text" id={id} className='w-[6vw] lg:w-[5vw] lg:h-[5vw] lg:rounded-lg text-black text-[20px] lg:text-[30px]  bg-[#D9D9D9] rounded-md border border-[#4A5568] text-center  shadow-lg'></input>
     </>
 }
-export function GreyInput() {
+export function GreyInput({ onchange, value }: { onchange: (e: any) => void, value: string}) {
     return <>
-        <input type="text" className='bg-[#414A5B] opacity-60 rounded-lg p-1' />
+        <input value={value} type="text" onChange={onchange} className='bg-[#414A5B] opacity-60 rounded-lg p-1' />
     </>
 }
 import SearchIcon from '@mui/icons-material/Search';
