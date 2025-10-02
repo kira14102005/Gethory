@@ -75,23 +75,26 @@ export function MeetingCard(props: MeetingDetailsProps) {
             <h1 className="text-lg text-white">{props.title}</h1>
             <div className="flex w-full justify-between px-2 items-center h-[100px]">
                 <div className="relative -top-8">
-                    <div className='absolute w-[50px] h-[50px] bg-[#566AA6] z-0 rounded-full bg- top-0 left-0'></div>
-                    <div className='absolute w-[50px] h-[50px] z-10 bg-[#DB9C50] rounded-full top-5 left-4'></div>
+                    <div className='absolute w-[50px] h-[50px] bg-[#566AA6] z-0 rounded-full bg- top-0 left-0 overflow-hidden'>
+                        <img src="./profile.png" alt="" className='cover' />
+                    </div>
+                    <div className='absolute w-[50px] h-[50px] z-10 bg-[#DB9C50] rounded-full top-5 left-4 overflow-hidden'>
+                        <img src="./profile.png" alt="" className='cover' /></div>
                 </div>
                 <div className='flex flex-col'>
                     <span className='flex gap-1 items-center text-[14px]'>
                         <p>{props.authors[0]}</p>
-                        <ForumIcon fontSize='small' />
+                        <ForumIcon fontSize='inherit' />
                     </span>
                     <span className='flex gap-1 items-center text-[14px]'>
                         <p>{props.authors[1]}</p>
-                        <ForumIcon fontSize='small' />
+                        <ForumIcon fontSize='inherit' />
                     </span>
                 </div>
             </div>
             <div className='w-full flex justify-end text-[14px]'>
                 <span className='flex items-center gap-1'><p>{count}</p>
-                    <PersonIcon fontSize='small' />
+                    <PersonIcon fontSize='inherit' />
                 </span>
             </div>
         </div>

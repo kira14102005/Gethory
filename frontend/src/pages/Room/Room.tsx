@@ -1,101 +1,102 @@
-import { MeetingCard, type MeetingDetailsProps } from "../../components/shared/Card"
-import Section from "../../components/shared/Section"
-
-const MeetingArray: MeetingDetailsProps[] = [
-    {
-        title: "AI Ethics and Governance",
-        authors: ["Dr. Alice Morgan", "Prof. John Tan", "Laura Kim"],
-        count: 58
-    },
-    {
-        title: "Quantum Computing Trends",
-        authors: ["Ethan Zhao", "Dr. Marie Chen"],
-        count: 1007
-    },
-    {
-        title: "Climate Tech Innovations",
-        authors: ["Carlos Vega", "Sophie Grant", "Dr. Elena Petrov"],
-        count: 2788
-    },
-    {
-        title: "Cybersecurity in 2025",
-        authors: ["Nina Brooks", "Oliver West"],
-        count: 66
-    },
-    {
-        title: "Sustainable Architecture",
-        authors: ["Ava Thompson", "Dr. Ravi Singh"],
-        count: 39
-    },
-    {
-        title: "Future of Work",
-        authors: ["Liam Carter", "Emily Zhang", "Marcus Bell"],
-        count: 82
-    },
-    {
-        title: "Space Tech Missions",
-        authors: ["Dr. Naomi Watts", "Leo Fernandez"],
-        count: 90
-    },
-    {
-        title: "Smart City Planning",
-        authors: ["Grace Lin", "Andrew Kumar"],
-        count: 47
-    },
-    {
-        title: "Digital Health Revolution",
-        authors: ["Isabella Reed", "Thomas Müller", "Dr. Kate Morgan"],
-        count: 55
-    },
-    {
-        title: "Blockchain Beyond Crypto",
-        authors: ["Maya Singh", "James Huang"],
-        count: 60
-    },
-    {
-        title: "Robotics in Everyday Life",
-        authors: ["Victor Chan", "Ella Romano", "David Nwosu"],
-        count: 78
-    },
-    {
-        title: "AgriTech and Food Security",
-        authors: ["Dr. Li Wei", "Hannah Patel"],
-        count: 44
-    },
-    {
-        title: "Ocean Conservation Tech",
-        authors: ["Chris O'Donnell", "Fatima Noor", "Jun Yamamoto"],
-        count: 63
-    },
-    {
-        title: "Autonomous Vehicles Update",
-        authors: ["Tina Brooks", "Haruto Sato"],
-        count: 71
-    },
-    {
-        title: "Augmented Reality in Education",
-        authors: ["Rachel Stein", "Ahmed Salah"],
-        count: 52
-    },
-    {
-        title: "Green Energy Storage",
-        authors: ["Sanjay Desai", "Olivia Carter", "Nikolai Petrov"],
-        count: 69
-    }
-];
+import { CreateRoomButton, DarkButton } from "../../components/shared/Buttons";
+import { MeetingCard, MenuCard, type MeetingDetailsProps } from "../../components/shared/Card"
+import { GreyInput, SearchInput } from "../../components/shared/Input";
+import { SectionType2 } from "../../components/shared/Section"
+import { useCallback, useMemo, useState } from "react";
+import CloseIcon from '@mui/icons-material/Close';
+import { MeetingArray, roomArr, type roomDetails } from "./constants";
 
 
 const Room = () => {
+    const [showRoomModel, setShowRoomModel] = useState(false)
+    const handleClick = useCallback(() => {
+        setShowRoomModel(true)
+    }, [setShowRoomModel])
+    const onClose = useCallback(() => {
+        setShowRoomModel(false)
+    }, [setShowRoomModel])
+    const opacity = useMemo(() => {
+        return showRoomModel ? '30%' : ''
+    }, [showRoomModel])
     return (
-        <Section>
-            <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 w-full h-full">
-                {MeetingArray.map((meet: MeetingDetailsProps) => {
-                    return <MeetingCard title={meet.title} count={meet.count} authors={meet.authors}></MeetingCard>
-                })}
+        <SectionType2>
+            <div className="flex h-full w-full justify-center">
+                <div className="flex flex-col w-full h-full place-items-center" style={{ opacity: opacity }}>
+                    <VoiceBar onclick={handleClick} />
+                    <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 w-full h-full">
+
+                        {MeetingArray.map((meet: MeetingDetailsProps, i) => {
+                            return <MeetingCard key={i} title={meet.title} count={meet.count} authors={meet.authors}></MeetingCard>
+                        })}
+
+                    </div>
+                </div>
+                {showRoomModel && <RoomModel onclose={onClose} />}
 
             </div>
-        </Section>
+
+        </SectionType2>
+
     )
+}
+
+export function VoiceBar({ onclick }: { onclick: () => void }) {
+    return (
+        <>
+            <div className="flex w-full h-fit flex-row items-center justify-between">
+                <MenuCard title="All voice rooms" />
+                <SearchInput />
+                <CreateRoomButton name="Start a room" onclick={onclick} />
+            </div>
+        </>
+    )
+}
+
+
+const RoomModel = ({ onclose }: { onclose: () => void }) => {
+    const [room, setRoom] = useState(0)
+    const [topic, setTopic] = useState('')
+    function handleChange(e: any) {
+        console.log(topic)
+        setTopic(e.target.value)
+    }
+    return <>
+        <div className='z-10 fixed w-[70%] lg:w-[50%]  md:w-[60%] rounded-2xl flex flex-col bg-[#1A202C] py-5 px-6 gap-2 text-[20px]'>
+            <h1 className='text-[20px]'>Enter the topic to be discovered</h1>
+            <button onClick={onclose} className='absolute top-2 right-2 cursor-pointer' >
+                <CloseIcon fontSize='small' />
+            </button>
+            <GreyInput value={topic} onchange={handleChange} />
+            <div className='bg-[#d9d9d9] h-[1px] opacity-60 w-full'></div>
+            <div className='flex flex-col gap-4'>
+                <h1>Room Type</h1>
+                <div className='w-full hover:cursor-pointer  grid grid-cols-3'>
+                    {roomArr.map((elem: roomDetails, i: number) => {
+                        let Emoji = elem.emoji;
+                        if (i != room)
+                            return (
+                                <div key={i} className='flex flex-col place-items-center shadow-xl' onClick={() => {
+                                    setRoom(i)
+                                }}>
+                                    {Emoji}
+                                    <p className='text-[16px] text-[#d9d9d9] opacity-50'>{elem.roomType}</p>
+                                </div>)
+                        else return (
+                            <div key={i} className='flex flex-col place-items-center rounded-lg py-2
+                            bg-[#161A22]' style={{ borderStyle: 'ridge', boxShadow: 'inset 0 0 4px 3px rgba(42, 48, 53, 1)' }} onClick={() => {
+                                    setRoom(i)
+                                }}>
+                                {Emoji}
+                                <p className='text-[16px] text-[#d9d9d9] opacity-50'>{elem.roomType}</p>
+                            </div>)
+                    })}
+
+                </div>
+                <div className='w-full flex justify-center text-[16px] text-[#d9d9d9] opacity-50'>Start a room, open to everyone</div>
+                <div className='flex w-full justify-center'><DarkButton name="Let's go" onclick={() => { }} /></div>
+            </div>
+        </div>
+    </>
 }
 
 export default Room

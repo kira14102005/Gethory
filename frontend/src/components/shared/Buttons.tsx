@@ -1,3 +1,5 @@
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+
 interface ButtonProps {
     onclick: () => void,
     name: string,
@@ -18,6 +20,17 @@ export function LightButton(
     return <>
         <button className="text-[#71E8DF] lightBtn border-[#FFFFFF] border-[3px] px-[20px] w-fit rounded-lg" onClick={props.onclick}>
             {props.name}
+        </button>
+    </>
+}
+export function CreateRoomButton(
+    props: ButtonProps
+) {
+    return <>
+        <button className="text-[#71E8DF] lightBtn border-[#FFFFFF] border-[3px] px-3 p-[2px] w-fit space-x-4 rounded-full flex flex-row justify-between items-center" onClick={props.onclick}>
+            <PersonAddAlt1Icon fontSize='inherit' />
+            <span>
+                {props.name}</span>
         </button>
     </>
 }

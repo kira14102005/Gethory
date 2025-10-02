@@ -1,8 +1,6 @@
-import { useSelector } from "react-redux";
 import { DarkLogo, Logo } from "./logo";
 import LogoutButton from "./Logout";
 import { ProfileIcon } from "./UserUI";
-import { selectUser } from "../../store/authSelectors";
 
 export function Navbar() {
     return <>
@@ -13,14 +11,13 @@ export function Navbar() {
         </nav>
     </>
 }
-export function NavbarWithProfile() {
-    const user = useSelector(selectUser)
-    const localName = user?.name 
+export function NavbarWithProfile({ containLogout }: { containLogout?: boolean }) {
+
     return <>
         <nav className="w-full px-[40px] border-b border-[#A0AEC0] pb-3 border-b-[1px]">
             <div className="flex flex-row w-full mt-[33.33px] justify-between ">
                 <Logo />
-                <ProfileIcon name={localName ?? "NotLogged_User"} />
+                <ProfileIcon containLogout={containLogout} />
 
             </div>
         </nav>

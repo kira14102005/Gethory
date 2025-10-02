@@ -10,21 +10,15 @@ export const api = axios.create({
   withCredentials: true
 })
 
-export const sendVerificationCode = (data: string | null) => {
-  return api.post(`/auth/email/verify?code=${data}`)
-}
 
 export const activate = async (currentActiveState: ActivateState) => {
   const res = await api.put('/user/update_profile', currentActiveState);
   return res
 }
-export const getAvatarImage = (path: string) => {
-  const url = baseURL + '/storage/' + path;
-  return url
-}
 import { store } from "../store";
 import { clearActivate } from "../store/activateSlice";
 import { clearUser } from "../store/authSlice";
+import { useNavigate } from 'react-router-dom';
 
 let isRefreshing = false;
 let failedQueue: { resolve: (token: string) => void; reject: (error: any) => void }[] = [];
@@ -61,7 +55,7 @@ api.interceptors.response.use(
         isRefreshing = true;
 
         try {
-          await axios.get(`${baseURL}/auth/refresh`, { withCredentials: true }); //usual new axios request so that no Recursove loop of interceptors begin
+          await axios.get(`${baseURL}/auth/refresh`, { withCredentials: true }); //usual new axios request so that no Recursive loop of interceptors begin
 
           isRefreshing = false;
           processQueue(null, 'RENEWED');
@@ -73,7 +67,8 @@ api.interceptors.response.use(
 
           store.dispatch(clearUser());
           store.dispatch(clearActivate());
-          window.location.href = '/signin';
+          const navigate = useNavigate()
+          navigate('/signin');
 
           return Promise.reject(refreshError);
         }
