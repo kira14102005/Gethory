@@ -3,11 +3,18 @@ import { DarkButton } from "./Buttons"
 import { CustomBox } from "./Card";
 import { selectUser } from "../../store/authSelectors";
 import { useMemo } from "react";
-import { getAvatarImage } from "../../http";
 
-export const ProfileIcon = ({ name }: { name: string }) => {
+import { Link, useNavigate } from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useDispatch } from "react-redux";
+import { getAvatarImage, handleLogout } from "../../http/utils";
+export const ProfileIcon = ({ containLogout, }: { containLogout?: boolean }) => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     const avatar = useSelector(selectUser)?.avatar ?? ''
-    const image = useMemo( () => {
+    const name = useSelector(selectUser)?.name ?? ''
+    const image = useMemo(() => {
         const payload = getAvatarImage(avatar)
         return payload
     }, [avatar])
@@ -16,7 +23,16 @@ export const ProfileIcon = ({ name }: { name: string }) => {
             <span className="text-[20px] text-[#1A202C] text-white mr-2">
                 Hello {name}
             </span>
-            <div className="w-[45px] h-[45px] rounded-full bg-white flex items-center overflow-hidden justify-center items-center"><img className="w-[90%] h-[90%] object-cover" src={image} alt="profile" /></div>
+            <div className="w-[45px] h-[45px] rounded-full bg-white flex items-center overflow-hidden justify-center items-center">
+                <Link to='/profile'><img className="w-[90%] h-[90%] object-cover" src={image} alt="profile" />
+                </Link>
+            </div>
+            {containLogout && <button className="ml-2 p-2 rounded-full hover:border-white
+            border border-transparent aspect-square flex items-center justify-center" onClick={async () => {
+                    await handleLogout(dispatch, navigate)
+                }}>
+                <LogoutIcon fontSize="small" />
+            </button>}
 
         </div>
     </>
