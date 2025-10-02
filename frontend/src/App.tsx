@@ -8,7 +8,6 @@ import { Profile } from "./pages/Profile/Profile"
 import ProtectedRoute from "./routes/protected/ProtectedRoute.tsx"
 import SemiProtected from "./routes/protected/SemiProtected.tsx"
 import Room from "./pages/Room/Room.tsx"
-import StartMeet from "./pages/StartMeet/StartMeet.tsx"
 import AppInitializer from "./components/shared/AppInitializer.tsx"
 import OnboardingRoute from "./routes/protected/OnboardingRoute.tsx"
 import VerificationGuard from "./routes/protected/VerificationGuard.tsx"
@@ -51,11 +50,6 @@ function App() {
           <Route path="/room" element={
             <ProtectedRoute>
               <Room />
-            </ProtectedRoute>}>
-          </Route>
-          <Route path="/createroom" element={
-            <ProtectedRoute>
-              <StartMeet />
             </ProtectedRoute>}>
           </Route>
         </Routes>
