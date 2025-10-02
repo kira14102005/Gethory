@@ -1,5 +1,5 @@
 interface InputProps<T> {
-    label ?: string,
+    label?: string,
     placeholder?: string,
     id: string,
     setValue: React.Dispatch<React.SetStateAction<T>>,
@@ -39,7 +39,7 @@ export function CodeInput(props: InputProps<CodeInterface>) {
     }
     return <>
         <div className="flex flex-col w-[75%]">
-            
+
             <input type="text" name={props.label} id={props.id}
                 onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] rounded-md text-black text-[16px] font-100" />
         </div>
@@ -74,5 +74,15 @@ export function OtpInput({ id }: { id: string }) {
 export function GreyInput() {
     return <>
         <input type="text" className='bg-[#414A5B] opacity-60 rounded-lg p-1' />
+    </>
+}
+import SearchIcon from '@mui/icons-material/Search';
+export function SearchInput() {
+    return <>
+        <div className="bg-[#414A5B] opacity-60 rounded-full p-1 pl-3 flex flex-row">
+            <input type="text" className="bg-transparent rounded-md" />
+            <SearchIcon />
+        </div>
+
     </>
 }
