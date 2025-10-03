@@ -20,11 +20,6 @@ export const handleLogout = async (dispatch: AppDispatch, navigate: NavigateFunc
     }
 };
 
-export const getAvatarImage = (path: string) => {
-    const url = path
-    return url
-}
-
 export const sendVerificationCode = (data: string | null) => {
     return api.post(`/auth/email/verify?code=${data}`)
 }
