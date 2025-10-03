@@ -28,3 +28,7 @@ export const getAvatarImage = (path: string) => {
 export const sendVerificationCode = (data: string | null) => {
     return api.post(`/auth/email/verify?code=${data}`)
 }
+
+export const createRoom = (data: any) => {
+    return api.post('/room/create' , data)
+}
