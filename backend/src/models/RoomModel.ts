@@ -26,7 +26,11 @@ const roomModelSchema = new mongoose.Schema({
     },
 
     topic: { type: String, required: true },
-    roomType: { type: RoomType, required: true }
+    roomType: {
+        type: String,
+        required: true,
+        enum: Object.values(RoomType)
+    }
     , createdAt: { type: Date, default: Date.now, required: true },
     speakers: {
         type: [
