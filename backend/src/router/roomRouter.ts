@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { roomCreateController } from "../controllers/room.controllers";
+import { fetchAllRoomController, roomCreateController } from "../controllers/room.controllers";
 const rt = Router()
 
 rt.post('/create' , roomCreateController)

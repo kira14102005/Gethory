@@ -35,9 +35,8 @@ export const updateUser = async (
             },
         },
         { new: true }
-    );
+    )
 
-    console.log(updatedUser);
     appAssert(updatedUser, HTTP.NOT_FOUND, "User not found or update failed");
 
     return updatedUser;
