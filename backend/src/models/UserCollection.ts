@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { compareHash, hashValue } from "../utils/hash";
+import { BACKEND_URL } from "../constants/env";
 
 const userSchema = new mongoose.Schema(
     {
@@ -20,6 +21,9 @@ const userSchema = new mongoose.Schema(
         },
         avatar: {
             type: String,
+            get: (avatar: string) => {
+                return `${BACKEND_URL}/storage/${avatar}`
+            }
         },
 
         verified: {
