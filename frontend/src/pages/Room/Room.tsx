@@ -5,6 +5,7 @@ import { SectionType2 } from "../../components/shared/Section"
 import { useCallback, useMemo, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { MeetingArray, roomArr, type roomDetails } from "./constants";
+import { createRoom } from "../../http/utils";
 
 
 const Room = () => {
@@ -60,6 +61,16 @@ const RoomModel = ({ onclose }: { onclose: () => void }) => {
         console.log(topic)
         setTopic(e.target.value)
     }
+
+    async function onSubmit() {
+        const payload = {
+            topic : topic,
+            roomType: roomArr[room].roomType
+        }
+       const {data}  = await createRoom(payload)
+
+       console.log(data)
+    }
     return <>
         <div className='z-10 fixed w-[70%] lg:w-[50%]  md:w-[60%] rounded-2xl flex flex-col bg-[#1A202C] py-5 px-6 gap-2 text-[20px]'>
             <h1 className='text-[20px]'>Enter the topic to be discovered</h1>
@@ -93,7 +104,7 @@ const RoomModel = ({ onclose }: { onclose: () => void }) => {
 
                 </div>
                 <div className='w-full flex justify-center text-[16px] text-[#d9d9d9] opacity-50'>Start a room, open to everyone</div>
-                <div className='flex w-full justify-center'><DarkButton name="Let's go" onclick={() => { }} /></div>
+                <div className='flex w-full justify-center'><DarkButton name="Let's go" onclick={onSubmit} /></div>
             </div>
         </div>
     </>

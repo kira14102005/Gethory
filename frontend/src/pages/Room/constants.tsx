@@ -10,17 +10,17 @@ export interface roomDetails {
 
 export const roomArr: roomDetails[] = [
     {
-        roomType: 'Public',
+        roomType: 'public',
         emoji: <PublicIcon />
     }
     ,
     {
-        roomType: 'Group',
+        roomType: 'group',
         emoji: <PeopleIcon />
     }
     ,
     {
-        roomType: 'Private',
+        roomType: 'private',
         emoji: <LockIcon />
     }
     ,
