@@ -1,17 +1,21 @@
 import mongoose, { model } from "mongoose";
+import { Schema } from "zod";
 
-enum RoomType {
+export enum RoomType {
     'public',
     'private',
     'group'
 }
-
+type SpeakerType = {
+    id: mongoose.Types.ObjectId
+}
 export interface RoomModelDocument extends mongoose.Document {
     userId: mongoose.Types.ObjectId;
     // expiresAt: Date;
     topic: string;
     roomType: RoomType;
     createdAt: Date;
+    speakers: SpeakerType[]
 }
 
 const roomModelSchema = new mongoose.Schema({
@@ -24,6 +28,16 @@ const roomModelSchema = new mongoose.Schema({
     topic: { type: String, required: true },
     roomType: { type: RoomType, required: true }
     , createdAt: { type: Date, default: Date.now, required: true },
+    speakers: {
+        type: [
+            {
+                id: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User'
+                }
+            }
+        ]
+    }
 })
 
 const RoomModel = model<RoomModelDocument>('Room', roomModelSchema, 'rooms')
