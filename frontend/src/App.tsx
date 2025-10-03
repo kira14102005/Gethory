@@ -12,6 +12,7 @@ import AppInitializer from "./components/shared/AppInitializer.tsx"
 import OnboardingRoute from "./routes/protected/OnboardingRoute.tsx"
 import VerificationGuard from "./routes/protected/VerificationGuard.tsx"
 import VerificationStatusPage from "./pages/VerifyStatus/VerificationStatus.tsx"
+import Newroom from "./pages/NewRoom/Newroom.tsx"
 function App() {
 
   return (
@@ -47,10 +48,12 @@ function App() {
               <Profile />
             </ProtectedRoute>}>
           </Route>
-          <Route path="/room" element={
+          <Route path="/rooms" element={
             <ProtectedRoute>
               <Room />
             </ProtectedRoute>}>
+          </Route>
+          <Route path="/newroom/:id" element = {<Newroom/>}>
           </Route>
         </Routes>
       </AppInitializer>
