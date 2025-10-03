@@ -12,14 +12,15 @@ import cookieParser from 'cookie-parser'
 import { userRouter } from "./router/userRouter";
 import { authenticate } from "./midwares/authenticate";
 import { sessionRouter } from "./router/sessionRouter";
+import { roomRouter } from "./router/roomRouter";
 const app = express();
 app.use(cors({
     origin: APP_ORIGIN,
     credentials: true
 }))
-app.use(express.json({ limit: '10mb' })); 
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
-app.use("/storage", express.static(path.join(__dirname, "/storage")));app.use(cookieParser())
+app.use("/storage", express.static(path.join(__dirname, "/storage"))); app.use(cookieParser())
 app.get("/error", catchError(async (req: Request, res: Response, next: NextFunction) => {
     console.log("Hello")
     throw new Error("booo");
@@ -28,11 +29,12 @@ app.get("/error", catchError(async (req: Request, res: Response, next: NextFunct
     })
 })
 )
-app.use('/auth'  , authRouter)
+app.use('/auth', authRouter)
 
 // protected routes 
-app.use('/user' , authenticate , userRouter)
-app.use('/sessions' , authenticate , sessionRouter)
+app.use('/user', authenticate, userRouter)
+app.use('/sessions', authenticate, sessionRouter)
+app.use('/room', authenticate, roomRouter)
 
 //Error Midware at the End
 app.use(errorHandler)
