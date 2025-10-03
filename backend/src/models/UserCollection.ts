@@ -38,7 +38,8 @@ const userSchema = new mongoose.Schema(
         }
     },
     {
-        timestamps: true
+        timestamps: true,
+        toJSON : {getters : true}
     }
 );
 
@@ -56,9 +57,9 @@ userSchema.methods.isPasswordMatch = async function (password: string) {
 }
 
 userSchema.methods.omitPassword = function () {
-    const user = this.toObject();
-    delete user.password;
-    return user;
+  const obj = this.toObject ? this.toObject({ getters: true }) : this;
+  delete obj.password;
+  return obj;
 };
 
 const User = mongoose.model("User", userSchema)
