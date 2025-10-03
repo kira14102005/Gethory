@@ -1,5 +1,5 @@
 import { type NavigateFunction } from 'react-router-dom';
-import { api, baseURL } from '.';
+import { api } from '.';
 import { clearUser } from '../store/authSlice';
 import { clearActivate } from '../store/activateSlice';
 import type { AppDispatch } from '../store';
@@ -21,7 +21,7 @@ export const handleLogout = async (dispatch: AppDispatch, navigate: NavigateFunc
 };
 
 export const getAvatarImage = (path: string) => {
-    const url = baseURL + '/storage/' + path;
+    const url = path
     return url
 }
 
@@ -30,5 +30,10 @@ export const sendVerificationCode = (data: string | null) => {
 }
 
 export const createRoom = (data: any) => {
-    return api.post('/room/create' , data)
+    return api.post('/room/create', data)
+}
+
+
+export const getAllRooms = () => {
+    return api.get('/room/fetchall');
 }
