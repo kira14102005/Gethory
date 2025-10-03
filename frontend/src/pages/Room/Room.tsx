@@ -2,14 +2,27 @@ import { CreateRoomButton, DarkButton } from "../../components/shared/Buttons";
 import { MeetingCard, MenuCard, type MeetingDetailsProps } from "../../components/shared/Card"
 import { GreyInput, SearchInput } from "../../components/shared/Input";
 import { SectionType2 } from "../../components/shared/Section"
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
-import { MeetingArray, roomArr, type roomDetails } from "./constants";
-import { createRoom } from "../../http/utils";
+import { roomArr, type roomDetails } from "./constants";
+import { createRoom, getAllRooms } from "../../http/utils";
+import { useNavigate } from "react-router-dom";
 
 
 const Room = () => {
     const [showRoomModel, setShowRoomModel] = useState(false)
+    const [meetingArr, setMeetingArr] = useState([])
+    useEffect(() => {
+        const fetchRooms = async () => {
+            const { data } = await getAllRooms()
+            //@ts-ignore
+            const newRoomArr = data.meetingArr 
+            console.log(newRoomArr)
+            //@ts-ignore
+            setMeetingArr(newRoomArr)
+        };
+        fetchRooms()
+    }, [])
     const handleClick = useCallback(() => {
         setShowRoomModel(true)
     }, [setShowRoomModel])
@@ -26,8 +39,8 @@ const Room = () => {
                     <VoiceBar onclick={handleClick} />
                     <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 w-full h-full">
 
-                        {MeetingArray.map((meet: MeetingDetailsProps, i) => {
-                            return <MeetingCard key={i} title={meet.title} count={meet.count} authors={meet.authors}></MeetingCard>
+                        {meetingArr.map((meet: MeetingDetailsProps, i) => {
+                            return <MeetingCard key={i} topic={meet.topic} count={meet.count} authors={meet.authors}></MeetingCard>
                         })}
 
                     </div>
@@ -57,6 +70,7 @@ export function VoiceBar({ onclick }: { onclick: () => void }) {
 const RoomModel = ({ onclose }: { onclose: () => void }) => {
     const [room, setRoom] = useState(0)
     const [topic, setTopic] = useState('')
+    const navigate = useNavigate()
     function handleChange(e: any) {
         console.log(topic)
         setTopic(e.target.value)
@@ -64,12 +78,15 @@ const RoomModel = ({ onclose }: { onclose: () => void }) => {
 
     async function onSubmit() {
         const payload = {
-            topic : topic,
+            topic: topic,
             roomType: roomArr[room].roomType
         }
-       const {data}  = await createRoom(payload)
+        const { data } = await createRoom(payload)
 
-       console.log(data)
+        console.log(data)
+        //@ts-ignore
+        const roomId = data.room._id
+        navigate(`/newroom/${roomId}`, { replace: true })
     }
     return <>
         <div className='z-10 fixed w-[70%] lg:w-[50%]  md:w-[60%] rounded-2xl flex flex-col bg-[#1A202C] py-5 px-6 gap-2 text-[20px]'>
