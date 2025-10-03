@@ -1,5 +1,6 @@
 import ForumIcon from '@mui/icons-material/Forum';
 import PersonIcon from '@mui/icons-material/Person';
+import { memo } from 'react';
 interface CardProps {
     title: string,
     subtitle?: string
@@ -47,11 +48,12 @@ export function CustomBox({ name, count }: { name: string, count: number }) {
 }
 
 export interface MeetingDetailsProps {
-    title: string,
-    authors: string[],
+    topic: string,
+    authors: any,
     count: number
 }
-export function MeetingCard(props: MeetingDetailsProps) {
+export const MeetingCard = memo((props: MeetingDetailsProps) => {
+
     let count;
     if (props.count <= 0) count = ""
     else if (props.count < 100) {
@@ -70,26 +72,38 @@ export function MeetingCard(props: MeetingDetailsProps) {
         let mul = Math.floor(props.count / 1000);
         count = `${mul}k+`
     }
+    const authors = [props.authors[0].name, '']
+    const avatars = [props.authors[0].avatar, '/profile.png']
+    let onlyOne;
+    if (props.authors.length === 1) onlyOne = true
+    let styling;
+    if (onlyOne) styling = 'w-[70px] h-[70px] bg-[#566AA6] rounded-full  overflow-hidden flex flex-row justify-center items-center'
+    else styling = 'absolute w-[50px] h-[50px] bg-[#566AA6] z-0 rounded-full  top-0 left-0 overflow-hidden flex flex-row justify-center items-center'
     return <>
-        <div className="col-span-1 flex flex-col place-items-center p-5 m-3 bg-[#1A202C] h-[250px] rounded-2xl gap-2">
-            <h1 className="text-lg text-white">{props.title}</h1>
-            <div className="flex w-full justify-between px-2 items-center h-[100px]">
-                <div className="relative -top-8">
-                    <div className='absolute w-[50px] h-[50px] bg-[#566AA6] z-0 rounded-full bg- top-0 left-0 overflow-hidden'>
-                        <img src="./profile.png" alt="" className='cover' />
+        <div className="col-span-1 flex flex-col place-items-center p-3 m-3 bg-[#1A202C] max-h-[200px] rounded-2xl gap-2">
+            <h1 className="text-lg text-white">{props.topic}</h1>
+            <div className={`flex w-full ${!onlyOne ? 'justify-between' : 'justify-evenly'} px-2 items-center h-[100px]`}>
+                <div className={!onlyOne ? `relative -top-8` : ''}>
+                    <div className={styling}>
+                         <div className='w-[90%] h-[90%] rounded-full overflow-hidden flex flex-row items-center justify-center'>
+                        <img src={avatars[0]} alt="" className='cover' />
+                        </div>
                     </div>
-                    <div className='absolute w-[50px] h-[50px] z-10 bg-[#DB9C50] rounded-full top-5 left-4 overflow-hidden'>
-                        <img src="./profile.png" alt="" className='cover' /></div>
+                    {!onlyOne && <div className='absolute w-[50px] h-[50px] z-10 bg-[#DB9C50] rounded-full top-5 left-4 overflow-hidden flex flex-row justify-center items-center'>
+                        <div className='w-[90%] h-[90%] rounded-full overflow-hidden flex flex-row items-center justify-center'>
+                            <img src=
+                                {avatars[1]} alt="" className='cover' /></div>
+                    </div>}
                 </div>
                 <div className='flex flex-col'>
                     <span className='flex gap-1 items-center text-[14px]'>
-                        <p>{props.authors[0]}</p>
+                        <p>{authors[0]}</p>
                         <ForumIcon fontSize='inherit' />
                     </span>
-                    <span className='flex gap-1 items-center text-[14px]'>
-                        <p>{props.authors[1]}</p>
+                    {!onlyOne && <span className='flex gap-1 items-center text-[14px]'>
+                        <p>{authors[1]}</p>
                         <ForumIcon fontSize='inherit' />
-                    </span>
+                    </span>}
                 </div>
             </div>
             <div className='w-full flex justify-end text-[14px]'>
@@ -100,4 +114,4 @@ export function MeetingCard(props: MeetingDetailsProps) {
         </div>
     </>
 
-}
+})
