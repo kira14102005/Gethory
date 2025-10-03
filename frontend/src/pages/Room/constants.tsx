@@ -1,4 +1,3 @@
-import type { MeetingDetailsProps } from "../../components/shared/Card";
 import PublicIcon from '@mui/icons-material/Public';
 import PeopleIcon from '@mui/icons-material/People';
 import LockIcon from '@mui/icons-material/Lock';
