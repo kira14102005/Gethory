@@ -17,3 +17,4 @@ export const EMAIL_SENDER = getEnv("EMAIL_SENDER", "sender@gmail.com")
 export const DEFAULT_AVATAR  = getEnv("DEFAULT_AVATAR", "...")
 //@ts-ignore
 export const ACCESS_TOKEN_EXPIRY : SignOptions['expiresIn'] = getEnv('ACCESS_TOKEN_EXPIRY' , '1m')
+export const BACKEND_URL = getEnv('BACKEND_URL' , 'http://localhost:3000')
