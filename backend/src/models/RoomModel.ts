@@ -6,9 +6,8 @@ export enum RoomType {
     'private',
     'group'
 }
-type SpeakerType = {
-    id: mongoose.Types.ObjectId
-}
+type SpeakerType = mongoose.Types.ObjectId
+
 export interface RoomModelDocument extends mongoose.Document {
     userId: mongoose.Types.ObjectId;
     // expiresAt: Date;
@@ -35,15 +34,15 @@ const roomModelSchema = new mongoose.Schema({
     speakers: {
         type: [
             {
-                id: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User'
-                }
+
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+
             }
         ]
     }
 })
 
-const RoomModel = model<RoomModelDocument>('Room', roomModelSchema, 'rooms')
+const RoomModel = model('Room', roomModelSchema, 'rooms')
 
 export default RoomModel

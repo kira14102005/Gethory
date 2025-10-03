@@ -7,8 +7,7 @@ export const createRoomService = async (payload: RoomModelDocument) => {
         userId,
         topic,
         roomType,
-        speakers: [{ id: userId }]
+        speakers: [userId]
     })
-
     return room
 }
