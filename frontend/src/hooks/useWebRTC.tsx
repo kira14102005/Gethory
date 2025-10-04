@@ -3,6 +3,7 @@ import type { User } from "../store/authSlice";
 import { useStateWithCallback } from "./useStateWithCallback";
 import { socketInit } from "../sockets";
 import { ACTIONS } from "../store/actions";
+import { getIceServers } from "../store/getIceServers";
 export type ClientInterface = {
     _id: string,
     name: string
@@ -20,11 +21,14 @@ const joineeDummyData: ClientInterface[] = [{
 export interface AudioInterface {
     [userId: string]: any;
 }
+export interface ConnectionInterface {
+    [peerId: string]: RTCPeerConnection
+}
 export const useWebRTC = (roomId: string, user: User) => {
     const [clients, setClients] = useStateWithCallback(joineeDummyData);
     const audioElements = useRef<AudioInterface>({})
     const localmediaStream = useRef<MediaStream>(null)
-    const connections = useRef({})
+    const connections = useRef<ConnectionInterface>({})
     const socketRef = useRef<SocketIOClient.Socket>(null)
     const provideRef = (instance: any, userId: number | string) => {
         audioElements.current[userId] = instance
@@ -39,7 +43,56 @@ export const useWebRTC = (roomId: string, user: User) => {
             }, cb)
 
     }, [clients, setClients])
+    useEffect(() => {
+        socketRef.current = socketInit()
+    }, [])
 
+    useEffect(() => {
+        const handleNewPeer = async ({ peerId, createOffer, user }: { peerId: string, createOffer: boolean, user: User }) => {
+            if (peerId in connections.current) {
+                return console.warn(
+                    `Youare already connected with ${peerId} ${user.name}`
+                );
+            }
+            connections.current[peerId] = new RTCPeerConnection({
+                iceServers: getIceServers()
+            })
+
+            //Handle new Icecandidate
+            connections.current[peerId].onicecandidate = (event) => {
+                socketRef.current?.emit(ACTIONS.RELAY_ICE, {
+                    peerId,
+                    icecandidate: event.candidate
+                })
+            }
+            //Handle on track on this connection
+            connections.current[peerId].ontrack = ({
+                streams: [remoteStream]
+            }) => {
+                //@ts-ignore
+                addNewClient(user, () => {
+                    if (audioElements.current[user._id]) {
+                        audioElements.current[user._id].srcObject = remoteStream
+                    }
+                    else {
+                        let settled = false;
+                        const interval = setInterval(() => {
+                            if (audioElements.current[user._id]) {
+                                audioElements.current[user._id].srcObject = remoteStream
+                                settled = true
+                            }
+                            if (settled) {
+                                clearInterval(interval)
+                            }
+                        }, 1000)
+                    }
+                })
+
+            }
+        };
+
+    }
+        , [])
     //Start capture media
     useEffect(() => {
         const startCapture = async () => {
@@ -61,9 +114,7 @@ export const useWebRTC = (roomId: string, user: User) => {
         }).catch((err) => { })
     }, [])
 
-    useEffect(() => {
-        socketRef.current = socketInit()
-    }, [])
+
     return { clients, provideRef }
 
 }
