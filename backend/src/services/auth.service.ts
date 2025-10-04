@@ -1,6 +1,5 @@
 import { ACCESS_TOKEN_EXPIRY, APP_ORIGIN, DEFAULT_AVATAR, JWT_REFRESH_SECRET, JWT_SECRET } from "../constants/env"
 import { SignOptions } from "jsonwebtoken"; import { HTTP } from "../constants/http"
-import { VerificationCodeType } from "../constants/VerificationCodeType"
 import SessionModel from "../models/SessionModel"
 import User from "../models/UserCollection"
 import VerificationModel from "../models/verificationCodeModel"
@@ -9,13 +8,12 @@ import { get30daysfromNow, get7daysfromNow, getFiveMinsAgo, getOneHourFromNow, g
 import { accessTokenSignOptions, refereshTokenSignOptions, refreshTokenPayload, signToken, verifyTokens } from "../utils/jwt"
 import { sendMail } from "../utils/sendMail"
 import { hashValue } from "../utils/hash"
+import { VerificationCodeType } from "../constants/verificationCodeType";
 export type CreateAccountParams = {
     email: string
     , password: string
     , userAgent?: string
 }
-
-
 export const CreateAccount = async (data: CreateAccountParams) => {
     const existingUser = await User.exists({
         email: data.email
