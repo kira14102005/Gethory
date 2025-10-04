@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef } from "react";
 import type { User } from "../store/authSlice";
 import { useStateWithCallback } from "./useStateWithCallback";
+import { socketInit } from "../sockets";
+import { ACTIONS } from "../store/actions";
 export type ClientInterface = {
     _id: string,
     name: string
@@ -23,7 +25,7 @@ export const useWebRTC = (roomId: string, user: User) => {
     const audioElements = useRef<AudioInterface>({})
     const localmediaStream = useRef<MediaStream>(null)
     const connections = useRef({})
-
+    const socketRef = useRef<SocketIOClient.Socket>(null)
     const provideRef = (instance: any, userId: number | string) => {
         audioElements.current[userId] = instance
     }
@@ -52,8 +54,15 @@ export const useWebRTC = (roomId: string, user: User) => {
                 const localElement = audioElements.current[user._id]
                 localElement.volume = 0
                 localElement.srcObject = localmediaStream.current
+
+                //Scoket JOIN
+                socketRef.current?.emit(ACTIONS.JOIN, { roomId, user })
             })
         }).catch((err) => { })
+    }, [])
+
+    useEffect(() => {
+        socketRef.current = socketInit()
     }, [])
     return { clients, provideRef }
 

@@ -1,6 +1,6 @@
 import  io from 'socket.io-client'
 import { baseURL } from '../http';
-const socketInit =  ()=>{
+export const socketInit =  ()=>{
     const options  = {
         'force new connection' : true,
         reconnectionAttempt : 'Infinity',
