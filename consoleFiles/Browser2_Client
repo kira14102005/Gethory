@@ -1,0 +1,60 @@
+const configuration = {
+  iceServers: [
+    {
+      urls: 'stun:stun.l.google.com:19302' // Google's public STUN server
+    }
+  ]
+};
+
+const peerConn = new RTCPeerConnection(configuration);
+undefined
+const offer =  {"type":"offer","sdp":"v=0\r\no=mozilla...THIS_IS_SDPARTA-99.0 7176191659045762193 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=sendrecv\r\na=fingerprint:sha-256 05:B1:22:EE:68:46:19:88:1F:6F:8C:A2:31:7B:01:B3:5B:60:75:35:E3:23:EA:C7:39:CE:4D:11:EC:3B:23:EA\r\na=group:BUNDLE 0\r\na=ice-options:trickle\r\na=msid-semantic:WMS *\r\nm=application 59078 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 106.219.232.156\r\na=candidate:0 1 UDP 2122187007 7485239b-9a3a-4af7-bc62-e1cfb06e6512.local 59078 typ host\r\na=candidate:2 1 UDP 2122252543 a46f0800-8d19-4c7e-98a6-68ddc8c4f910.local 59079 typ host\r\na=candidate:4 1 TCP 2105458943 7485239b-9a3a-4af7-bc62-e1cfb06e6512.local 9 typ host tcptype active\r\na=candidate:5 1 TCP 2105524479 a46f0800-8d19-4c7e-98a6-68ddc8c4f910.local 9 typ host tcptype active\r\na=candidate:1 1 UDP 1685987327 106.219.232.156 59078 typ srflx raddr 0.0.0.0 rport 0\r\na=candidate:3 1 UDP 1686052607 2401:4900:a15c:13b7:453e:d8b2:eac9:24b4 59079 typ srflx raddr 0.0.0.0 rport 0\r\na=sendrecv\r\na=end-of-candidates\r\na=extmap-allow-mixed\r\na=ice-pwd:d829e6293ad3896299d3771aab3e189f\r\na=ice-ufrag:76ad4428\r\na=mid:0\r\na=setup:actpass\r\na=sctp-port:5000\r\na=max-message-size:1073741823\r\n"}
+undefined
+peerConn.onicecandidate = ()=>console.log('Ice cand on otheer   : ' , JSON.stringify(peerConn.localDescription)
+
+                                          )
+function onicecandidate()
+
+await peerConn.setRemoteDescription(offer)
+undefined
+let dataChannel;
+undefined
+peerConn.ondatachannel = (e)=>{
+
+dataChannel =  e.channel;
+dataChannel.onopen  = ()=>console.log('Channel opened');
+dataChannel.onmessage = (e)=>console.log('Message received  : ' , e.data);…
+function ondatachannel(e)
+
+const ans  = await peerConn.createAnswer()
+Object { type: "answer", sdp: "v=0\r\no=mozilla...THIS_IS_SDPARTA-99.0 4808871817931227736 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=fingerprint:sha-256 FD:52:D4:BB:FB:91:7C:2C:9A:1E:E8:8F:BC:90:D7:05:76:CC:7B:CA:6D:97:5A:36:59:E5:3F:37:89:82:6D:8E\r\na=group:BUNDLE 0\r\na=ice-options:trickle\r\na=msid-semantic:WMS *\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 0.0.0.0\r\na=sendrecv\r\na=extmap-allow-mixed\r\na=ice-pwd:4eeed69ec73d8b4247a65c7c2a183f88\r\na=ice-ufrag:518ee706\r\na=mid:0\r\na=setup:active\r\na=sctp-port:5000\r\na=max-message-size:1073741823\r\n" }
+
+await peerConn.setLocalDescription(ans)
+undefined
+Ice cand on otheer   :  {"type":"answer","sdp":"v=0\r\no=mozilla...THIS_IS_SDPARTA-99.0 4808871817931227736 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=sendrecv\r\na=fingerprint:sha-256 FD:52:D4:BB:FB:91:7C:2C:9A:1E:E8:8F:BC:90:D7:05:76:CC:7B:CA:6D:97:5A:36:59:E5:3F:37:89:82:6D:8E\r\na=group:BUNDLE 0\r\na=ice-options:trickle\r\na=msid-semantic:WMS *\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 0.0.0.0\r\na=candidate:0 1 UDP 2122187007 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 49669 typ host\r\na=sendrecv\r\na=extmap-allow-mixed\r\na=ice-pwd:4eeed69ec73d8b4247a65c7c2a183f88\r\na=ice-ufrag:518ee706\r\na=mid:0\r\na=setup:active\r\na=sctp-port:5000\r\na=max-message-size:1073741823\r\n"} debugger eval code:1:39
+Ice cand on otheer   :  {"type":"answer","sdp":"v=0\r\no=mozilla...THIS_IS_SDPARTA-99.0 4808871817931227736 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=sendrecv\r\na=fingerprint:sha-256 FD:52:D4:BB:FB:91:7C:2C:9A:1E:E8:8F:BC:90:D7:05:76:CC:7B:CA:6D:97:5A:36:59:E5:3F:37:89:82:6D:8E\r\na=group:BUNDLE 0\r\na=ice-options:trickle\r\na=msid-semantic:WMS *\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 0.0.0.0\r\na=candidate:0 1 UDP 2122187007 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 49669 typ host\r\na=candidate:2 1 UDP 2122252543 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 49670 typ host\r\na=sendrecv\r\na=extmap-allow-mixed\r\na=ice-pwd:4eeed69ec73d8b4247a65c7c2a183f88\r\na=ice-ufrag:518ee706\r\na=mid:0\r\na=setup:active\r\na=sctp-port:5000\r\na=max-message-size:1073741823\r\n"} debugger eval code:1:39
+Ice cand on otheer   :  {"type":"answer","sdp":"v=0\r\no=mozilla...THIS_IS_SDPARTA-99.0 4808871817931227736 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=sendrecv\r\na=fingerprint:sha-256 FD:52:D4:BB:FB:91:7C:2C:9A:1E:E8:8F:BC:90:D7:05:76:CC:7B:CA:6D:97:5A:36:59:E5:3F:37:89:82:6D:8E\r\na=group:BUNDLE 0\r\na=ice-options:trickle\r\na=msid-semantic:WMS *\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 0.0.0.0\r\na=candidate:0 1 UDP 2122187007 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 49669 typ host\r\na=candidate:2 1 UDP 2122252543 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 49670 typ host\r\na=candidate:4 1 TCP 2105458943 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 9 typ host tcptype active\r\na=sendrecv\r\na=extmap-allow-mixed\r\na=ice-pwd:4eeed69ec73d8b4247a65c7c2a183f88\r\na=ice-ufrag:518ee706\r\na=mid:0\r\na=setup:active\r\na=sctp-port:5000\r\na=max-message-size:1073741823\r\n"} debugger eval code:1:39
+Ice cand on otheer   :  {"type":"answer","sdp":"v=0\r\no=mozilla...THIS_IS_SDPARTA-99.0 4808871817931227736 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=sendrecv\r\na=fingerprint:sha-256 FD:52:D4:BB:FB:91:7C:2C:9A:1E:E8:8F:BC:90:D7:05:76:CC:7B:CA:6D:97:5A:36:59:E5:3F:37:89:82:6D:8E\r\na=group:BUNDLE 0\r\na=ice-options:trickle\r\na=msid-semantic:WMS *\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 0.0.0.0\r\na=candidate:0 1 UDP 2122187007 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 49669 typ host\r\na=candidate:2 1 UDP 2122252543 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 49670 typ host\r\na=candidate:4 1 TCP 2105458943 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 9 typ host tcptype active\r\na=candidate:5 1 TCP 2105524479 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 9 typ host tcptype active\r\na=sendrecv\r\na=extmap-allow-mixed\r\na=ice-pwd:4eeed69ec73d8b4247a65c7c2a183f88\r\na=ice-ufrag:518ee706\r\na=mid:0\r\na=setup:active\r\na=sctp-port:5000\r\na=max-message-size:1073741823\r\n"} debugger eval code:1:39
+Ice cand on otheer   :  {"type":"answer","sdp":"v=0\r\no=mozilla...THIS_IS_SDPARTA-99.0 4808871817931227736 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=sendrecv\r\na=fingerprint:sha-256 FD:52:D4:BB:FB:91:7C:2C:9A:1E:E8:8F:BC:90:D7:05:76:CC:7B:CA:6D:97:5A:36:59:E5:3F:37:89:82:6D:8E\r\na=group:BUNDLE 0\r\na=ice-options:trickle\r\na=msid-semantic:WMS *\r\nm=application 54373 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 106.219.232.156\r\na=candidate:0 1 UDP 2122187007 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 49669 typ host\r\na=candidate:2 1 UDP 2122252543 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 49670 typ host\r\na=candidate:4 1 TCP 2105458943 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 9 typ host tcptype active\r\na=candidate:5 1 TCP 2105524479 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 9 typ host tcptype active\r\na=candidate:1 1 UDP 1685987327 106.219.232.156 54373 typ srflx raddr 0.0.0.0 rport 0\r\na=sendrecv\r\na=extmap-allow-mixed\r\na=ice-pwd:4eeed69ec73d8b4247a65c7c2a183f88\r\na=ice-ufrag:518ee706\r\na=mid:0\r\na=setup:active\r\na=sctp-port:5000\r\na=max-message-size:1073741823\r\n"} debugger eval code:1:39
+Ice cand on otheer   :  {"type":"answer","sdp":"v=0\r\no=mozilla...THIS_IS_SDPARTA-99.0 4808871817931227736 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=sendrecv\r\na=fingerprint:sha-256 FD:52:D4:BB:FB:91:7C:2C:9A:1E:E8:8F:BC:90:D7:05:76:CC:7B:CA:6D:97:5A:36:59:E5:3F:37:89:82:6D:8E\r\na=group:BUNDLE 0\r\na=ice-options:trickle\r\na=msid-semantic:WMS *\r\nm=application 54373 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 106.219.232.156\r\na=candidate:0 1 UDP 2122187007 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 49669 typ host\r\na=candidate:2 1 UDP 2122252543 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 49670 typ host\r\na=candidate:4 1 TCP 2105458943 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 9 typ host tcptype active\r\na=candidate:5 1 TCP 2105524479 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 9 typ host tcptype active\r\na=candidate:1 1 UDP 1685987327 106.219.232.156 54373 typ srflx raddr 0.0.0.0 rport 0\r\na=candidate:3 1 UDP 1686052607 2401:4900:a15c:13b7:453e:d8b2:eac9:24b4 49670 typ srflx raddr 0.0.0.0 rport 0\r\na=sendrecv\r\na=extmap-allow-mixed\r\na=ice-pwd:4eeed69ec73d8b4247a65c7c2a183f88\r\na=ice-ufrag:518ee706\r\na=mid:0\r\na=setup:active\r\na=sctp-port:5000\r\na=max-message-size:1073741823\r\n"} debugger eval code:1:39
+Ice cand on otheer   :  {"type":"answer","sdp":"v=0\r\no=mozilla...THIS_IS_SDPARTA-99.0 4808871817931227736 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=sendrecv\r\na=fingerprint:sha-256 FD:52:D4:BB:FB:91:7C:2C:9A:1E:E8:8F:BC:90:D7:05:76:CC:7B:CA:6D:97:5A:36:59:E5:3F:37:89:82:6D:8E\r\na=group:BUNDLE 0\r\na=ice-options:trickle\r\na=msid-semantic:WMS *\r\nm=application 54373 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 106.219.232.156\r\na=candidate:0 1 UDP 2122187007 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 49669 typ host\r\na=candidate:2 1 UDP 2122252543 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 49670 typ host\r\na=candidate:4 1 TCP 2105458943 1c30fc4a-c55b-464f-912b-6d3ff5d6ced4.local 9 typ host tcptype active\r\na=candidate:5 1 TCP 2105524479 ed246f48-ccd7-49b7-87f5-56d61ff291a8.local 9 typ host tcptype active\r\na=candidate:1 1 UDP 1685987327 106.219.232.156 54373 typ srflx raddr 0.0.0.0 rport 0\r\na=candidate:3 1 UDP 1686052607 2401:4900:a15c:13b7:453e:d8b2:eac9:24b4 49670 typ srflx raddr 0.0.0.0 rport 0\r\na=sendrecv\r\na=end-of-candidates\r\na=extmap-allow-mixed\r\na=ice-pwd:4eeed69ec73d8b4247a65c7c2a183f88\r\na=ice-ufrag:518ee706\r\na=mid:0\r\na=setup:active\r\na=sctp-port:5000\r\na=max-message-size:1073741823\r\n"} 2 debugger eval code:1:39
+Source map error: Error: URL constructor:  is not a valid URL.
+Stack in the worker:resolveSourceMapURL@resource://devtools/client/shared/source-map-loader/utils/fetchSourceMap.js:56:22
+getOriginalURLs@resource://devtools/client/shared/source-map-loader/source-map.js:74:24
+workerHandler/</<@resource://devtools/client/shared/worker-utils.js:115:52
+workerHandler/<@resource://devtools/client/shared/worker-utils.js:113:13
+
+Resource URL: null
+Source Map URL: null
+Channel opened debugger eval code:4:35
+Source map error: Error: URL constructor:  is not a valid URL.
+Stack in the worker:resolveSourceMapURL@resource://devtools/client/shared/source-map-loader/utils/fetchSourceMap.js:56:22
+getOriginalURLs@resource://devtools/client/shared/source-map-loader/source-map.js:74:24
+workerHandler/</<@resource://devtools/client/shared/worker-utils.js:115:52
+workerHandler/<@resource://devtools/client/shared/worker-utils.js:113:13
+
+Resource URL: null
+Source Map URL: null
+dataChannel.send('Hello I am from the client browser')
+undefined
+Message received  :  Hello im from the server side debugger eval code:5:38
