@@ -14,6 +14,17 @@ import { authenticate } from "./midwares/authenticate";
 import { sessionRouter } from "./router/sessionRouter";
 import { roomRouter } from "./router/roomRouter";
 const app = express();
+import {createServer} from 'http'
+import { Server } from "socket.io";
+
+const server = createServer(app)
+const  io = new Server(server  , {
+    cors : {
+        origin : APP_ORIGIN,
+        methods : ['POST' , 'GET'  , 'PUT']
+    }
+})
+
 app.use(cors({
     origin: APP_ORIGIN,
     credentials: true
@@ -38,7 +49,7 @@ app.use('/room', authenticate, roomRouter)
 
 //Error Midware at the End
 app.use(errorHandler)
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
     try {
         console.log("Running  on PORT " + PORT + " in " + NODE_ENV + " environment")
         await connecttoDb(DB_URI);
