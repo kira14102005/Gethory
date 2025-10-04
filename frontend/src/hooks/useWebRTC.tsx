@@ -67,6 +67,15 @@ export const useWebRTC = (roomId: string, user: User) => {
         }).catch((err) => {
             console.log('Error : ', err)
         })
+        //on Leave the window or Dismounting
+        return () => {
+            //Leaving the room
+            localmediaStream.current?.getTracks().forEach((track) => {
+                return track.stop()
+            })
+
+            socketRef.current?.emit(ACTIONS.LEAVE, { roomId })
+        }
     }, [])
 
     useEffect(() => {
