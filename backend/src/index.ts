@@ -17,6 +17,7 @@ const app = express();
 import { createServer } from 'http'
 import { Server } from "socket.io";
 import { ACTIONS } from "./constants/socketActions";
+import { socketUserMapping } from "./constants/socketUserMapping";
 
 const server = createServer(app)
 const io = new Server(server, {
@@ -52,20 +53,37 @@ app.use('/room', authenticate, roomRouter)
 app.use(errorHandler)
 
 //Sockets
-interface SocketUserMappingInterface {
-    [socket_id: string]: string;
-}
-let socketUserMapping: SocketUserMappingInterface = {};
+
 io.on('connection', (socket) => {
     console.log('New connection  : ', socket.id)
     socket.on(ACTIONS.JOIN, ({ roomId, user }) => {
-        socketUserMapping[socket.id] = user._id;
-        const clients = Array.from(io.sockets.adapter.rooms.get(roomId) ?? [])
-clients.forEach((clientId) => {
-    io.to(clientId).emit(ACTIONS.ADD_PEER  , {})
-});
-socket.emit(ACTIONS.ADD_PEER)
-        console.log(clients)
+        socketUserMapping[socket.id] = user;
+        const clientsInRoom = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+
+        //    need to map socket IDs to the actual user Id.
+        const existingPeers = clientsInRoom.map(socketId => ({
+            socketId,
+            user: socketUserMapping[socketId]
+        }));
+
+        // socket.emit(ACTIONS.RELAY_PEERS, existingPeers);
+        clientsInRoom.forEach((clientId) =>{
+            socket.emit(ACTIONS.ADD_PEER , {
+                peerId : clientId,
+                createOffer : true,
+                user : socketUserMapping[clientId]
+            })
+        })
+
+        //    Use `socket.broadcast` to send to everyone except the current socket.
+        socket.broadcast.to(roomId).emit(ACTIONS.ADD_PEER, {
+            peerId: socket.id,
+            createOffer : false,
+            user,
+        });
+
+        socket.join(roomId);
+        console.log(clientsInRoom)
 
     });
 
