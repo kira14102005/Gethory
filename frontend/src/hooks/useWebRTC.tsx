@@ -100,7 +100,7 @@ export const useWebRTC = (roomId: string, user: User) => {
                 const offer = await connections.current[peerId].createOffer()
 
                 //setLocalDescription
-                await connections.current[peerId].setLocalDescription(offer)
+                connections.current[peerId].setLocalDescription(offer)
 
                 //send offer
                 socketRef.current?.emit(ACTIONS.RELAY_SDP, {
@@ -117,6 +117,42 @@ export const useWebRTC = (roomId: string, user: User) => {
         }
     }
         , [])
+
+    useEffect(() => {
+        socketRef.current?.on(ACTIONS.RELAY_ICE, ({ peerId, icecandidate }: { peerId: string, icecandidate: any }) => {
+            if (icecandidate)
+                connections.current[peerId].addIceCandidate(icecandidate)
+        })
+
+        return () => {
+            socketRef.current?.off(ACTIONS.RELAY_ICE)
+        }
+    }, [])
+    useEffect(() => {
+
+        const handleRemoteSdp = async ({ peerId, sessionDescription: remoteSessionDescription }: { peerId: string, sessionDescription: any }) => {
+            connections.current[peerId].setRemoteDescription(new RTCSessionDescription(remoteSessionDescription))
+
+            //if sdp is type of offer then create ans
+            if (remoteSessionDescription.type === 'offer') {
+                const conn = connections.current[peerId]
+                const ans = await conn.createAnswer()
+                conn.setLocalDescription(ans)
+
+                socketRef.current?.emit(ACTIONS.RELAY_SDP, {
+                    peerId,
+                    sessionDescription: ans
+                })
+            }
+
+        }
+        socketRef.current?.on(ACTIONS.RELAY_SDP, handleRemoteSdp)
+
+        return () => {
+            socketRef.current?.off(ACTIONS.RELAY_ICE)
+        }
+    }, [])
+
     //Start capture media
     useEffect(() => {
         const startCapture = async () => {
