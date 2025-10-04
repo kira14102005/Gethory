@@ -74,14 +74,20 @@ io.on('connection', (socket) => {
                 createOffer: true,
                 user: socketUserMapping[clientId]
             })
-        })
-
-        //    Use `socket.broadcast` to send to everyone except the current socket.
-        socket.broadcast.to(roomId).emit(ACTIONS.ADD_PEER, {
-            peerId: socket.id,
-            createOffer: false,
-            user,
+            //Can use broadcast also like below
+            io.to(clientId).emit(ACTIONS.ADD_PEER, {
+                peerId: socket.id,
+                createOffer: false,
+                user
+            })
         });
+
+        // //    Use `socket.broadcast` to send to everyone except the current socket.
+        // socket.broadcast.to(roomId).emit(ACTIONS.ADD_PEER, {
+        //     peerId: socket.id,
+        //     createOffer: false,
+        //     user,
+        // });
 
         socket.join(roomId);
         console.log(clientsInRoom)
@@ -105,20 +111,37 @@ io.on('connection', (socket) => {
     })
     //Leaving room handler
     const leaveRoom = ({ roomId }: { roomId: any }) => {
+        //all joined rooms currently by  `socket  `
         const { rooms } = socket;
-        Array.from(rooms).forEach((roomId)=>{
-            const clients  = Array.from(io.sockets.adapter.rooms.get(roomId) || [])
+        Array.from(rooms).forEach((roomId) => {
+            const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || [])
 
-            //Pass message to all the clients to remove me `socket`
             clients.forEach((clientId) => {
-                io.to(clientId).emit(ACTIONS.REMOVE_PEER , {
-                    peerId : socket.id,
-                    userId  : socketUserMapping[socket.id]._id
+                //Pass message to all the clients to remove me `socket`
+
+                io.to(clientId).emit(ACTIONS.REMOVE_PEER, {
+                    peerId: socket.id,
+                    userId: socketUserMapping[socket.id]._id
 
                 })
+
+                //Pass the `socket` all the clients to be removed
+                socket.emit(ACTIONS.REMOVE_PEER, {
+                    peerId: clientId,
+                    userId: socketUserMapping[clientId]._id
+                })
             })
-        })
+
+            //Now socket leave the room `roomId`
+            socket.leave(roomId)
+
+        });
+        //Delete from socketMapping
+        delete socketUserMapping[socket.id];
     }
+
+    //Call the leaveRoom handler
+    socket.on(ACTIONS.LEAVE , leaveRoom)
 
 });
 
