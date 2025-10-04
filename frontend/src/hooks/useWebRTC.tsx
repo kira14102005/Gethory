@@ -91,6 +91,7 @@ export const useWebRTC = (roomId: string, user: User) => {
             }
             //Add local track to remote connections
             localmediaStream.current?.getTracks().forEach(track => {
+                //@ts-ignore
                 connections.current[peerId].addTrack(track, localmediaStream.current)
             })
 
@@ -99,7 +100,7 @@ export const useWebRTC = (roomId: string, user: User) => {
                 const offer = await connections.current[peerId].createOffer()
 
                 //setLocalDescription
-
+                await connections.current[peerId].setLocalDescription(offer)
 
                 //send offer
                 socketRef.current?.emit(ACTIONS.RELAY_SDP, {
@@ -134,7 +135,9 @@ export const useWebRTC = (roomId: string, user: User) => {
                 //Scoket JOIN
                 socketRef.current?.emit(ACTIONS.JOIN, { roomId, user })
             })
-        }).catch((err) => { })
+        }).catch((err) => {
+            console.log('Error : ', err)
+        })
     }, [])
 
 
