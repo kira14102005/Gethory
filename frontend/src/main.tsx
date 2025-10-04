@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { store } from './store/index.ts'
 import { Provider } from 'react-redux'
 createRoot(document.getElementById('root')!).render(
+
   // <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
@@ -13,6 +14,6 @@ createRoot(document.getElementById('root')!).render(
 
       </BrowserRouter>
     </Provider>
-  // </StrictMode>,
+// </StrictMode>,
 )
 
