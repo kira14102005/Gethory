@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-
+import { type ClientInterface } from "./useWebRTC"
 export const useStateWithCallback = (initialState : any)=>{
-    const [state , setState] = useState(initialState)
+    const [state , setState] = useState<ClientInterface[]>(initialState)
     const cbRef  = useRef<null | Function>(null)
     const updateState = useCallback((newState : any , cb : ()=>any)=>{
         cbRef.current  = cb
@@ -17,5 +17,5 @@ export const useStateWithCallback = (initialState : any)=>{
         }
     } , [state])
 
-    return [state , updateState]
+    return [state , updateState] as const
 }
