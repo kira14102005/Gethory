@@ -67,18 +67,18 @@ io.on('connection', (socket) => {
         }));
 
         // socket.emit(ACTIONS.RELAY_PEERS, existingPeers);
-        clientsInRoom.forEach((clientId) =>{
-            socket.emit(ACTIONS.ADD_PEER , {
-                peerId : clientId,
-                createOffer : true,
-                user : socketUserMapping[clientId]
+        clientsInRoom.forEach((clientId) => {
+            socket.emit(ACTIONS.ADD_PEER, {
+                peerId: clientId,
+                createOffer: true,
+                user: socketUserMapping[clientId]
             })
         })
 
         //    Use `socket.broadcast` to send to everyone except the current socket.
         socket.broadcast.to(roomId).emit(ACTIONS.ADD_PEER, {
             peerId: socket.id,
-            createOffer : false,
+            createOffer: false,
             user,
         });
 
@@ -87,7 +87,15 @@ io.on('connection', (socket) => {
 
     });
 
-})
+    // Handle  Relay ice
+    socket.on(ACTIONS.RELAY_ICE, ({ peerId, icecandidate }) => {
+        io.to(peerId).emit(ACTIONS.RELAY_ICE ,  {
+            peerId  : socket.id,
+            icecandidate
+        })
+    })
+
+});
 
 server.listen(PORT, async () => {
     try {
