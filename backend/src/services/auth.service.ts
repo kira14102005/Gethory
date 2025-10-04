@@ -31,7 +31,7 @@ export const CreateAccount = async (data: CreateAccountParams) => {
     const code = await VerificationModel.create({
         userID: user._id,
         type: VerificationCodeType.EMAIL,
-        expiresAt: getOneYearFromNow()
+        expiresAt: getOneHourFromNow()
     })
     //Send this Verification Code to the User Mail
     const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`
