@@ -18,6 +18,7 @@ import { createServer } from 'http'
 import { Server } from "socket.io";
 import { ACTIONS } from "./constants/socketActions";
 import { socketUserMapping } from "./constants/socketUserMapping";
+import mongoose from "mongoose";
 
 const server = createServer(app)
 const io = new Server(server, {
@@ -97,11 +98,27 @@ io.on('connection', (socket) => {
 
     //Handle relay sdp(session  description)
     socket.on(ACTIONS.RELAY_SDP, ({ peerId, sessionDescription }) => {
-        io.to(peerId).emit(ACTIONS.SESSION_DESCRIPTION , {
-            peerId  : socket.id,
+        io.to(peerId).emit(ACTIONS.SESSION_DESCRIPTION, {
+            peerId: socket.id,
             sessionDescription
         })
     })
+    //Leaving room handler
+    const leaveRoom = ({ roomId }: { roomId: any }) => {
+        const { rooms } = socket;
+        Array.from(rooms).forEach((roomId)=>{
+            const clients  = Array.from(io.sockets.adapter.rooms.get(roomId) || [])
+
+            //Pass message to all the clients to remove me `socket`
+            clients.forEach((clientId) => {
+                io.to(clientId).emit(ACTIONS.REMOVE_PEER , {
+                    peerId : socket.id,
+                    userId  : socketUserMapping[socket.id]._id
+
+                })
+            })
+        })
+    }
 
 });
 

@@ -1,4 +1,4 @@
 interface SocketUserMappingInterface {
-    [socket_id: string]: string;
+    [socket_id: string]: any;
 }
 export let socketUserMapping: SocketUserMappingInterface = {};
