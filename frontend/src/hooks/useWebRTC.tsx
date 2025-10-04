@@ -51,7 +51,7 @@ export const useWebRTC = (roomId: string, user: User) => {
         const handleNewPeer = async ({ peerId, createOffer, user }: { peerId: string, createOffer: boolean, user: User }) => {
             if (peerId in connections.current) {
                 return console.warn(
-                    `Youare already connected with ${peerId} ${user.name}`
+                    `You are already connected with ${peerId} ${user.name}`
                 );
             }
             connections.current[peerId] = new RTCPeerConnection({
@@ -118,16 +118,19 @@ export const useWebRTC = (roomId: string, user: User) => {
     }
         , [])
 
+    //Handle ice_Candidate received from server
     useEffect(() => {
-        socketRef.current?.on(ACTIONS.RELAY_ICE, ({ peerId, icecandidate }: { peerId: string, icecandidate: any }) => {
+        socketRef.current?.on(ACTIONS.ICE_CANDIDATE, ({ peerId, icecandidate }: { peerId: string, icecandidate: any }) => {
             if (icecandidate)
                 connections.current[peerId].addIceCandidate(icecandidate)
         })
 
         return () => {
-            socketRef.current?.off(ACTIONS.RELAY_ICE)
+            socketRef.current?.off(ACTIONS.ICE_CANDIDATE)
         }
     }, [])
+
+    //Handle RemoteSDP
     useEffect(() => {
 
         const handleRemoteSdp = async ({ peerId, sessionDescription: remoteSessionDescription }: { peerId: string, sessionDescription: any }) => {
@@ -146,10 +149,10 @@ export const useWebRTC = (roomId: string, user: User) => {
             }
 
         }
-        socketRef.current?.on(ACTIONS.RELAY_SDP, handleRemoteSdp)
+        socketRef.current?.on(ACTIONS.SESSION_DESCRIPTION, handleRemoteSdp)
 
         return () => {
-            socketRef.current?.off(ACTIONS.RELAY_ICE)
+            socketRef.current?.off(ACTIONS.SESSION_DESCRIPTION)
         }
     }, [])
 

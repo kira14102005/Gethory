@@ -89,9 +89,17 @@ io.on('connection', (socket) => {
 
     // Handle  Relay ice
     socket.on(ACTIONS.RELAY_ICE, ({ peerId, icecandidate }) => {
-        io.to(peerId).emit(ACTIONS.RELAY_ICE ,  {
-            peerId  : socket.id,
+        io.to(peerId).emit(ACTIONS.ICE_CANDIDATE, {
+            peerId: socket.id,
             icecandidate
+        })
+    })
+
+    //Handle relay sdp(session  description)
+    socket.on(ACTIONS.RELAY_SDP, ({ peerId, sessionDescription }) => {
+        io.to(peerId).emit(ACTIONS.SESSION_DESCRIPTION , {
+            peerId  : socket.id,
+            sessionDescription
         })
     })
 
