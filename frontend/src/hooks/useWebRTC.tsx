@@ -131,7 +131,7 @@ export const useWebRTC = (roomId: string, user: User) => {
                 const offer = await connections.current[peerId].createOffer()
 
                 //setLocalDescription
-                connections.current[peerId].setLocalDescription(offer)
+                await connections.current[peerId].setLocalDescription(offer)
 
                 //send offer
                 socketRef.current?.emit(ACTIONS.RELAY_SDP, {
@@ -165,7 +165,7 @@ export const useWebRTC = (roomId: string, user: User) => {
     useEffect(() => {
 
         const handleRemoteSdp = async ({ peerId, sessionDescription: remoteSessionDescription }: { peerId: string, sessionDescription: any }) => {
-            connections.current[peerId].setRemoteDescription(new RTCSessionDescription(remoteSessionDescription))
+            await connections.current[peerId].setRemoteDescription(new RTCSessionDescription(remoteSessionDescription))
 
             //if sdp is type of offer then create ans
             if (remoteSessionDescription.type === 'offer') {
