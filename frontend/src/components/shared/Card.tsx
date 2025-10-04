@@ -76,7 +76,7 @@ export const MeetingCard = memo((props: MeetingDetailsProps) => {
         count = `${mul}k+`
     }
     const authors = [props.authors[0].name, '']
-    const onclick = useCallback(() => { navigate(`/room/${props._id}`, { replace: true }) }, [])
+    const onclick = useCallback(() => { navigate(`/newroom/${props._id}`, { replace: true }) }, [])
     const avatars = [props.authors[0].avatar, '/profile.png']
     let onlyOne;
     if (props.authors.length === 1) onlyOne = true

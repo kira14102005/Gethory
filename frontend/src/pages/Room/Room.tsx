@@ -16,7 +16,7 @@ const Room = () => {
         const fetchRooms = async () => {
             const { data } = await getAllRooms()
             //@ts-ignore
-            const newRoomArr = data.meetingArr 
+            const newRoomArr = data.meetingArr
             console.log(newRoomArr)
             //@ts-ignore
             setMeetingArr(newRoomArr)
@@ -40,7 +40,13 @@ const Room = () => {
                     <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 w-full h-full">
 
                         {meetingArr.map((meet: MeetingDetailsProps, i) => {
-                            return <MeetingCard key={i} topic={meet.topic} count={meet.count} authors={meet.authors}></MeetingCard>
+                            return <MeetingCard key={i}
+                                topic={meet.topic}
+                                authors={meet.topic}
+                                _id={meet._id}
+                                count={meet.count}
+
+                            ></MeetingCard>
                         })}
 
                     </div>
