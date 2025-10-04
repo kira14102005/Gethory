@@ -42,7 +42,7 @@ const Room = () => {
                         {meetingArr.map((meet: MeetingDetailsProps, i) => {
                             return <MeetingCard key={i}
                                 topic={meet.topic}
-                                authors={meet.topic}
+                                authors={meet.authors}
                                 _id={meet._id}
                                 count={meet.count}
 
