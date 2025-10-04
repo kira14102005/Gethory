@@ -1,6 +1,6 @@
 import { SectionType2 } from "../../components/shared/Section"
 import { MenuCard } from "../../components/shared/Card"
-import { useWebRTC } from "../../hooks/useWebRTC"
+import { useWebRTC, type ClientInterface } from "../../hooks/useWebRTC"
 import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { selectUser } from "../../store/authSelectors"
@@ -21,17 +21,17 @@ const Newroom = () => {
 const Joinee = () => {
   const { id: roomId } = useParams()
   const user = useSelector(selectUser)
-  if (!roomId || !user) return <>Not Verified</>
+  //@ts-ignore
   const { clients, provideRef } = useWebRTC(roomId, user)
   return <>
+
     <div>
-      {clients.map((client: any) => {
-        return <>
-          <div>
-            <audio ref={(instance) => provideRef(instance, client.id)} controls autoPlay></audio>
-            <h4>{client.name}</h4>
-          </div>
-        </>
+      {clients.map((client: ClientInterface) => {
+        return <div key={client._id}>
+          <audio ref={(instance) => provideRef(instance, client._id)} controls autoPlay></audio>
+          <h4>{client.name}</h4>
+        </div>
+
       })}
     </div>
   </>
