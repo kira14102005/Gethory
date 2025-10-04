@@ -9,14 +9,7 @@ export type ClientInterface = {
     name: string
 }
 
-const joineeDummyData: ClientInterface[] = [{
-    _id: '1',
-    name: "Rakesh K"
-},
-{
-    _id: '2',
-    name: "Kaishal Openuy"
-}]
+const joineeDummyData: ClientInterface[] = []
 
 export interface AudioInterface {
     [userId: string]: any;

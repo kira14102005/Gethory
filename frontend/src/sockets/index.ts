@@ -1,11 +1,9 @@
-import  io from 'socket.io-client'
+import io from 'socket.io-client'
 import { baseURL } from '../http';
-export const socketInit =  ()=>{
-    const options  = {
-        'force new connection' : true,
-        reconnectionAttempt : 'Infinity',
-        timeout : 10000,
-        transports  : ['websockets']
+export const socketInit = () => {
+    const options = {
+        transports: ['websocket'],
+        reconnectionAttempts: Infinity, timeout: 10000
     };
-    return io(baseURL , options)
+    return io(baseURL, options)
 }
