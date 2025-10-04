@@ -14,14 +14,15 @@ import { authenticate } from "./midwares/authenticate";
 import { sessionRouter } from "./router/sessionRouter";
 import { roomRouter } from "./router/roomRouter";
 const app = express();
-import {createServer} from 'http'
+import { createServer } from 'http'
 import { Server } from "socket.io";
+import { ACTIONS } from "./constants/socketActions";
 
 const server = createServer(app)
-const  io = new Server(server  , {
-    cors : {
-        origin : APP_ORIGIN,
-        methods : ['POST' , 'GET'  , 'PUT']
+const io = new Server(server, {
+    cors: {
+        origin: APP_ORIGIN,
+        methods: ['POST', 'GET',]
     }
 })
 
@@ -49,6 +50,27 @@ app.use('/room', authenticate, roomRouter)
 
 //Error Midware at the End
 app.use(errorHandler)
+
+//Sockets
+interface SocketUserMappingInterface {
+    [socket_id: string]: string;
+}
+let socketUserMapping: SocketUserMappingInterface = {};
+io.on('connection', (socket) => {
+    console.log('New connection  : ', socket.id)
+    socket.on(ACTIONS.JOIN, ({ roomId, user }) => {
+        socketUserMapping[socket.id] = user._id;
+        const clients = Array.from(io.sockets.adapter.rooms.get(roomId) ?? [])
+clients.forEach((clientId) => {
+    io.to(clientId).emit(ACTIONS.ADD_PEER  , {})
+});
+socket.emit(ACTIONS.ADD_PEER)
+        console.log(clients)
+
+    });
+
+})
+
 server.listen(PORT, async () => {
     try {
         console.log("Running  on PORT " + PORT + " in " + NODE_ENV + " environment")
