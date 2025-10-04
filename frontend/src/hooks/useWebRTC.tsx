@@ -46,6 +46,28 @@ export const useWebRTC = (roomId: string, user: User) => {
     useEffect(() => {
         socketRef.current = socketInit()
     }, [])
+    //Start capture media
+    useEffect(() => {
+        const startCapture = async () => {
+            localmediaStream.current = await navigator.mediaDevices.getUserMedia({
+                audio: true
+            })
+        }
+        startCapture().then(() => {
+            //Now add to the list of Clients
+            //@ts-ignore 
+            addNewClient(user, () => {
+                const localElement = audioElements.current[user._id]
+                localElement.volume = 0
+                localElement.srcObject = localmediaStream.current
+
+                //Scoket JOIN
+                socketRef.current?.emit(ACTIONS.JOIN, { roomId, user })
+            })
+        }).catch((err) => {
+            console.log('Error : ', err)
+        })
+    }, [])
 
     useEffect(() => {
         const handleNewPeer = async ({ peerId, createOffer, user }: { peerId: string, createOffer: boolean, user: User }) => {
@@ -156,29 +178,24 @@ export const useWebRTC = (roomId: string, user: User) => {
         }
     }, [])
 
-    //Start capture media
+    // handle remove user
     useEffect(() => {
-        const startCapture = async () => {
-            localmediaStream.current = await navigator.mediaDevices.getUserMedia({
-                audio: true
-            })
+        const handleRemovePeer = async ({ peerId, userId }: { peerId: string, userId: string }) => {
+            if (connections.current[peerId]) {
+                connections.current[peerId].close()
+
+                delete connections.current[peerId]
+                delete audioElements.current[peerId]
+                setClients((list: ClientInterface[]) => list.filter((client) => client._id !== userId))
+            }
         }
-        startCapture().then(() => {
-            //Now add to the list of Clients
-            //@ts-ignore 
-            addNewClient(user, () => {
-                const localElement = audioElements.current[user._id]
-                localElement.volume = 0
-                localElement.srcObject = localmediaStream.current
 
-                //Scoket JOIN
-                socketRef.current?.emit(ACTIONS.JOIN, { roomId, user })
-            })
-        }).catch((err) => {
-            console.log('Error : ', err)
-        })
+        socketRef.current?.on(ACTIONS.REMOVE_PEER, handleRemovePeer)
+
+        return () => {
+            socketRef.current?.off(ACTIONS.REMOVE_PEER)
+        }
     }, [])
-
 
     return { clients, provideRef }
 
