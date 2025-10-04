@@ -86,11 +86,34 @@ export const useWebRTC = (roomId: string, user: User) => {
                             }
                         }, 1000)
                     }
-                })
+                });
 
             }
+            //Add local track to remote connections
+            localmediaStream.current?.getTracks().forEach(track => {
+                connections.current[peerId].addTrack(track  , localmediaStream.current)
+            })
+       
+        //Create offer
+        if(createOffer){
+            const offer  = await connections.current[peerId].createOffer()
+
+            //setLocalDescription
+
+
+            //send offer
+            socketRef.current?.emit(ACTIONS.RELAY_SDP  , {
+                peerId ,
+                sessionDescription : offer
+            })
+        }
+
         };
 
+       socketRef.current?.on(ACTIONS.ADD_PEER , handleNewPeer)
+
+
+       
     }
         , [])
     //Start capture media
