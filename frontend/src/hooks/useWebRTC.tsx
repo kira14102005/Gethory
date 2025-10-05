@@ -1,10 +1,10 @@
-import { use, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { User } from "../store/authSlice";
 import { useStateWithCallback } from "./useStateWithCallback";
 import { socketInit } from "../sockets";
 import { ACTIONS } from "../sockets/actions";
 import { getIceServers } from "../store/getIceServers";
-export interface ClientInterface extends User { }
+export interface ClientInterface extends User { muted: boolean }
 const joineeDummyData: ClientInterface[] = []
 
 export interface AudioInterface {
@@ -202,23 +202,27 @@ export const useWebRTC = (roomId: string, user: User) => {
 
     //Listen for mute/unmute
     useEffect(() => {
-        socketRef.current?.on(ACTIONS.MUTE, ({ peerId, userId }: { peerId: string, userId: string }) => {
+        socketRef.current?.on(ACTIONS.MUTE, ({ userId }: { peerId: string, userId: string }) => {
             setMute(true, userId)
         })
-        socketRef.current?.on(ACTIONS.UNMUTE, ({ peerId, userId }: { peerId: string, userId: string }) => {
+        socketRef.current?.on(ACTIONS.UNMUTE, ({ userId }: { peerId: string, userId: string }) => {
             setMute(false, userId)
         })
 
         const setMute = (mute: boolean, userId: string) => {
             const clientIdx = clientRef.current.map(client => client._id).indexOf(userId)
-            
+            const connectedClients = JSON.parse(JSON.stringify(clientRef.current))   //Need deeep copy here
+            if (clientIdx > -1) {
+                connectedClients[clientIdx].muted = mute
+                setClients(connectedClients)
+            }
 
-         }
+        }
     })
 
 
     //handling mute
-    const handleMute = (isMute: boolean, userId: string) => {
+    const handleMute = (isMute: boolean, userId: string | undefined) => {
         let settled = false
         if (localmediaStream.current) localmediaStream.current.getTracks()[0].enabled = !isMute;
         else {
