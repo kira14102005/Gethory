@@ -2,6 +2,7 @@ import ForumIcon from '@mui/icons-material/Forum';
 import PersonIcon from '@mui/icons-material/Person';
 import { memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './components.module.css'
 interface CardProps {
     title: string,
     subtitle?: string
@@ -29,7 +30,7 @@ export function LighttitleCard(props: CardProps) {
 
 export function MenuCard(props: CardProps) {
     return <>
-        <div className="text-white text-[20px] pb-3 pr-2 h-[35px] border-b-[3px] border-[#71E8DF] w-max ">
+        <div className={`${styles.linkUnderline} text-white text-[20px] pb-3 pr-2 h-[35px] border-b-[2px] border-[#71E8DF] w-max `}>
             {props.title}
         </div>
     </>

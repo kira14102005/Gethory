@@ -1,4 +1,6 @@
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import type { OverridableComponent } from '@mui/material/OverridableComponent';
+import type { SvgIconTypeMap } from '@mui/material/SvgIcon';
 
 interface ButtonProps {
     onclick: () => void,
@@ -29,6 +31,22 @@ export function CreateRoomButton(
     return <>
         <button className="text-[#71E8DF] lightBtn border-[#FFFFFF] border-[3px] px-3 p-[2px] w-fit space-x-4 rounded-full flex flex-row justify-between items-center" onClick={props.onclick}>
             <PersonAddAlt1Icon fontSize='inherit' />
+            <span>
+                {props.name}</span>
+        </button>
+    </>
+}
+interface ButtonWithLogoProps extends ButtonProps {
+    logo: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+        muiName: string;
+    }
+}
+export function ButtonWithLogo(
+    props: ButtonWithLogoProps
+) {
+    return <>
+        <button className="text-[#71E8DF] lightBtn border-[#FFFFFF] border-[3px] px-3 p-[2px] w-fit space-x-2 rounded-full flex flex-row justify-between items-center" onClick={props.onclick}>
+            <props.logo fontSize='inherit' />
             <span>
                 {props.name}</span>
         </button>
