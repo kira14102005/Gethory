@@ -184,6 +184,7 @@ io.on('connection', (socket) => {
 
     //Handle mute unmute
     socket.on(ACTIONS.MUTE, ({ roomId, userId }: { roomId: string, userId: string }) => {
+        console.log('Server MUTE' , userId)
         const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || [])
         clients.map((clientId)=>{
             io.to(clientId).emit(ACTIONS.MUTE , {
@@ -193,6 +194,8 @@ io.on('connection', (socket) => {
         })
     })
     socket.on(ACTIONS.UNMUTE, ({ roomId, userId }: { roomId: string, userId: string }) => {
+        console.log('Server UnMUTE' , userId)
+
         const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || [])
         clients.map((clientId)=>{
             io.to(clientId).emit(ACTIONS.UNMUTE , {
