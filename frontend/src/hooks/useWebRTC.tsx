@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { use, useCallback, useEffect, useRef } from "react";
 import type { User } from "../store/authSlice";
 import { useStateWithCallback } from "./useStateWithCallback";
 import { socketInit } from "../sockets";
@@ -45,7 +45,7 @@ export const useWebRTC = (roomId: string, user: User) => {
         startCapture().then(() => {
             //Now add to the list of Clients
             //@ts-ignore 
-            addNewClient(user, () => {
+            addNewClient({ ...user, muted: true }, () => {
                 const localElement = audioElements.current[user._id]
                 localElement.volume = 0
                 localElement.srcObject = localmediaStream.current
@@ -90,7 +90,7 @@ export const useWebRTC = (roomId: string, user: User) => {
                 streams: [remoteStream]
             }) => {
                 //@ts-ignore
-                addNewClient(user, () => {
+                addNewClient({ ...user, muted: true }, () => {
                     if (audioElements.current[user._id]) {
                         audioElements.current[user._id].srcObject = remoteStream
                     }
@@ -195,6 +195,23 @@ export const useWebRTC = (roomId: string, user: User) => {
         }
     }, [])
 
-    return { clients, provideRef }
 
-}
+    //handling mute
+    const handleMute = (isMute: boolean, userId: string) => {
+        let settled = false
+        if (localmediaStream.current) localmediaStream.current.getTracks()[0].enabled = !isMute;
+        else {
+            let interval = setInterval(() => {
+                if (localmediaStream.current) localmediaStream.current.getTracks()[0].enabled = !isMute;
+                if(isMute){
+                    socketRef?.current?.emit(ACTIONS.MUTE , {
+                        roomId ,
+                        userId
+                    })
+                }
+            })
+
+        }
+        return { clients, provideRef }
+
+    }
