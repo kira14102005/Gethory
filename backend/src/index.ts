@@ -159,7 +159,7 @@ io.on('connection', (socket) => {
     //     //Delete from socketMapping
     //     delete socketUserMapping[socket.id];
     // }
-    const leaveRoom = ({ roomId }: { roomId: any }) => {
+    const leaveRoom = () => {
         for (const r of socket.rooms) {
             if (r === socket.id) continue; // skip own auto-room
             const clients = Array.from(io.sockets.adapter.rooms.get(r) || []);
@@ -180,6 +180,8 @@ io.on('connection', (socket) => {
 
     //Call the leaveRoom handler
     socket.on(ACTIONS.LEAVE, leaveRoom)
+    //Leaving the websocket like closing browser
+    socket.on('disconnecting', leaveRoom)
 
 });
 
