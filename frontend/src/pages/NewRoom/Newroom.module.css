@@ -1,0 +1,17 @@
+.userHead{
+ background: pink;   
+ width: 100px;
+ height:  100px;
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+.userAvatar{
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    overflow:  hidden;
+}
+

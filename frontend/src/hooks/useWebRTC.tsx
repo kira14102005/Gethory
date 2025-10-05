@@ -4,11 +4,7 @@ import { useStateWithCallback } from "./useStateWithCallback";
 import { socketInit } from "../sockets";
 import { ACTIONS } from "../store/actions";
 import { getIceServers } from "../store/getIceServers";
-export type ClientInterface = {
-    _id: string,
-    name: string
-}
-
+export interface ClientInterface extends User { }
 const joineeDummyData: ClientInterface[] = []
 
 export interface AudioInterface {
