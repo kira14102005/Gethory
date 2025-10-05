@@ -1,8 +1,8 @@
-import { use, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { User } from "../store/authSlice";
 import { useStateWithCallback } from "./useStateWithCallback";
 import { socketInit } from "../sockets";
-import { ACTIONS } from "../store/actions";
+import { ACTIONS } from "../sockets/actions";
 import { getIceServers } from "../store/getIceServers";
 export interface ClientInterface extends User { }
 const joineeDummyData: ClientInterface[] = []
@@ -203,13 +203,22 @@ export const useWebRTC = (roomId: string, user: User) => {
         else {
             let interval = setInterval(() => {
                 if (localmediaStream.current) localmediaStream.current.getTracks()[0].enabled = !isMute;
-                if(isMute){
-                    socketRef?.current?.emit(ACTIONS.MUTE , {
-                        roomId ,
+                if (isMute) {
+                    socketRef?.current?.emit(ACTIONS.MUTE, {
+                        roomId,
                         userId
                     })
+                } else {
+                    socketRef?.current?.emit(ACTIONS.UNMUTE, {
+                        roomId,
+                        userId
+                    });
                 }
-            })
+                if (settled) {
+                    clearInterval(interval)
+                }
+
+            }, 200)
 
         }
         return { clients, provideRef }
