@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { use, useCallback, useEffect, useRef } from "react";
 import type { User } from "../store/authSlice";
 import { useStateWithCallback } from "./useStateWithCallback";
 import { socketInit } from "../sockets";
@@ -15,6 +15,7 @@ export interface ConnectionInterface {
 }
 export const useWebRTC = (roomId: string, user: User) => {
     const [clients, setClients] = useStateWithCallback(joineeDummyData);
+    const clientRef = useRef<ClientInterface[]>([])   //we want an updated copy of the clients on whose change there is no component re render
     const audioElements = useRef<AudioInterface>({})
     const localmediaStream = useRef<MediaStream>(null)
     const connections = useRef<ConnectionInterface>({})
@@ -195,6 +196,26 @@ export const useWebRTC = (roomId: string, user: User) => {
         }
     }, [])
 
+    useEffect(() => {
+        clientRef.current = clients
+    }, [clients])
+
+    //Listen for mute/unmute
+    useEffect(() => {
+        socketRef.current?.on(ACTIONS.MUTE, ({ peerId, userId }: { peerId: string, userId: string }) => {
+            setMute(true, userId)
+        })
+        socketRef.current?.on(ACTIONS.UNMUTE, ({ peerId, userId }: { peerId: string, userId: string }) => {
+            setMute(false, userId)
+        })
+
+        const setMute = (mute: boolean, userId: string) => {
+            const clientIdx = clientRef.current.map(client => client._id).indexOf(userId)
+            
+
+         }
+    })
+
 
     //handling mute
     const handleMute = (isMute: boolean, userId: string) => {
@@ -221,6 +242,7 @@ export const useWebRTC = (roomId: string, user: User) => {
             }, 200)
 
         }
-        return { clients, provideRef }
-
     }
+    return { clients, provideRef, handleMute }
+
+}
