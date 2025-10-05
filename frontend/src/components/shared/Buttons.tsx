@@ -45,9 +45,9 @@ export function ButtonWithLogo(
     props: ButtonWithLogoProps
 ) {
     return <>
-        <button className="text-[#71E8DF] lightBtn border-[#FFFFFF] border-[3px] px-3 p-[2px] w-fit space-x-2 rounded-full flex flex-row justify-between items-center" onClick={props.onclick}>
+        <button className="text-[#71E8DF] lightBtn border-[#FFFFFF] border-[2px] md:border-[3px] px-2 md:py-[2px] py-[6px] w-fit space-x-2 rounded-full  flex flex-row justify-between items-center" onClick={props.onclick}>
             <props.logo fontSize='inherit' />
-            <span>
+            <span className='hidden md:flex'>
                 {props.name}</span>
         </button>
     </>

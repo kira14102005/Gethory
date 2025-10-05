@@ -11,6 +11,7 @@ import styles from './Newroom.module.css'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ButtonWithLogo } from "../../components/shared/Buttons";
 import { useEffect, useState } from "react";
+import { getRoomDetails } from "../../http/utils";
 const Newroom = () => {
   const navigate = useNavigate()
   const [room, setRoom] = useState({})
@@ -23,7 +24,8 @@ const Newroom = () => {
   useEffect(() => {
     const fetchRoomDetails = async () => {
       const { data } = await getRoomDetails(roomId)
-      setRoom(data.room)
+      //@ts-ignore
+      setRoom((prev) => data.room)
     }
     fetchRoomDetails()
   }, [roomId])

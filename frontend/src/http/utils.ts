@@ -35,5 +35,5 @@ export const getAllRooms = () => {
 
 
 export const getRoomDetails = (roomId: string | undefined) => {
-    return api.get(`/room/${roomId}`)
+    return api.get(`/room/getroom/${roomId}`)
 }
