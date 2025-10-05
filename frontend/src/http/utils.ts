@@ -32,3 +32,8 @@ export const createRoom = (data: any) => {
 export const getAllRooms = () => {
     return api.get('/room/fetchall');
 }
+
+
+export const getRoomDetails = (roomId: string | undefined) => {
+    return api.get(`/room/${roomId}`)
+}

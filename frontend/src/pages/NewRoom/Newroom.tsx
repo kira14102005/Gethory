@@ -1,18 +1,42 @@
 import { SectionType2 } from "../../components/shared/Section"
 import { MenuCard } from "../../components/shared/Card"
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import FrontHandIcon from '@mui/icons-material/FrontHand';
 import { useWebRTC, type ClientInterface } from "../../hooks/useWebRTC"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { selectUser } from "../../store/authSelectors"
 import styles from './Newroom.module.css'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { ButtonWithLogo } from "../../components/shared/Buttons";
 const Newroom = () => {
-
+  const navigate = useNavigate()
+  const topicMeet = 'My Meet on Ai'
+  const handleManualLeave = () => {
+    navigate('/rooms', { replace: true })
+  }
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <SectionType2>
-        <MenuCard title="All connected clients" />
+        <div className="flex space-x-3">
+          <button onClick={handleManualLeave}>
+            <ArrowBackIcon fontSize="inherit" />
+          </button>
+          <span className={styles.linkUnderline}>All Voice Rooms</span>
+        </div>
       </SectionType2>
-      <Joinee />
+      <div className="flex flex-col m-5 space-y-2 w-[95%] h-fit">
+        <div className="flex justify-between w-full">
+          <MenuCard title={topicMeet} />
+          <div className="flex space-x-3">  <ButtonWithLogo name="Raise hand" logo={FrontHandIcon} onclick={handleManualLeave} />
+            <ButtonWithLogo name="Leave Quietly" logo={ExitToAppIcon} onclick={handleManualLeave} />
+
+          </div>
+        </div>
+        <div>
+          <Joinee />
+        </div>
+      </div>
     </div>
   )
 }
@@ -23,7 +47,7 @@ const Joinee = () => {
   const { clients, provideRef } = useWebRTC(roomId, user)
   return <>
 
-    <div>
+    <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
       {clients.map((client: ClientInterface) => {
         return <div className="w-fit m-3 flex flex-col items-center" key={client._id}>
           <div className={styles.userHead}>
