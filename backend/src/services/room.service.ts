@@ -16,8 +16,13 @@ export const createRoomService = async (payload: RoomModelDocument) => {
     return room
 }
 
-export const getRoomService = async (types: any) => {
+export const getAllRoomsService = async (types: any) => {
     const rooms = await RoomModel.find({ roomType: { $in: types } }
     ).populate('speakers').populate('userId').exec()
     return rooms
+}
+export const getSingleRoomService = async (roomId: string) => {
+    const room = await RoomModel.findById(roomId).populate('speakers').populate('userId').exec()
+    appAssert(room, HTTP.NOT_FOUND, 'No room found of this ID')
+    return room
 }
