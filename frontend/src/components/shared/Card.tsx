@@ -30,7 +30,7 @@ export function LighttitleCard(props: CardProps) {
 
 export function MenuCard(props: CardProps) {
     return <>
-        <div className={`${styles.linkUnderline} text-white text-[20px] pb-3 pr-2 h-[35px] border-b-[2px] border-[#71E8DF] w-max `}>
+        <div className={`${styles.linkUnderline} text-white text-[20px]  pr-2 h-[35px] border-b-[2px] border-[#71E8DF] w-max `}>
             {props.title}
         </div>
     </>
