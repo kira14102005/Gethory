@@ -13,10 +13,10 @@ services:
       - /usr/src/app/node_modules
     env_file:
       - ./backend/.env
-    environment:
-      - NODE_ENV=development
     depends_on:
       - mongo
+    environment:
+      DB_URI : "mongodb://mongo_container:27017/myDatabase"
 
   frontend:
     build:
@@ -24,19 +24,16 @@ services:
     ports:
       - "5173:80"
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app   #Bind mount
       - /app/node_modules
 
   mongo:
     image: mongo:latest
+    container_name : 'mongo_container'
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongodb 
-      MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: gethory 
-
+    
 volumes:
   mongo-data:
