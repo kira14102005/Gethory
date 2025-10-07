@@ -1,4 +1,4 @@
-import { DarkLogo, Logo } from "./logo";
+import { DarkLogo, Logo } from "./Logo";
 import LogoutButton from "./Logout";
 import { ProfileIcon } from "./UserUI";
 

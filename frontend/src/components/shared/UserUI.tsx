@@ -39,6 +39,7 @@ export interface UserInfo {
     desc?: string,
     followers: number,
     following: number,
+    avatar: string
 
 }
 
@@ -46,7 +47,10 @@ export function ProfileBox(props: UserInfo) {
     return <>
         <div className="w-full flex flex-col">
             <div className="w-full flex flex-row md:justify-around justify-evenly">
-                <div className="w-[20vw] h-[20vw] md:w-[10vw] md:h-[10vw]  border-[3px] border-[#4A5568] bg-[#DB9C50] rounded-full"></div>
+                <div className="w-[20vw] h-[20vw] md:w-[10vw] md:h-[10vw]  border-[3px] border-[#4A5568] bg-[#DB9C50] rounded-full flex items-center justify-center ">
+                    <div className="w-[90%] h-[90%] overflow-hidden rounded-full"> <img src={props.avatar} alt="" className="cover" />
+                    </div>
+                </div>
                 <div className="h-full flex flex-col justify-center ">
                     <span className="text-white text-[23px] h-[25px]">{props.name}</span>
                     <span className="text-[15px] text-[#D9D9D9] opacity-[59%]">@{props.username}</span>

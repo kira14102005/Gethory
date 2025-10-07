@@ -75,10 +75,12 @@ const Joinee = ({ roomId }: { roomId: string | undefined }) => {
     handleMute(isMute, user?._id)
   }, [isMute])
 
-  const handleMuteClick = useCallback((clientId: string) => {
-    if (clientId !== user?._id) return //be able mute yourself only
-    setMute((prev) => !prev)
-  }, [setMute])
+  const handleMuteClick = (clientId: string) => {
+
+    if (clientId !== user?._id) return; //be able mute yourself only
+    setMute(prev => !prev)
+    console.log('Handle Muteclick : ', isMute)
+  }
   return <>
 
     <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 items-center w-full">
