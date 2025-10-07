@@ -13,7 +13,7 @@ import { updateUserProfile } from "../../store/authSlice";
 import { selectActivate, selectAvatar, selectName, selectUsername } from "../../store/activateSelectors";
 import { setAvatar, setName, setUsername } from "../../store/activateSlice";
 import AvatarComponent from "../../components/shared/Avatar";
-import { Loader1, Loader2, Loader3 } from "../../components/shared/LoaderOptions";
+import { Loader3 } from "../../components/shared/LoaderOptions";
 
 
 

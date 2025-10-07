@@ -16,7 +16,6 @@ import { useWebRTCVersion2 , type ClientInterface} from "../../hooks/useWebRTCVe
 
 export interface RoomInterface {
   userId: string;
-  // expiresAt: Date;
   topic: string;
   roomType: string;
   createdAt: Date;
