@@ -201,25 +201,32 @@ export const useWebRTC = (roomId: string, user: User) => {
     }, [clients])
 
     //Listen for mute/unmute
+    // in useWebRTC.tsx
+
+    // Listen for mute/unmute
     useEffect(() => {
-        socketRef.current?.on(ACTIONS.MUTE, ({ userId }: { peerId: string, userId: string }) => {
-            setMute(true, userId)
-        })
-        socketRef.current?.on(ACTIONS.UNMUTE, ({ userId }: { peerId: string, userId: string }) => {
-            setMute(false, userId)
-        })
+        const handleSetMute = (mute: boolean, userId: string) => {
+            // Use the ref here to get the latest clients without causing re-renders
+            const clientIdx = clientRef.current.findIndex(c => c._id === userId);
 
-        const setMute = (mute: boolean, userId: string) => {
-            const clientIdx = clientRef.current.map(client => client._id).indexOf(userId)
-            const connectedClients = JSON.parse(JSON.stringify(clientRef.current))   //Need deeep copy here
             if (clientIdx > -1) {
-                connectedClients[clientIdx].muted = mute
-                setClients(connectedClients)
+                const newClients = [...clientRef.current]; // Create a new array
+                newClients[clientIdx].muted = mute;
+                setClients(newClients, () => { }); // Update state
             }
+        };
 
-        }
-    })
+        const onMute = ({ userId }: { userId: string }) => handleSetMute(true, userId);
+        const onUnmute = ({ userId }: { userId: string }) => handleSetMute(false, userId);
 
+        socketRef.current?.on(ACTIONS.MUTE, onMute);
+        socketRef.current?.on(ACTIONS.UNMUTE, onUnmute);
+
+        return () => {
+            socketRef.current?.off(ACTIONS.MUTE, onMute);
+            socketRef.current?.off(ACTIONS.UNMUTE, onUnmute);
+        };
+    }, [setClients]); // ✅ FIX: Add dependency array
 
     //handling mute
     const handleMute = (isMute: boolean, userId: string | undefined) => {
@@ -229,6 +236,7 @@ export const useWebRTC = (roomId: string, user: User) => {
 
             let interval = setInterval(() => {
                 if (localmediaStream.current) localmediaStream.current.getTracks()[0].enabled = !isMute;
+                console.log('Hi')
                 if (isMute) {
                     socketRef?.current?.emit(ACTIONS.MUTE, {
                         roomId,
