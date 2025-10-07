@@ -4,15 +4,15 @@ import MicOffIcon from '@mui/icons-material/MicOff';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import MicIcon from '@mui/icons-material/Mic';
 import FrontHandIcon from '@mui/icons-material/FrontHand';
-import { useWebRTC, type ClientInterface } from "../../hooks/useWebRTC"
 import { useNavigate, useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { selectUser } from "../../store/authSelectors"
 import styles from './Newroom.module.css'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ButtonWithLogo } from "../../components/shared/Buttons";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getRoomDetails } from "../../http/utils";
+import { useWebRTCVersion2 , type ClientInterface} from "../../hooks/useWebRTCVer2";
 
 export interface RoomInterface {
   userId: string;
@@ -27,11 +27,9 @@ const Newroom = () => {
   const [room, setRoom] = useState<RoomInterface | null>(null)
   const { id: roomId } = useParams()
 
-
-  const handleManualLeave = useCallback(() => {
-    navigate('/rooms', { replace: true })
-  }, [navigate])
-
+  const handleManualLeave = () => {
+    navigate('/rooms', { replace: true });
+  };
   useEffect(() => {
     const fetchRoomDetails = async () => {
       const { data } = await getRoomDetails(roomId)
@@ -69,7 +67,7 @@ const Newroom = () => {
 const Joinee = ({ roomId }: { roomId: string | undefined }) => {
   const user = useSelector(selectUser)
   //@ts-ignore
-  const { clients, provideRef, handleMute } = useWebRTC(roomId, user)
+  const { clients, provideRef, handleMute } = useWebRTCVersion2(roomId, user)
   const [isMute, setMute] = useState(true)
   useEffect(() => {
     handleMute(isMute, user?._id)
