@@ -42,12 +42,12 @@ app.get("/error", catchError(async (req: Request, res: Response, next: NextFunct
     })
 })
 )
-app.use('/auth', authRouter)
+app.use('/api/auth', authRouter)
 
 // protected routes 
-app.use('/user', authenticate, userRouter)
-app.use('/sessions', authenticate, sessionRouter)
-app.use('/room', authenticate, roomRouter)
+app.use('/api/user', authenticate, userRouter)
+app.use('/api/sessions', authenticate, sessionRouter)
+app.use('/api/room', authenticate, roomRouter)
 
 //Error Midware at the End
 app.use(errorHandler)
