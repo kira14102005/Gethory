@@ -18,9 +18,6 @@ services:
       - "3000:3000"
     env_file:
       - ./backend/.env
-    volumes:
-      - ./backend:/backend
-      - /backend/node_modules
     depends_on:
       - mongodb
   frontend:
