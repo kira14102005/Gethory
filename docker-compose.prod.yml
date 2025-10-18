@@ -7,7 +7,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongodb:/data/db
+      - mongodata:/data/db
   backend:
     build:
       dockerfile: Dockerfile.prod
