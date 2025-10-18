@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 services:
   mongodb:
     image: mongo
@@ -7,10 +7,10 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongodata:/data/db
+      - mongodb:/data/db
   backend:
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
       context: ./backend/
     container_name: backend
     restart: always
@@ -25,16 +25,17 @@ services:
       - mongodb
   frontend:
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
       context: ./
     container_name: frontend
     ports:
-      - "5173:5173"
+      - "80:80"
+      - "443:443"
     env_file:
       - ./frontend/.env
     volumes:
-      - ./frontend:/frontend
-      - /frontend/node_modules
+      - ./deploy/default.conf:/etc/nginx/sites-available/default
+      - /var/certs/etc-letsencrypt:/etc/letsencrypt
     depends_on:
       - backend
 volumes:
