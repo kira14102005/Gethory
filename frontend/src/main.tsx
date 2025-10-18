@@ -7,13 +7,13 @@ import { store } from './store/index.ts'
 import { Provider } from 'react-redux'
 createRoot(document.getElementById('root')!).render(
 
-  // <StrictMode>
+  <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <App></App>
 
       </BrowserRouter>
     </Provider>
-//  </StrictMode>,
+  </StrictMode>,
 )
 
