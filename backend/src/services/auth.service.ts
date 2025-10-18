@@ -8,7 +8,7 @@ import { get30daysfromNow, get7daysfromNow, getFiveMinsAgo, getOneHourFromNow, g
 import { accessTokenSignOptions, refereshTokenSignOptions, refreshTokenPayload, signToken, verifyTokens } from "../utils/jwt"
 import { sendMail } from "../utils/sendMail"
 import { hashValue } from "../utils/hash"
-import { VerificationCodeType } from "../constants/verificationCodeType";
+import { VerificationCodeType } from "../constants/VerificationCodeType";
 export type CreateAccountParams = {
     email: string
     , password: string
