@@ -4,5 +4,5 @@ export const socketInit = () => {
         transports: ['websocket'],
         reconnectionAttempts: Infinity, timeout: 10000
     };
-    return io('', options)
+    return io('http://kira14102005.dpdns.org', options)
 }
