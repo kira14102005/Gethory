@@ -4,5 +4,5 @@ export const socketInit = () => {
         transports: ['websocket'],
         reconnectionAttempts: Infinity, timeout: 10000
     };
-    return io('http://kira14102005.dpdns.org', options)
+    return io(import.meta.env.VITE_FULL_BACKEND_URL, options)
 }
