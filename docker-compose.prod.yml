@@ -1,17 +1,19 @@
 version: "3.8"
+
 services:
   mongodb:
-    image: mongo
+    image: mongo:latest
     container_name: mongodb
     restart: always
     ports:
       - "27017:27017"
     volumes:
       - mongodata:/data/db
+
   backend:
     build:
+      context: ./backend
       dockerfile: Dockerfile.prod
-      context: ./backend/
     container_name: backend
     restart: always
     ports:
@@ -20,20 +22,26 @@ services:
       - ./backend/.env
     depends_on:
       - mongodb
+
   frontend:
     build:
+      context: .
       dockerfile: Dockerfile.prod
-      context: ./
     container_name: frontend
+    restart: always
     ports:
       - "80:80"
       - "443:443"
     env_file:
       - ./frontend/.env
+    # Nginx + Certbot mounts
     volumes:
-      - ./deploy/default.conf:/etc/nginx/sites-available/default
+      # Use /etc/nginx/conf.d for Alpine or /etc/nginx/sites-available for Ubuntu
+      - ./deploy/default.conf:/etc/nginx/conf.d/default.conf
+      # Mount host cert storage (persist across rebuilds)
       - /var/certs/etc-letsencrypt:/etc/letsencrypt
     depends_on:
       - backend
+
 volumes:
   mongodata:
