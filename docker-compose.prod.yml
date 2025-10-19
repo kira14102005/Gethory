@@ -26,7 +26,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./frontend/Dockerfile.prod
+      dockerfile: Dockerfile.prod
     container_name: frontend
     restart: always
     ports:
