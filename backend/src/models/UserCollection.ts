@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
         avatar: {
             type: String,
             get: (avatar: string) => {
-                return `${BACKEND_URL}/storage/${avatar}`
+                return `${BACKEND_URL}/api/storage/${avatar}`
             }
         },
 
