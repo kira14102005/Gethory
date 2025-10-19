@@ -28,7 +28,7 @@ export const io = new Server(server, {
 })
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: APP_ORIGIN,
     credentials: true
 }))
 app.use(express.json({ limit: '10mb' }));
