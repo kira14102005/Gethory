@@ -19,7 +19,7 @@ export const Home = () => {
                         <span className="text-[#DB9C50]"> Swift & Hassle-free</span>
                     </div>
                     <div className="text-center px-8 w-[80%] my-2">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas quaerat iste quibusdam quidem ullam nisi velit. Corporis cumque temporibus sint. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia fugit deserunt tempora mollitia perferendis recusandae.
+                       Stop wasting time on clunky setups. Gethory is the definitive WebRTC platform for seamless, high-definition video and audio collaboration. Connect instantly with secure, zero-download rooms. Your next great meeting is just a click away.
                     </div>
                     <div className="p-10 w-full flex flex-row justify-between w-[80%]">
                         <Link to={'/register'}>

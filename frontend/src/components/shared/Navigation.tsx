@@ -14,13 +14,14 @@ export function Navbar() {
 export function NavbarWithProfile({ containLogout }: { containLogout?: boolean }) {
 
     return <>
-        <nav className="w-full px-[40px] border-b border-[#A0AEC0] pb-3 border-b-[1px]">
+
+        <div className="px-[40px] border-b border-[#A0AEC0] pb-3 border-b-[1px]">
             <div className="flex flex-row w-full mt-[33.33px] justify-between ">
                 <Logo />
                 <ProfileIcon containLogout={containLogout} />
 
             </div>
-        </nav>
+        </div>
     </>
 }
 export function NavbarWithLogout() {
