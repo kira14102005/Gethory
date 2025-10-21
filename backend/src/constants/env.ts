@@ -18,3 +18,5 @@ export const DEFAULT_AVATAR  = getEnv("DEFAULT_AVATAR", "...")
 //@ts-ignore
 export const ACCESS_TOKEN_EXPIRY : SignOptions['expiresIn'] = getEnv('ACCESS_TOKEN_EXPIRY' , '1m')
 export const BACKEND_URL = getEnv('BACKEND_URL' , 'http://localhost:3000')
+export const MJ_APIKEY_PUBLIC = getEnv('MJ_APIKEY_PUBLIC' , 'mailjet-public-key')
+export const MJ_APIKEY_PRIVATE = getEnv('MJ_APIKEY_PRIVATE' , 'mailjet-private-key')
