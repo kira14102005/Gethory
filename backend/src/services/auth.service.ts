@@ -6,9 +6,10 @@ import VerificationModel from "../models/verificationCodeModel"
 import { appAssert } from "../utils/appAssert"
 import { get30daysfromNow, get7daysfromNow, getFiveMinsAgo, getOneHourFromNow, getOneYearFromNow, ONE_DAY_MILIS } from "../utils/date"
 import { accessTokenSignOptions, refereshTokenSignOptions, refreshTokenPayload, signToken, verifyTokens } from "../utils/jwt"
-import { sendMail } from "../utils/sendMail"
+import { sendMail, sendMailJet } from "../utils/sendMail"
 import { hashValue } from "../utils/hash"
 import { VerificationCodeType } from "../constants/VerificationCodeType";
+import { renderVerificationEmail } from "../constants/mail";
 export type CreateAccountParams = {
     email: string
     , password: string
@@ -32,14 +33,15 @@ export const CreateAccount = async (data: CreateAccountParams) => {
         expiresAt: getOneHourFromNow()
     })
     //Send this Verification Code to the User Mail
-    const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`
     console.log(code._id);
-    const { error } = await sendMail({
-        to: user.email, subject: "Verify email", text: "Check this link to verify your email",
-        html: `<h2>Click this link to verify Email</h2><br/><a href=${verifyURL} target = "_blank">Click to verify</a>`
+    const htm  = renderVerificationEmail(code._id , user.email)
+    const respo = await sendMailJet({
+        to: user.email, subject: "Verify email", text: "This is the verification code for your Gethory account",
+        html: htm
     })
 
-    if (error) console.log(error);
+    // if (error) console.log(error);
+    console.log(respo)
     const sessionExpiryDate = getOneHourFromNow()
     // Session Handling
     const session = await SessionModel.create({
@@ -220,7 +222,7 @@ export const verifyEmail = async (code: string) => {
     });
     const accessToken = signToken({ userId: updatedUser._id, sessionId: session._id }, {
         secret: JWT_SECRET,
-        expiresIn : ACCESS_TOKEN_EXPIRY,
+        expiresIn: ACCESS_TOKEN_EXPIRY,
         ...accessTokenSignOptions
     });
 
