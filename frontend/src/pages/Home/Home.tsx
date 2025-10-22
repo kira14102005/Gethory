@@ -21,7 +21,7 @@ export const Home = () => {
                     <div className="text-center px-8 w-[80%] my-3">
                        Stop wasting time on clunky setups. Gethory is the definitive WebRTC platform for seamless, high-definition video and audio collaboration. Connect instantly with secure, zero-download rooms. Your next great meeting is just a click away.
                     </div>
-                    <div className="p-10 text-sm md:text-md  w-[80%] flex flex-row justify-between w-[80%]">
+                    <div className="p-10 text-sm md:text-md flex  md:w-[80%] flex-row md:justify-between space-x-7 ">
                         <Link to={'/register'}>
                             <DarkButton name="Try Gethory Now!"
                                 onclick={() => {
