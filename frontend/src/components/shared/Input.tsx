@@ -79,8 +79,8 @@ export function GreyInput({ onchange, value }: { onchange: (e: any) => void, val
 import SearchIcon from '@mui/icons-material/Search';
 export function SearchInput() {
     return <>
-        <div className="bg-[#414A5B] opacity-60 rounded-full p-1 pl-3 flex flex-row">
-            <input type="text" className="bg-transparent rounded-md" />
+        <div className="bg-[#414A5B] opacity-60 rounded-full p-1 flex flex-row">
+            <input type="text" className="bg-transparent rounded-md w-full" />
             <SearchIcon />
         </div>
 

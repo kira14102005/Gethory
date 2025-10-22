@@ -12,7 +12,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ButtonWithLogo } from "../../components/shared/Buttons";
 import { useEffect, useState } from "react";
 import { getRoomDetails } from "../../http/utils";
-import { useWebRTCVersion2 , type ClientInterface} from "../../hooks/useWebRTCVer2";
+import { useWebRTCVersion2, type ClientInterface } from "../../hooks/useWebRTCVer2";
 
 export interface RoomInterface {
   userId: string;
@@ -39,17 +39,17 @@ const Newroom = () => {
     fetchRoomDetails()
   }, [roomId])
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full">
       <SectionType2>
-        <div className="flex space-x-3">
+        <div className="px-4 w-full flex space-x-3 py-3">
           <button onClick={handleManualLeave}>
             <ArrowBackIcon fontSize="inherit" />
           </button>
           <span className={styles.linkUnderline}>All Voice Rooms</span>
         </div>
       </SectionType2>
-      <div className="flex flex-col m-5 space-y-2 w-[95%] h-fit">
-        <div className="flex justify-between w-full">
+      <div className="flex flex-col py-4 space-y-2 px-5 w-full">
+        <div className="flex justify-between ">
           <MenuCard title={room?.topic ?? ""} />
           <div className="flex space-x-3">  <ButtonWithLogo name="Raise hand" logo={FrontHandIcon} onclick={handleManualLeave} />
             <ButtonWithLogo name="Leave Quietly" logo={ExitToAppIcon} onclick={handleManualLeave} />
@@ -80,17 +80,17 @@ const Joinee = ({ roomId }: { roomId: string | undefined }) => {
   }
   return <>
 
-    <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 items-center w-full">
+    <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 items-center w-full">
       {clients.map((client: ClientInterface) => {
         return <div className="w-fit m-3 flex flex-col items-center justify-self-center col-span-1" key={client._id}>
-          <div className={styles.userHead}>
+          <div className={styles.userHead} >
             <audio ref={(instance) => provideRef(instance, client._id)} autoPlay></audio>
             <img className={styles.userAvatar}
               //@ts-ignore
               src={client.avatar} alt="" />
             <button onClick={() => { handleMuteClick(client._id) }} className={styles.micBtn}>{client.muted ? <MicOffIcon fontSize="inherit" /> : <MicIcon fontSize="inherit" />}</button>
           </div>
-          <h4>{client.name}</h4>
+          <h4 className="text-sm text-center">{client.name?.split(' ')[0]}</h4>
         </div>
 
       })}

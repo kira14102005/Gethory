@@ -3,7 +3,7 @@ import { LoginSubmitButton, SigninButton } from "../../components/shared/Buttons
 import { SigninInput } from "../../components/shared/Input";
 import { LightNavbar } from "../../components/shared/Navigation";
 
-import './Signin.module.css'
+import styles from './Signin.module.css'
 import { TitleCard } from "../../components/shared/Card";
 import { useState, type FormEvent, useEffect } from "react";
 import { api } from "../../http";
@@ -30,7 +30,7 @@ export function Signin() {
             const timer = setTimeout(() => {
                 setShowError(false);
                 setError(null);
-                navigate('/'); 
+                navigate('/');
             }, 5000);
 
             return () => clearTimeout(timer);
@@ -85,7 +85,7 @@ export function Signin() {
         })
     }
 
-    return <>
+    return <div className={styles.dtop}>
         <LightNavbar />
 
         {showError && error && (
@@ -93,33 +93,36 @@ export function Signin() {
                 <Errorpopup message={error} />
             </div>
         )}
+        <div className="flex flex-row justify-center">
+            <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
+                <TitleCard subtitle="Log in to your account to continue" title="WELCOME BACK" />
+                <div className="my-3">
+                    <SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
+                </div>
 
-        <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
-            <TitleCard subtitle="Log in to your account to continue" title="WELCOME BACK" />
-            <div className="my-3">
-                <SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
+                <SigninButton name="Google" path="/google.png" onclick={() => { }} />
+
+                <div className="w-[80%]  flex flex-row mt-2 items-center">
+                    <div className="w-[44%] h-[1px] border border-black"></div>
+                    <span className="mx-1 text-[16px] text-[#A0AEC0]"> or </span>
+                    <div className="w-[44%] h-[1px] border border-black"></div>
+                </div>
+
+                <form onSubmit={handleSignin} className="flex flex-col justify-between h-[230px]">
+                    <SigninInput setValue={setUserinfo} label="Email" id="101" placeholder="Enter your email" value="email" />
+                    <SigninInput value="password" setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
+                    <LoginSubmitButton name="Login" onclick={() => { }} />
+                </form>
+
+                <div></div>
+
+                <div className="flex flex-row w-[75%] justify-center my-2 items-center">
+                    <span className="text-[#4A5568] text-[16px] ">Don't have an account?</span>
+                    <Link to={'/register'} className="text-[#4A5568] text-[16px] underline mx-1"> Sign up</Link>
+                </div>
+
             </div>
-
-            <SigninButton name="Google" path="/google.png" onclick={() => { }} />
-
-            <div className="w-[80%]  flex flex-row mt-2 items-center">
-                <div className="w-[44%] h-[1px] border border-black"></div>
-                <span className="mx-1 text-[16px] text-[#A0AEC0]"> or </span>
-                <div className="w-[44%] h-[1px] border border-black"></div>
-            </div>
-
-            <form onSubmit={handleSignin} className="flex flex-col justify-between h-[230px]">
-                <SigninInput setValue={setUserinfo} label="Email" id="101" placeholder="Enter your email" value="email" />
-                <SigninInput value="password" setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
-                <LoginSubmitButton name="Login" onclick={() => { }} />
-            </form>
-
-            <div></div>
-
-            <div className="flex flex-row w-[75%] justify-center my-2 items-center">
-                <span className="text-[#4A5568] text-[16px] ">Don't have an account?</span>
-                <Link to={'/register'} className="text-[#4A5568] text-[16px] underline mx-1"> Sign up</Link>
-            </div>
+            <div className="hidden md:flex md:w-[38%]"></div>
         </div>
-    </>
+    </div>
 }

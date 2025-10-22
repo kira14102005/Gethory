@@ -4,8 +4,8 @@ import { ProfileIcon } from "./UserUI";
 
 export function Navbar() {
     return <>
-        <nav>
-            <div className="mt-[33.33px] ml-[40px] ">
+        <nav className="pt-4 pl-5">
+            <div>
                 <Logo />
             </div>
         </nav>
@@ -15,8 +15,8 @@ export function NavbarWithProfile({ containLogout }: { containLogout?: boolean }
 
     return <>
 
-        <div className="px-[40px] border-b border-[#A0AEC0] pb-3 border-b-[1px]">
-            <div className="flex flex-row w-full mt-[33.33px] justify-between ">
+        <div className="px-3 md:px-5 py-3 border-b border-[#A0AEC0] border-b-[1px]">
+            <div className="flex flex-row justify-between ">
                 <Logo />
                 <ProfileIcon containLogout={containLogout} />
 
@@ -26,8 +26,8 @@ export function NavbarWithProfile({ containLogout }: { containLogout?: boolean }
 }
 export function NavbarWithLogout() {
     return <>
-        <nav className="w-full px-[40px] border-b border-[#A0AEC0] pb-3 border-b-[1px]">
-            <div className="flex flex-row w-full mt-[33.33px] justify-between ">
+        <nav className="px-4 border-b border-[#A0AEC0] pb-3 border-b-[1px] py-3">
+            <div className="flex flex-row justify-between ">
                 <Logo />
                 <LogoutButton />
 
@@ -37,8 +37,8 @@ export function NavbarWithLogout() {
 }
 export function LightNavbar() {
     return <>
-        <nav>
-            <div className="mt-[33.33px] ml-[40px] ">
+        <nav className="pt-3 pl-8">
+            <div>
                 <DarkLogo />
             </div>
         </nav>

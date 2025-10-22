@@ -12,8 +12,8 @@ const Section = ({ children }: {
     return (
         <>
             <NavbarWithProfile />
-            <div className='justify-between flex flex-col w-full h-fit'>
-                <div className='flex  justify-between m-5 mr-10'>
+            <div className='justify-between flex flex-col  h-fit'>
+                <div className='flex  justify-between px-4 my-3'>
                     <MenuCard title='Profile' />
                     <LightButton name="See Rooms" onclick={() => {
                         navigate('/rooms', { replace: true })
@@ -21,7 +21,7 @@ const Section = ({ children }: {
 
                     <LogoutButton />
                 </div>
-                <div className='relative h-fit w-full bg-[#0B1D23]/75 p-5'>
+                <div className='relative h-fit bg-[#0B1D23]/75 pt-5 md:pt-8'>
                     {children}
                 </div>
             </div>
@@ -33,11 +33,11 @@ export const SectionType2 = ({ children }: {
     children: ReactNode
 }) => {
     return (
-        <div className="w-screen">
+        <div className="w-full h-full">
             <NavbarWithProfile containLogout={true} />
-            <div className='justify-between flex flex-col w-full items-center h-fit'>
-                <div className='relative h-fit w-full bg-[#0B1D23]/75 p-5 flex justify-center items-center'>
-                    <div className="w-[90%] ">{children}</div>
+            <div className='justify-between flex flex-col items-center h-full w-full'>
+                <div className='relative h-full bg-[#0B1D23]/75  flex justify-center items-center w-full'>
+                    {children}
                 </div>
             </div>
         </div>)

@@ -7,21 +7,21 @@ export const Home = () => {
     return <>
         <Navbar />
 
-        <div className="w-screen h-screen flex flex-col justify-center items-center ">
+        <div className="mt-6 w-screen h-screen flex flex-col justify-center items-center ">
             <div className="m-1 text-[#71e8df]">GETHORY CONVENE</div>
             <div className="relative w-full h-full flex flex-col items-center justify-center ">
                 <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
 
                 </div>
-                <div className="absolute inset-0 z-10 w-[80.67%] h-[75%] mx-auto flex flex-col items-center">
-                    <div className="mt-3 w-[20%] text-center text-[33.3px]">
+                <div className="absolute inset-0 z-10 w-full  md:w-[80.67%] h-[75%] mx-auto flex flex-col items-center">
+                    <div className="mt-3 w-[80%] md:w-[50%] lg:w-[30%] text-center text-[33.3px]">
                         <span>Make Your Meetings</span>
                         <span className="text-[#DB9C50]"> Swift & Hassle-free</span>
                     </div>
-                    <div className="text-center px-8 w-[80%] my-2">
+                    <div className="text-center px-8 w-[80%] my-3">
                        Stop wasting time on clunky setups. Gethory is the definitive WebRTC platform for seamless, high-definition video and audio collaboration. Connect instantly with secure, zero-download rooms. Your next great meeting is just a click away.
                     </div>
-                    <div className="p-10 w-full flex flex-row justify-between w-[80%]">
+                    <div className="p-10 text-sm md:text-md  w-[80%] flex flex-row justify-between w-[80%]">
                         <Link to={'/register'}>
                             <DarkButton name="Try Gethory Now!"
                                 onclick={() => {
