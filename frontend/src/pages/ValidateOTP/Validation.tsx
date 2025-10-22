@@ -33,7 +33,7 @@ export function ValidateOTP() {
         <div className={`flex flex-row w-screen ${styles.dtop} min-h-screen`}>
             <div className='md:w-[60%] w-[80%]'>
                 <LightNavbar />
-                <div className="w-[90%] flex flex-col pl-5">
+                <div className="w-[90%] flex flex-col pl-5 md:pl-9 md:w-[70%]">
                     <div className='w-[85%]'>
                         <TitleCard title='Enter the Code' subtitle='Please enter the Verification Code' /></div>
                     <form onSubmit={verifyCode}>
