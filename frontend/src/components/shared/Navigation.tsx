@@ -37,7 +37,7 @@ export function NavbarWithLogout() {
 }
 export function LightNavbar() {
     return <>
-        <nav className="pt-3 pl-8">
+        <nav className="pt-3 pl-4 md:pl-8">
             <div>
                 <DarkLogo />
             </div>
