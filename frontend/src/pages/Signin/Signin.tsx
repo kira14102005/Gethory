@@ -93,8 +93,8 @@ export function Signin() {
                 <Errorpopup message={error} />
             </div>
         )}
-        <div className="flex flex-row justify-center">
-            <div className="ml-[40px] my-2 w-screen h-screen flex flex-col" >
+        <div className="flex flex-row justify-center pl-5 md:pl-8">
+            <div className="my-2 w-screen h-screen flex flex-col" >
                 <TitleCard subtitle="Log in to your account to continue" title="WELCOME BACK" />
                 <div className="my-3">
                     <SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
@@ -108,9 +108,10 @@ export function Signin() {
                     <div className="w-[44%] h-[1px] border border-black"></div>
                 </div>
 
-                <form onSubmit={handleSignin} className="flex flex-col justify-between h-[230px]">
-                    <SigninInput setValue={setUserinfo} label="Email" id="101" placeholder="Enter your email" value="email" />
-                    <SigninInput value="password" setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
+                <form onSubmit={handleSignin} className="flex flex-col space-y-4 w-[75%]">
+                    <div className="flex flex-col space-y-1"><SigninInput setValue={setUserinfo} label="Email" id="101" placeholder="Enter your email" value="email" />
+                        <SigninInput value="password" setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
+                    </div>
                     <LoginSubmitButton name="Login" onclick={() => { }} />
                 </form>
 

@@ -34,8 +34,8 @@ export function Register() {
     return (
         <div className={styles.dtop}>
             <LightNavbar />
-            <div className="flex flex-row justify-center">
-                <div className="ml-8 flex flex-col md:w-[60%] w-full" >
+            <div className="flex flex-row justify-center pl-5">
+                <div className="flex flex-col md:w-[60%] w-full" >
                     <TitleCard title="WELCOME" subtitle="Create your account here!" />
                     <div className="my-3">
                         <SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
@@ -52,9 +52,11 @@ export function Register() {
 
                         </div>
                     </div>
-                    <form onSubmit={handleSubmit} className="flex flex-col justify-between h-[230px]">
-                        <SigninInput value={'email'} setValue={setUserinfo} label="Email" id="101" placeholder="Enter your email" />
-                        <SigninInput value={'password'} setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
+                    <form onSubmit={handleSubmit} className="flex flex-col space-y-4 w-[75%]">
+                        <div className="flex flex-col space-y-1">
+                            <SigninInput value={'email'} setValue={setUserinfo} label="Email" id="101" placeholder="Enter your email" />
+                            <SigninInput value={'password'} setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
+                        </div>
                         <LoginSubmitButton name="Register" onclick={() => { }} />
                     </form>
                     <div>
