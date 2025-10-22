@@ -8,7 +8,7 @@ import './Auth.module.css'
 import { Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { activate } from "../../http";
+import { activateUser } from "../../http";
 import { updateUserProfile } from "../../store/authSlice";
 import { selectActivate, selectAvatar, selectName, selectUsername } from "../../store/activateSelectors";
 import { setAvatar, setName, setUsername } from "../../store/activateSlice";
@@ -39,7 +39,7 @@ export function Auth() {
         setIsUpdating(true);
 
         try {
-            const res = await activate(currentActiveState);
+            const res = await activateUser(currentActiveState);
             //@ts-ignore
             const updatedUser = res.data.user;
 
@@ -125,7 +125,7 @@ export const MainCard = memo(
 export const Step2Card = memo(({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) => {
     const name = useSelector(selectName)
     const dispatch = useDispatch()
-    const initialState = useSelector(selectAvatar) ?? './profile.png'
+    const initialState = useSelector(selectAvatar) ?? '/profile.png'
     const [image, setImage] = useState(initialState)
     const displayString = `Okay ${name}, how's this avatar?`
     function captureImage(e: any) {

@@ -11,7 +11,7 @@ export const api = axios.create({
 })
 
 
-export const activate = async (currentActiveState: ActivateState) => {
+export const activateUser = async (currentActiveState: ActivateState) => {
   const res = await api.put('/user/update_profile', currentActiveState);
   return res
 }
