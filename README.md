@@ -1,477 +1,492 @@
-# Gethory
+# 🎙️ Gethory
 
-Real-time WebRTC voice rooms with public/private access. Gethory is a
-full-stack web application meticulously designed for seamless,
-low-latency audio communication, aiming to foster spontaneous and
-natural conversations online. It offers robust, secure user
-authentication, customizable user profiles, and a fully containerized
-environment. This Docker-based setup ensures a consistent, reproducible,
-and frictionless experience for both developers and production
-deployments.
+> Real-time WebRTC voice rooms with public/private access
 
-## Table of Contents
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
-- [[Overview]{.underline}](#fh6dva846lvi)
+Gethory is a full-stack web application meticulously designed for seamless, low-latency audio communication. It offers robust, secure user authentication, customizable user profiles, and a fully containerized environment for consistent deployments.
 
-- [[User Interface]{.underline}](#35t7bvo2j4ww)
+---
 
-- [[Architecture]{.underline}](#r3cpfp3ofdkv)
+## 📋 Table of Contents
 
-- [[Directory Structure]{.underline}](#ca5qemu9841d)
+- [✨ Overview](#-overview)
+- [🎨 User Interface](#-user-interface)
+- [🏗️ Architecture](#️-architecture)
+- [📁 Directory Structure](#-directory-structure)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [📦 Prerequisites](#-prerequisites)
+- [🚀 Local Development Setup](#-local-development-setup)
+- [🌐 Deployment & Branching Strategy](#-deployment--branching-strategy)
+- [⚙️ Configuration](#️-configuration)
+- [🔒 Security](#-security)
+- [📡 API Reference](#-api-reference)
+- [🗺️ Roadmap](#️-roadmap)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-- [[Tech Stack]{.underline}](#ax2c94wp2a31)
+---
 
-- [[Prerequisites]{.underline}](#c5jdjesv7ddg)
+## ✨ Overview
 
-- [[Local Development Setup]{.underline}](#a7inkja78azj)
+Gethory enables users to create and join real-time audio chat rooms with three core components:
 
-- [[Deployment & Branching Strategy]{.underline}](#jbeb7tys8rwp)
+```mermaid
+graph LR
+    A[👤 WebRTC] -->|Low Latency| B[🎯 Core Platform]
+    C[⚡ Node.js/Express] -->|Authentication| B
+    D[⚛️ React/Redux] -->|Interactive UI| B
+    
+    style B fill:#667eea,stroke:#764ba2,stroke-width:3px,color:#fff
+```
 
-- [[Configuration]{.underline}](#rfzeyy54tgc9)
+### 🌟 Core Features
 
-- [[Security]{.underline}](#buqa9o422zsf)
+| Feature | Description |
+|---------|-------------|
+| 🎵 **Real-time Audio** | High-quality, low-latency P2P audio streaming via WebRTC |
+| 🔓 **Public Rooms** | Open rooms discoverable by all users |
+| 🔐 **Private Rooms** | Group-based rooms for teams and friends |
+| 🔑 **Secure Auth** | JWT-based authentication with httpOnly cookies |
+| ✉️ **Email Verification** | One-time code verification for new users |
+| 👤 **User Profiles** | Customizable profiles with avatars |
+| 🐳 **Dockerized** | Fully containerized with optimized compose files |
+| 📊 **Scalable** | Pre-configured branches for different deployment scales |
 
-- [[API Reference]{.underline}](#meek9li1tbvs)
+---
 
-- [[Roadmap]{.underline}](#luxbs54sm5ri)
+## 🎨 User Interface
 
-- [[Contributing]{.underline}](#b6j24hzhxoz0)
+| 🏠 Home Page | 📋 Room List | 🎤 Active Room |
+|:---:|:---:|:---:|
+| Landing page for new users | Browse all active public conversations | Real-time voice chat in progress |
 
-- [[License]{.underline}](#j5kqaksz4jau)
+---
 
-## Overview
+## 🏗️ Architecture
 
-Gethory allows users to create and join real-time audio chat rooms. The
-application\'s architecture is built on three core components:
+Gethory follows a **hybrid client-server architecture** with P2P connections for audio streaming.
 
-1.  **WebRTC** for efficient, peer-to-peer audio streaming, which
-    > ensures low latency by routing audio directly between users.
+### 📊 System Architecture
 
-2.  A **Node.js/Express backend** that serves as the central hub for
-    > user authentication, room orchestration, API management, and as
-    > the crucial signaling server for WebRTC.
+```mermaid
+graph TD
+    A[⚛️ React Client] <-->|REST API| B[🚀 Backend API<br/>Node.js/Express]
+    B <-->|Data| C[(🍃 MongoDB)]
+    A <-->|WebSocket| D[🔌 Signaling Server<br/>Socket.IO]
+    A <-.->|P2P Audio| A
+    
+    style A fill:#61dafb,stroke:#20232a,stroke-width:2px
+    style B fill:#68a063,stroke:#333,stroke-width:2px
+    style C fill:#47a248,stroke:#333,stroke-width:2px
+    style D fill:#010101,stroke:#333,stroke-width:2px
+```
 
-3.  A **React/Redux frontend** that provides a responsive, dynamic, and
-    > interactive user experience for joining, creating, and
-    > participating in conversations.
+### 🔄 WebRTC Connection Flow
 
-### Core Features
+```mermaid
+sequenceDiagram
+    participant CA as 👤 Client A
+    participant SS as 🔌 Signaling Server
+    participant CB as 👥 Client B
+    
+    CA->>SS: 1️⃣ Join Room
+    SS-->>CA: ✅ Joined
+    CB->>SS: 1️⃣ Join Room
+    SS-->>CB: ✅ Joined
+    
+    SS->>CA: 2️⃣ add-peer (ClientB, createOffer: true)
+    SS->>CB: 2️⃣ add-peer (ClientA, createOffer: false)
+    
+    CA->>SS: 3️⃣ relay-sdp (Offer)
+    SS->>CB: 📝 session-description (Offer)
+    
+    CB->>SS: 4️⃣ relay-sdp (Answer)
+    SS->>CA: 📝 session-description (Answer)
+    
+    CA->>SS: 5️⃣ relay-ice (ICE Candidate)
+    SS->>CB: 🧊 ice-candidate
+    
+    CB->>SS: 5️⃣ relay-ice (ICE Candidate)
+    SS->>CA: 🧊 ice-candidate
+    
+    CA<-.->CB: 🎵 P2P Audio Stream Established
+```
 
-- **Real-time Audio:** High-quality, low-latency audio communication
-  > leveraging peer-to-peer WebRTC connections. This bypasses server
-  > bottlenecks, streaming audio directly between clients for maximum
-  > clarity and speed.
+### 🎯 WebRTC Steps Explained
 
-- **Public and Private Rooms:** Create public rooms for anyone to
-  > discover and join, or private (group-based) rooms ideal for friends,
-  > teams, or private events.
+1. **🚀 Initiation** - User joins room, connects to Socket.IO signaling server
+2. **📡 Signaling** - Server notifies all clients about new peer
+3. **🤝 Peer Connection** - Clients exchange SDP offers/answers
+4. **🧊 ICE Candidates** - Best network path negotiation
+5. **🎵 Audio Stream** - Direct P2P audio streaming (bypasses server)
 
-- **User Authentication:** Secure, token-based user authentication with
-  > JWTs (Access & Refresh tokens). Tokens are stored in httpOnly
-  > cookies to mitigate XSS attacks.
+---
 
-- **Email Verification:** New users must verify their email address via
-  > a one-time code before they can log in, preventing spam accounts and
-  > ensuring a valid user base.
+## 📁 Directory Structure
 
-- **User Profiles:** Customizable user profiles with avatars and
-  > personal information, allowing users to express their identity
-  > within the application.
+```
+Gethory/
+├── 📂 backend/
+│   ├── 📂 @types/              # TypeScript type definitions
+│   └── 📂 src/
+│       ├── 📂 config/          # 🔧 DB, Mail, etc.
+│       ├── 📂 constants/       # 📊 Enums, actions, env vars
+│       ├── 📂 controllers/     # 🎮 Express route handlers
+│       ├── 📂 dtos/            # 📦 Data Transfer Objects
+│       ├── 📂 midwares/        # 🛡️ Auth, error handling
+│       ├── 📂 models/          # 🗄️ Mongoose models
+│       ├── 📂 router/          # 🛣️ API routes
+│       ├── 📂 services/        # ⚙️ Business logic
+│       ├── 📂 socket/          # 🔌 Socket.IO handlers
+│       ├── 📂 storage/         # 🖼️ Avatars
+│       └── 📂 utils/           # 🛠️ JWT, hash helpers
+├── 📂 consoleFiles/            # 🐛 WebRTC debug logs
+├── 📂 deploy/                  # 🚀 Nginx configs
+└── 📂 frontend/
+    ├── 📂 public/
+    └── 📂 src/
+        ├── 📂 assets/          # 🎨 Images, styles
+        ├── 📂 components/      # 🧩 React components
+        │   └── 📂 shared/      # ♻️ Reusable components
+        ├── 📂 hooks/           # 🪝 Custom hooks (useWebRTC)
+        ├── 📂 http/            # 🌐 Axios instance
+        ├── 📂 pages/           # 📄 Route components
+        ├── 📂 routes/          # 🛣️ Route definitions
+        │   └── 📂 protected/   # 🔐 Route guards
+        ├── 📂 sockets/         # 🔌 Socket.IO client
+        └── 📂 store/           # 🗃️ Redux Toolkit store
+```
 
-- **Dockerized Environment:** The entire application is containerized
-  > with Docker. We provide separate, optimized compose files for
-  > development (with hot-reloading) and production, ensuring consistent
-  > and reproducible builds.
+---
 
-- **Optimized Deployment Branches:** The repository includes
-  > pre-configured branches for different deployment scales. This
-  > showcases adaptability for various infrastructure needs, from
-  > hobbyist projects on a t3.micro to larger-scale deployments.
+## 🛠️ Tech Stack
 
-## User Interface
+| Category | Technologies |
+|----------|-------------|
+| **🎨 Frontend** | ![React](https://img.shields.io/badge/React-19-61dafb?logo=react) ![Redux](https://img.shields.io/badge/Redux-Toolkit-764abc?logo=redux) ![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178c6?logo=typescript) ![Tailwind](https://img.shields.io/badge/Tailwind-CSS-38bdf8?logo=tailwindcss) |
+| **⚡ Backend** | ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs) ![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express) ![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178c6?logo=typescript) |
+| **🗄️ Database** | ![MongoDB](https://img.shields.io/badge/MongoDB-6.0-47a248?logo=mongodb) ![Mongoose](https://img.shields.io/badge/Mongoose-ODM-880000) |
+| **🔌 Realtime** | ![WebRTC](https://img.shields.io/badge/WebRTC-P2P-333333?logo=webrtc) ![Socket.io](https://img.shields.io/badge/Socket.io-4.x-010101?logo=socketdotio) |
+| **🔐 Auth** | ![JWT](https://img.shields.io/badge/JWT-Tokens-000000?logo=jsonwebtokens) |
+| **📧 Email** | ![Mailjet](https://img.shields.io/badge/Mailjet-API-f47920) |
+| **🐳 Container** | ![Docker](https://img.shields.io/badge/Docker-Compose-2496ed?logo=docker) |
+| **🌐 Deployment** | ![Nginx](https://img.shields.io/badge/Nginx-1.x-009639?logo=nginx) ![AWS](https://img.shields.io/badge/AWS-EC2-ff9900?logo=amazonaws) |
 
-Here\'s a glimpse of the Gethory application.
+---
 
-| **Home Page**                   | **Room List**                                            | **Active Room**                          |
-|---------------------------------|----------------------------------------------------------|------------------------------------------|
-|                                 |                                                          |                                          |
-| **Landing Page** for new users. | **Browse Rooms** to see all active public conversations. | **In a Room** with real-time voice chat. |
+## 📦 Prerequisites
 
-## Architecture
+Ensure you have the following installed:
 
-Gethory follows a client-server architecture for signaling and API
-requests, while leveraging peer-to-peer (P2P) connections for the actual
-audio streaming. This hybrid model ensures that while user data and room
-logic are managed centrally by the server, the heavy lifting of audio
-streaming is offloaded directly to the clients. This approach is
-critical for enabling scalability and maintaining low-latency
-communication.
+```bash
+✅ Node.js (v18 or higher)
+✅ npm (v8 or higher)
+✅ Docker
+✅ Docker Compose
+```
 
-graph TD  
-A\[React Client\] \<\--\> B\[Backend API (Node.js/Express)\];  
-B \<\--\> C\[MongoDB\];  
-A \<\--\> D\[Signaling Server (Socket.IO)\];
+Check your versions:
 
-### WebRTC Flow
+```bash
+node --version   # Should be v18.x.x or higher
+npm --version    # Should be 8.x.x or higher
+docker --version
+docker-compose --version
+```
 
-1.  **Initiation:** A user joins a room, which connects them to the
-    > Socket.IO signaling server. This establishes the vital \"signaling
-    > channel\" used to coordinate the connection.
+---
 
-2.  **Signaling:** The server orchestrates the connections by notifying
-    > all other clients in the room that a new peer has joined
-    > (add-peer).
+## 🚀 Local Development Setup
 
-3.  **Peer Connection:** The new client and existing clients establish
-    > direct WebRTC peer connections.
+### 1️⃣ Clone the Repository
 
-    - The new client creates an **Offer (SDP)**. The SDP (Session
-      > Description Protocol) defines the technical details of the media
-      > to be streamed, such as codecs and formats.
-
-    - Existing peers receive this offer and create an **Answer (SDP)**.
-
-4.  **ICE Candidates:** Clients exchange ICE (Interactive Connectivity
-    > Establishment) candidates through the signaling server. ICE is a
-    > protocol used to find the best and most direct network path
-    > between two peers (e.g., a direct connection on the same network,
-    > or via a TURN server if both users are behind strict firewalls).
-
-5.  **Audio Stream:** Once P2P connections are established, audio is
-    > streamed directly between the users. The audio data bypasses the
-    > server entirely, which is the key to achieving minimal latency and
-    > reducing server load.
-
-sequenceDiagram  
-participant ClientA  
-participant SignalingServer  
-participant ClientB  
-  
-ClientA-\>\>SignalingServer: Join Room (roomId, user)  
-SignalingServer\--\>\>ClientA: Joined  
-ClientB-\>\>SignalingServer: Join Room (roomId, user)  
-SignalingServer\--\>\>ClientB: Joined  
-  
-SignalingServer-\>\>ClientA: add-peer (peerId: ClientB, createOffer:
-true)  
-SignalingServer-\>\>ClientB: add-peer (peerId: ClientA, createOffer:
-false)  
-  
-ClientA-\>\>SignalingServer: relay-sdp (peerId: ClientB,
-sessionDescription: Offer)  
-SignalingServer-\>\>ClientB: session-description (peerId: ClientA,
-sessionDescription: Offer)  
-  
-ClientB-\>\>SignalingServer: relay-sdp (peerId: ClientA,
-sessionDescription: Answer)  
-SignalingServer-\>\>ClientA: session-description (peerId: ClientB,
-sessionDescription: Answer)  
-  
-ClientA-\>\>SignalingServer: relay-ice (peerId: ClientB, icecandidate)  
-SignalingServer-\>\>ClientB: ice-candidate (peerId: ClientA,
-icecandidate)  
-  
-ClientB-\>\>SignalingServer: relay-ice (peerId: ClientA, icecandidate)  
-SignalingServer-\>\>ClientA: ice-candidate (peerId: ClientB,
-icecandidate)  
-  
-ClientA\<-\>\>ClientB: Peer-to-Peer Audio Stream Established
-
-## Directory Structure
-
-Gethory/  
-├───backend/  
-│ ├───@types/  
-│ └───src/  
-│ ├───config/ \# DB, Mail, etc.  
-│ ├───constants/ \# Enums, actions, env vars  
-│ ├───controllers/ \# Express route handlers  
-│ ├───dtos/ \# Data Transfer Objects  
-│ ├───midwares/ \# Authentication, error handling  
-│ ├───models/ \# Mongoose models  
-│ ├───router/ \# API routes  
-│ ├───services/ \# Business logic  
-│ ├───socket/ \# Socket.IO handlers  
-│ ├───storage/ \# Default/uploaded avatars  
-│ └───utils/ \# Helpers (JWT, hash, etc.)  
-├───consoleFiles/ \# WebRTC debugging logs  
-├───deploy/ \# Nginx configs  
-└───frontend/  
-├───public/  
-└───src/  
-├───assets/  
-├───components/  
-│ └───shared/ \# Reusable components (Buttons, Cards)  
-├───hooks/ \# Custom hooks (useWebRTC)  
-├───http/ \# Axios instance & interceptors  
-├───pages/ \# Top-level route components  
-├───routes/  
-│ └───protected/ \# Route guards  
-├───sockets/ \# Socket.IO client setup  
-└───store/ \# Redux Toolkit store
-
-## Tech Stack
-
-| **Category**         | **Technology**                                    |
-|----------------------|---------------------------------------------------|
-| **Frontend**         | React 19, Redux Toolkit, TypeScript, Tailwind CSS |
-| **Backend**          | Node.js, Express, TypeScript                      |
-| **Database**         | MongoDB (with Mongoose)                           |
-| **Realtime**         | WebRTC, Socket.IO                                 |
-| **Authentication**   | JWT (Access/Refresh Tokens), httpOnly Cookies     |
-| **Email**            | Mailjet / Resend                                  |
-| **Containerization** | Docker, Docker Compose                            |
-| **Deployment**       | Nginx, AWS EC2                                    |
-
-## Prerequisites
-
-- Node.js (v18 or higher)
-
-- npm (v8 or higher)
-
-- Docker
-
-- Docker Compose
-
-## Local Development Setup
-
-This project is configured to run in a containerized development
-environment with **hot-reloading** for both the frontend and backend.
-This provides a fast, iterative development experience where code
-changes are reflected live without needing to manually rebuild
-containers.
-
-### 1. Clone the Repository {#clone-the-repository}
-
-git clone
-\[https://github.com/kira14102005/gethory.git\](https://github.com/kira14102005/gethory.git)  
+```bash
+git clone https://github.com/kira14102005/gethory.git
 cd gethory
+```
 
-### 2. Set Up Environment Files {#set-up-environment-files}
+### 2️⃣ Set Up Environment Files
 
-You must create two .env files for development. These files provide the
-necessary secrets and configuration for the services to run correctly
-without hard-coding sensitive data into the source code.
+#### 🔧 Backend Environment
 
-**A) Backend Environment**
+Create `backend/.env.dev`:
 
-Create a file named backend/.env.dev. You can copy the example:
-
+```bash
 cp backend/.env.dev.example backend/.env.dev
+```
 
-Then, edit backend/.env.dev and set your secrets (especially for JWT and
-email). Note that the DB_URI points to mongodb, which is the service
-name defined in docker-compose.dev.yml.
+Edit `backend/.env.dev`:
 
-\# backend/.env.dev  
-  
-\# Database (connects to the \'mongodb\' service in
-docker-compose.dev.yml)  
-DB_URI=\"mongodb://mongodb:27017/gethory\"  
-  
-\# JWT Secrets  
-JWT_SECRET=\"your_very_strong_jwt_secret\"  
-JWT_REFRESH_SECRET=\"your_other_strong_jwt_refresh_secret\"  
-ACCESS_TOKEN_EXPIRY=\"15m\"  
-  
-\# Server Configuration  
-PORT=3000  
-NODE_ENV=\"development\"  
-APP_ORIGIN=\"http://localhost:5173\"  
-BACKEND_URL=\"http://localhost:3000\"  
-  
-\# Email (Mailjet)  
-MJ_APIKEY_PUBLIC = \'your-mailjet-public-key\'  
-MJ_APIKEY_PRIVATE = \'your-mailjet-private-key\'  
-EMAIL_SENDER=\"your-verified-mailjet-email@example.com\"  
-  
-DEFAULT_AVATAR=\"profile.png\"
+```bash
+# 🗄️ Database (connects to 'mongodb' service in docker-compose.dev.yml)
+DB_URI="mongodb://mongodb:27017/gethory"
 
-**B) Frontend Environment**
+# 🔑 JWT Secrets
+JWT_SECRET="your_very_strong_jwt_secret"
+JWT_REFRESH_SECRET="your_other_strong_jwt_refresh_secret"
+ACCESS_TOKEN_EXPIRY="15m"
 
-Create a file named frontend/.env.dev. You can copy the example:
+# ⚙️ Server Configuration
+PORT=3000
+NODE_ENV="development"
+APP_ORIGIN="http://localhost:5173"
+BACKEND_URL="http://localhost:3000"
 
+# 📧 Email (Mailjet)
+MJ_APIKEY_PUBLIC="your-mailjet-public-key"
+MJ_APIKEY_PRIVATE="your-mailjet-private-key"
+EMAIL_SENDER="your-verified-mailjet-email@example.com"
+
+# 🖼️ Avatar
+DEFAULT_AVATAR="profile.png"
+```
+
+#### 🎨 Frontend Environment
+
+Create `frontend/.env.dev`:
+
+```bash
 cp frontend/.env.dev.example frontend/.env.dev
+```
 
-The contents should point to your local backend and socket server. The
-VITE\_ prefix is required by Vite to expose these variables to the
-client-side application.
+Edit `frontend/.env.dev`:
 
-\# frontend/.env.dev  
-VITE_BACKEND_URL = \'http://localhost:3000/api\'  
-VITE_FULL_BACKEND_URL = \'http://localhost:3000\'
+```bash
+# 🌐 Backend URLs (VITE_ prefix required)
+VITE_BACKEND_URL='http://localhost:3000/api'
+VITE_FULL_BACKEND_URL='http://localhost:3000'
+```
 
-### 3. Run with Docker Compose (Development) {#run-with-docker-compose-development}
+### 3️⃣ Run with Docker Compose
 
-Use the -f flag to specify the docker-compose.dev.yml file. This
-specific compose file is configured to mount your local source code
-directories directly into the running containers, which is what enables
-the hot-reloading magic.
+```bash
+# 🚀 Start development environment with hot-reloading
+docker-compose -f docker-compose.dev.yml up --build
+```
 
-docker-compose -f docker-compose.dev.yml up \--build
+**🎉 Services Available:**
 
-The services will be available at:
+| Service | URL | Description |
+|---------|-----|-------------|
+| 🎨 **Frontend** | http://localhost:5173 | Vite dev server |
+| ⚡ **Backend** | http://localhost:3000 | Express API |
+| 🗄️ **MongoDB** | mongodb://localhost:27017 | Database |
 
-- **Frontend (Vite):** http://localhost:5173
+---
 
-- **Backend (Node):** http://localhost:3000
+## 🌐 Deployment & Branching Strategy
 
-- **MongoDB:** mongodb://localhost:27017
+### 📌 Branch Overview
 
-## Deployment & Branching Strategy {#deployment-branching-strategy}
+```mermaid
+gitGraph
+    commit id: "Initial"
+    branch main
+    commit id: "Standard Deploy" tag: "v1.0"
+    branch @aws
+    commit id: "Low-Resource Deploy" tag: "v1.0-aws"
+```
 
-This repository is structured with two main branches for different
-deployment targets. This strategy allows for flexible deployments
-catering to different hardware capabilities and resource constraints.
+| Branch | Target | Build Method | Use Case |
+|--------|--------|--------------|----------|
+| 🌟 **main** | Standard servers (t2.medium+) | Multi-stage Dockerfile | CI/CD pipelines, standard deployments |
+| ☁️ **@aws** | Low-resource (t3.micro) | Pre-built dist folder | Free-tier, hobbyist deployments |
 
-### main Branch: Standard Deployment
+### 🚀 Deployment: Standard (main branch)
 
-- **Target:** Standard servers (e..g., AWS EC2 t2.medium or larger).
+```bash
+# 1️⃣ Checkout main branch
+git checkout main
 
-- **Method:** Uses a multi-stage Dockerfile.prod that builds the React
-  > frontend from source *inside* the container. This is the standard,
-  > most robust build method, as the build pipeline is self-contained.
+# 2️⃣ Set up production environment files
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+# Edit .env files with production values
 
-- **Files:** docker-compose.prod.yml, Dockerfile.prod,
-  > backend/Dockerfile.prod.
+# 3️⃣ Build and run
+docker-compose -f docker-compose.prod.yml up --build -d
+```
 
-- **Use Case:** Ideal for CI/CD pipelines and servers with enough
-  > resources (CPU/RAM) to run the npm run build command without issues.
+### ☁️ Deployment: AWS t3.micro (@aws branch)
 
-### @aws Branch: Low-Resource Deployment (t3.micro) {#aws-branch-low-resource-deployment-t3.micro}
+```bash
+# 1️⃣ Checkout @aws branch
+git checkout @aws
 
-- **Target:** Resource-constrained servers like AWS EC2 t3.micro.
+# 2️⃣ Build frontend locally (saves server resources)
+cd frontend
+npm install
+npm run build  # Creates ./frontend/dist folder
+cd ..
 
-- **Method:** To save RAM/CPU on the small instance, this branch **does
-  > not** build the frontend in the container. Instead, it uses a simple
-  > Nginx container and expects a **pre-built dist folder**. This is a
-  > key optimization for hobbyist deployments on free-tier or low-cost
-  > cloud instances where build resources are minimal.
+# 3️⃣ Set up production environment files
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+# Edit .env files with production values
 
-- **Files:** docker-compose.prod.yml (modified), Dockerfile.prod (Nginx
-  > only).
+# 4️⃣ Deploy to server (with pre-built dist folder)
+docker-compose -f docker-compose.prod.yml up --build -d
+```
 
-#### Deployment Steps for @aws (t3.micro) {#deployment-steps-for-aws-t3.micro}
+> **💡 Pro Tip:** The @aws branch avoids OOM errors on t3.micro by using pre-built frontend assets!
 
-1.  **Checkout the branch:**  
-    > git checkout @aws
+---
 
-2.  **Build Frontend Locally:** You must build the production-ready
-    > frontend on your local machine first. This pre-compiles all
-    > React/TS code into static HTML, CSS, and JS files.  
-    > cd frontend  
-    > npm install  
-    > npm run build  
-    > \# This creates the ./frontend/dist folder  
-    > cd ..
+## ⚙️ Configuration
 
-3.  **Prepare Production Environment:** Copy and fill in the production
-    > .env files (backend/.env and frontend/.env) on your server. Use
-    > the .env.example files as templates.
+All configuration follows the [12-Factor App](https://12factor.net/config) methodology.
 
-4.  **Build and Run Docker Compose:** On your t3.micro server (which now
-    > has the code and the frontend/dist folder), run:  
-    > \# This will build the backend image and use a simple Nginx
-    > image  
-    > \# to serve the static files from ./frontend/dist  
-    > docker-compose -f docker-compose.prod.yml up \--build -d  
-    >   
-    > This approach avoids an \"Out of Memory\" error during the npm run
-    > build step on the small server. Nginx will then serve the static
-    > files from frontend/dist while the backend container runs the API.
+### 🔧 Backend Environment Variables
 
-## Configuration
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `DB_URI` | 🗄️ MongoDB connection string | `mongodb://mongodb:27017/gethory` |
+| `JWT_SECRET` | 🔑 Access token signing key | `your_strong_secret_123` |
+| `JWT_REFRESH_SECRET` | 🔄 Refresh token signing key | `your_refresh_secret_456` |
+| `ACCESS_TOKEN_EXPIRY` | ⏱️ Token expiry time | `15m` or `1h` |
+| `PORT` | 🔌 Server port | `3000` |
+| `NODE_ENV` | 🌍 Environment | `development` or `production` |
+| `APP_ORIGIN` | 🌐 Frontend URL (CORS) | `http://localhost:5173` |
+| `BACKEND_URL` | 🔗 Backend public URL | `http://localhost:3000` |
+| `MJ_APIKEY_PUBLIC` | 📧 Mailjet public key | `your_public_key` |
+| `MJ_APIKEY_PRIVATE` | 🔐 Mailjet private key | `your_private_key` |
+| `EMAIL_SENDER` | 📨 Verified sender email | `noreply@yourdomain.com` |
+| `DEFAULT_AVATAR` | 🖼️ Default avatar filename | `profile.png` |
 
-All configuration is managed via environment variables. This follows the
-[[Twelve-Factor App]{.underline}](https://12factor.net/config)
-methodology, allowing the same Docker image to be used across different
-environments (dev, staging, prod) simply by changing the environment
-context.
+### 🎨 Frontend Environment Variables
 
-### Backend (backend/.env) {#backend-backend.env}
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `VITE_BACKEND_URL` | 🌐 Backend API URL | `https://yourdomain.com/api` |
+| `VITE_FULL_BACKEND_URL` | 🔌 Socket server URL | `https://yourdomain.com` |
 
-| **Variable**        | **Description**                                                                                                    |
-|---------------------|--------------------------------------------------------------------------------------------------------------------|
-| DB_URI              | Connection string for MongoDB.                                                                                     |
-| JWT_SECRET          | Secret key for signing JWT access tokens.                                                                          |
-| JWT_REFRESH_SECRET  | Secret key for signing JWT refresh tokens.                                                                         |
-| ACCESS_TOKEN_EXPIRY | Expiry time for access tokens (e.g., 15m for 15 minutes or 1h for 1 hour). A short expiry is crucial for security. |
-| PORT                | Port the backend server will run on.                                                                               |
-| NODE_ENV            | development or production.                                                                                         |
-| APP_ORIGIN          | The URL of the frontend (for CORS).                                                                                |
-| BACKEND_URL         | Public-facing URL of the backend (for email links).                                                                |
-| MJ_APIKEY_PUBLIC    | Mailjet Public API Key.                                                                                            |
-| MJ_APIKEY_PRIVATE   | Mailjet Private API Key.                                                                                           |
-| EMAIL_SENDER        | \"From\" email address verified with Mailjet.                                                                      |
-| DEFAULT_AVATAR      | Filename of the default avatar in src/storage.                                                                     |
+---
 
-### Frontend (frontend/.env) {#frontend-frontend.env}
+## 🔒 Security
 
-| **Variable**          | **Description**                                                           |
-|-----------------------|---------------------------------------------------------------------------|
-| VITE_BACKEND_URL      | The full URL to the backend API (e.g., https://yourdomain.com/api).       |
-| VITE_FULL_BACKEND_URL | The full URL to the backend socket server (e.g., https://yourdomain.com). |
+### 🛡️ Security Features
 
-## Security
+```mermaid
+graph TD
+    A[🔐 Security Layer] --> B[JWT Authentication]
+    A --> C[httpOnly Cookies]
+    A --> D[Email Verification]
+    A --> E[CORS Protection]
+    A --> F[Route Guards]
+    
+    B --> G[15m Access Token]
+    B --> H[30d Refresh Token]
+    C --> I[XSS Protection]
+    D --> J[Anti-Spam]
+    
+    style A fill:#667eea,stroke:#764ba2,stroke-width:3px,color:#fff
+```
 
-- **Authentication:** Handled with JWTs. Short-lived Access Tokens (15m)
-  > and long-lived Refresh Tokens (30d) are stored in httpOnly, secure
-  > cookies, making them inaccessible to client-side JavaScript.
+| Feature | Implementation | Benefit |
+|---------|----------------|---------|
+| 🔑 **JWT Auth** | Short-lived (15m) access tokens | Minimizes token compromise window |
+| 🔄 **Token Refresh** | Automatic 401 handling via axios interceptor | Seamless user experience |
+| 🍪 **httpOnly Cookies** | Tokens stored in secure, httpOnly cookies | Prevents XSS attacks |
+| 🛡️ **Authorization** | Middleware-protected routes | Access control |
+| ✉️ **Email Verification** | One-time code verification | Prevents spam accounts |
+| 🌐 **CORS** | Restricted to APP_ORIGIN | Prevents unauthorized access |
 
-- **Token Refresh:** The axios interceptor automatically handles 401
-  > errors by using the Refresh Token to request a new Access Token,
-  > providing a seamless user session.
+---
 
-- **Authorization:** Backend middleware protects routes, ensuring only
-  > authenticated users can access resources like profiles and rooms.
+## 📡 API Reference
 
-- **Email Verification:** New users are blocked from logging in until
-  > they verify their email, preventing spam signups.
+### 🌐 REST API Endpoints
 
-- **CORS:** The backend uses cors middleware to restrict requests to the
-  > APP_ORIGIN.
+#### 🔐 Authentication
 
-## API Reference
+```http
+POST   /api/auth/register              # Register new user
+POST   /api/auth/login                 # Login user
+GET    /api/auth/logout                # Logout (requires auth)
+GET    /api/auth/refresh               # Refresh access token
+POST   /api/auth/email/verify          # Verify email with code
+POST   /api/auth/email/resend-verification  # Resend verification
+```
 
-### REST API
+#### 👤 User Management
 
-| **Endpoint**                        | **Method** | **Auth**      | **Description**                                  |
-|-------------------------------------|------------|---------------|--------------------------------------------------|
-| /api/auth/register                  | POST       | No            | Register a new user.                             |
-| /api/auth/login                     | POST       | No            | Log in a user.                                   |
-| /api/auth/logout                    | GET        | Yes           | Log out a user (clears cookies).                 |
-| /api/auth/refresh                   | GET        | Yes (Refresh) | Get a new access token.                          |
-| /api/auth/email/verify              | POST       | No            | Verify email with code.                          |
-| /api/auth/email/resend-verification | POST       | No            | Resend verification email.                       |
-| /api/user                           | GET        | Yes           | Get the current user\'s profile.                 |
-| /api/user/update_profile            | PUT        | Yes           | Complete profile setup (name, username, avatar). |
-| /api/room/create                    | POST       | Yes           | Create a new room.                               |
-| /api/room/fetchall                  | GET        | Yes           | Get a list of all public rooms.                  |
-| /api/room/getroom/:id               | GET        | Yes           | Get details for a single room.                   |
+```http
+GET    /api/user                       # Get current user profile (auth required)
+PUT    /api/user/update_profile        # Update profile (auth required)
+```
 
-### Socket.IO Events {#socket.io-events}
+#### 🎤 Room Management
 
-| **Event**           | **Direction** | **Description**                               | **Payload**                                            |
-|---------------------|---------------|-----------------------------------------------|--------------------------------------------------------|
-| join                | C → S         | A user joins a room.                          | { roomId: string, user: object }                       |
-| leave               | C → S         | A user explicitly leaves a room.              | { roomId: string }                                     |
-| relay-ice           | C → S         | Relay an ICE candidate to a specific peer.    | { peerId: string, icecandidate: object }               |
-| relay-sdp           | C → S         | Relay an SDP offer/answer to a specific peer. | { peerId: string, sessionDescription: object }         |
-| ice-candidate       | S → C         | An ICE candidate from a peer.                 | { peerId: string, icecandidate: object }               |
-| session-description | S → C         | An SDP offer/answer from a peer.              | { peerId: string, sessionDescription: object }         |
-| add-peer            | S → C         | A new peer has joined the room.               | { peerId: string, createOffer: boolean, user: object } |
-| remove-peer         | S → C         | A peer has left the room.                     | { peerId: string, userId: string }                     |
-| mute                | C ↔ S ↔ C     | A user mutes their microphone.                | { roomId: string, userId: string }                     |
-| unmute              | C ↔ S ↔ C     | A user unmutes their microphone.              | { roomId: string, userId: string }                     |
-| mute-info           | C → S → C     | Relays mute status to new joiners.            | { userId: string, isMute: boolean }                    |
+```http
+POST   /api/room/create                # Create new room (auth required)
+GET    /api/room/fetchall              # List all public rooms (auth required)
+GET    /api/room/getroom/:id           # Get room details (auth required)
+```
 
-## Contributing
+### 🔌 Socket.IO Events
 
-Contributions are welcome! Please fork the repository and submit a pull
-request.
+#### 📤 Client → Server Events
 
-## License
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `join` | `{ roomId: string, user: object }` | Join a room |
+| `leave` | `{ roomId: string }` | Leave a room |
+| `relay-ice` | `{ peerId: string, icecandidate: object }` | Relay ICE candidate |
+| `relay-sdp` | `{ peerId: string, sessionDescription: object }` | Relay SDP offer/answer |
+| `mute` | `{ roomId: string, userId: string }` | Mute microphone |
+| `unmute` | `{ roomId: string, userId: string }` | Unmute microphone |
+| `mute-info` | `{ userId: string, isMute: boolean }` | Share mute status |
 
-This project is licensed under the MIT License. See the
-[[LICENSE]{.underline}](https://github.com/kira14102005/gethory/blob/main/LICENSE)
-file for details.
+#### 📥 Server → Client Events
+
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `ice-candidate` | `{ peerId: string, icecandidate: object }` | ICE candidate from peer |
+| `session-description` | `{ peerId: string, sessionDescription: object }` | SDP from peer |
+| `add-peer` | `{ peerId: string, createOffer: boolean, user: object }` | New peer joined |
+| `remove-peer` | `{ peerId: string, userId: string }` | Peer left room |
+| `mute` | `{ roomId: string, userId: string }` | Peer muted |
+| `unmute` | `{ roomId: string, userId: string }` | Peer unmuted |
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] 📱 Mobile app (React Native)
+- [ ] 🎥 Video chat support
+- [ ] 💬 Text chat in rooms
+- [ ] 🎨 Custom room themes
+- [ ] 📊 Analytics dashboard
+- [ ] 🌍 Multi-language support
+- [ ] 🔔 Push notifications
+- [ ] 👥 User roles & permissions
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. 🍴 Fork the repository
+2. 🌿 Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. 💾 Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. 📤 Push to the branch (`git push origin feature/AmazingFeature`)
+5. 🔀 Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](https://github.com/kira14102005/gethory/blob/main/LICENSE) file for details.
+
+---
+
+
+### 🌟 Made with ❤️ by the Gethory Team
+
+**[⭐ Star us on GitHub](https://github.com/kira14102005/gethory)** | **[🐛 Report Bug](https://github.com/kira14102005/gethory/issues)** | **[💡 Request Feature](https://github.com/kira14102005/gethory/issues)**
+
