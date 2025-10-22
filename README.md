@@ -1,4 +1,5 @@
-# 🎙️ Gethory
+# 🎙️ Gethory | [Site](https://kira14102005.dpdns.org/)
+
 
 > Real-time WebRTC voice rooms with public/private access
 
