@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema(
         },
         avatar: {
             type: String,
+            default : 'profile.png' ,
             get: (avatar: string) => {
                 return `${BACKEND_URL}/api/storage/${avatar}`
             }

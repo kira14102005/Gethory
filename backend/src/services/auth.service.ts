@@ -34,14 +34,12 @@ export const CreateAccount = async (data: CreateAccountParams) => {
     })
     //Send this Verification Code to the User Mail
     console.log(code._id);
-    const htm  = renderVerificationEmail(code._id , user.email)
+    const htm = renderVerificationEmail(code._id, user.email)
     const respo = await sendMailJet({
         to: user.email, subject: "Verify email", text: "This is the verification code for your Gethory account",
         html: htm
     })
 
-    // if (error) console.log(error);
-    console.log(respo)
     const sessionExpiryDate = getOneHourFromNow()
     // Session Handling
     const session = await SessionModel.create({
@@ -298,15 +296,12 @@ export const resendEmailVerification = async (email: string) => {
     console.log(code._id)
 
     // Send verification email
-    const verifyURL = `${APP_ORIGIN}/auth/email/verify?code=${code._id}`;
-    const { error } = await sendMail({
-        to: user.email,
-        subject: "Verify your email",
-        text: "Check this link to verify your email",
-        html: `<h2>Click this link to verify Email</h2><br/><a href=${verifyURL} target="_blank">Click to verify</a>`
-    });
-
-    if (error) console.log("Error sending verification email:", error);
-
+    console.log(code._id);
+    const htm = renderVerificationEmail(code._id, user.email)
+    const respo = await sendMailJet({
+        to: user.email, subject: "Verify email", text: "This is the verification code for your Gethory account",
+        html: htm
+    })
+    
     return { message: "Verification email sent successfully" };
 }
