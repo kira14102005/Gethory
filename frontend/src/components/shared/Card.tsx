@@ -9,11 +9,11 @@ interface CardProps {
 }
 export function TitleCard(props: CardProps) {
     return <>
-        <div className='flex flex-col space-y-2'>
+        <div className='flex flex-col space-y-1'>
             <div className="text-[33.3px] h-[35px] text-[#1A202C]">
                 {props.title}
             </div>
-            <div className="text-[16px] text-[#4A5568] opacity-[60%] leading-none font-[10]">
+            <div className="text-[16px] text-[#4A5568] opacity-[60%] leading-none font-[10] ">
                 {props.subtitle}
             </div>
         </div>

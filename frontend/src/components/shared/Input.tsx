@@ -38,10 +38,10 @@ export function CodeInput(props: InputProps<CodeInterface>) {
         })
     }
     return <>
-        <div className="flex flex-col w-[75%]">
+        <div className="flex flex-col">
 
             <input type="text" name={props.label} id={props.id}
-                onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] rounded-md text-black text-[16px] font-100" />
+                onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] shadow rounded-md text-black text-[16px] font-100" />
         </div>
     </>
 
