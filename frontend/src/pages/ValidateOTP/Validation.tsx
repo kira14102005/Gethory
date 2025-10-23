@@ -33,11 +33,11 @@ export function ValidateOTP() {
         <div className={`flex flex-row w-screen ${styles.dtop} min-h-screen`}>
             <div className='md:w-[60%] w-[80%]'>
                 <LightNavbar />
-                <div className="w-[90%] flex flex-col pl-5 md:pl-9 md:w-[70%]">
+                <div className="w-full flex flex-col pl-5 md:pl-9 md:w-[70%]">
                     <div className='w-[85%]'>
                         <TitleCard title='Enter the Code' subtitle='Please enter the Verification Code' /></div>
                     <form onSubmit={verifyCode}>
-                        <div className='py-4 flex flex-col space-y-4 w-[85%] justify-between '>
+                        <div className='py-4 flex flex-col space-y-4 w-[85%] justify-between max-w-[250px]'>
                             <CodeInput id='103' value='code' setValue={setCode} />
 
 
@@ -48,7 +48,7 @@ export function ValidateOTP() {
 
                 </div>
             </div>
-            <div className='w-[40%] min-h-full overflow-y-fill bg-gradient-to-r [background-image:linear-gradient(to_right,_#1A202C_0%,_#394660_57%,_#566A92_100%)]'>
+            <div className='w-[30%] md:w-[40%] min-h-full overflow-y-fill bg-gradient-to-r [background-image:linear-gradient(to_right,_#1A202C_0%,_#394660_57%,_#566A92_100%)]'>
             </div>
         </div>
     </>
