@@ -5,19 +5,19 @@ import { motion } from "framer-motion";
 const pageVariants = {
   initial: {
     opacity: 0,
-    y  : -100,
+    x  : -100,
     scale: 0.98,
     rotate: 0
   },
   in: {
     opacity: 1,
-    y  : 0,
+    x  : 0,
     scale: 1,
     rotate: 0
   },
   out: {
     opacity: 0,
-    y  : 100,
+    x : 100,
     scale: 1.01,
     rotate: 0
   }
@@ -25,8 +25,8 @@ const pageVariants = {
 
 const pageTransition = {
   type: "spring",
-  stiffness: 70,
-  damping: 20
+  stiffness: 90,
+  damping: 15
 };
 
 const AnimatedPage = ({ children } :  {children : React.ReactNode}) => (
