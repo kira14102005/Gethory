@@ -19,7 +19,7 @@ export function SigninInput(props: InputProps<UserInfoInterface>) {
         })
     }
     return <>
-        <div className="flex flex-col w-[75%]">
+        <div className="flex flex-col ">
             <label className="text-black text-[22px]" htmlFor={props.label}>{props.label}</label>
             <input type="text" name={props.label} id={props.id}
                 onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] rounded-md text-black text-[16px] font-100" />
@@ -38,10 +38,10 @@ export function CodeInput(props: InputProps<CodeInterface>) {
         })
     }
     return <>
-        <div className="flex flex-col w-[75%]">
+        <div className="flex flex-col">
 
             <input type="text" name={props.label} id={props.id}
-                onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] rounded-md text-black text-[16px] font-100" />
+                onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] shadow rounded-md text-black text-[16px] font-100" />
         </div>
     </>
 
@@ -79,8 +79,8 @@ export function GreyInput({ onchange, value }: { onchange: (e: any) => void, val
 import SearchIcon from '@mui/icons-material/Search';
 export function SearchInput() {
     return <>
-        <div className="bg-[#414A5B] opacity-60 rounded-full p-1 pl-3 flex flex-row">
-            <input type="text" className="bg-transparent rounded-md" />
+        <div className="bg-[#414A5B] opacity-60 rounded-full p-1 flex flex-row">
+            <input type="text" className="bg-transparent rounded-md w-full" />
             <SearchIcon />
         </div>
 

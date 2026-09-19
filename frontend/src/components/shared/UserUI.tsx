@@ -14,16 +14,24 @@ export const ProfileIcon = ({ containLogout, }: { containLogout?: boolean }) => 
     const avatar = useSelector(selectUser)?.avatar ?? ''
     const name = useSelector(selectUser)?.name ?? ''
     return <>
-        <div className="flex flex-row items-center ">
-            <span className="text-[20px] text-[#1A202C] text-white mr-2">
+        <div className="flex flex-row items-center space-x-2">
+            <span className="hidden md:block text-[#1A202C] text-white">
                 Hello {name}
             </span>
-            <div className="w-[45px] h-[45px] rounded-full bg-white flex items-center overflow-hidden justify-center items-center">
-                <Link to='/profile'><img className="w-[90%] h-[90%] object-cover" src={avatar} alt="profile" />
+            <div className="w-[45px] h-[45px] rounded-full bg-white overflow-hidden">
+                <Link
+                    to='/profile'
+                    className="w-full h-full flex items-center justify-center"
+                >
+                    <img
+                        className="w-[95%] h-[95%] object-cover rounded-full"
+                        src={avatar}
+                        alt="profile"
+                    />
                 </Link>
             </div>
-            {containLogout && <button className="ml-2 p-2 rounded-full hover:border-white
-            border border-transparent aspect-square flex items-center justify-center" onClick={async () => {
+            {containLogout && <button className="rounded-full hover:border-white
+            border border-transparent aspect-square flex items-center p-1 justify-center" onClick={async () => {
                     await handleLogout(dispatch, navigate)
                 }}>
                 <LogoutIcon fontSize="small" />
