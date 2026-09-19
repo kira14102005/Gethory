@@ -23,6 +23,7 @@ function appErrorHandler(res: Response, err: Apperror) {
 }
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     console.log(req.path)
+    console.error("Error Handler:", err);
     if(req.path === REFRESH_PATH){
         clearAuthCookies(res);
     }
