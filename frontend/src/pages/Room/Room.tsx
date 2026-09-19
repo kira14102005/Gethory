@@ -34,10 +34,10 @@ const Room = () => {
     }, [showRoomModel])
     return (
         <SectionType2>
-            <div className="flex h-full w-full justify-center">
-                <div className="flex flex-col w-full h-full place-items-center" style={{ opacity: opacity }}>
+            <div className="flex justify-center w-full px-3 md:px-6 py-4 h-full">
+                <div className="flex flex-col w-full h-full place-items-center space-y-4" style={{ opacity: opacity }}>
                     <VoiceBar onclick={handleClick} />
-                    <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 w-full h-full">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 w-full">
 
                         {meetingArr.map((meet: MeetingDetailsProps, i) => {
                             return <MeetingCard key={i}
@@ -56,7 +56,6 @@ const Room = () => {
             </div>
 
         </SectionType2>
-
     )
 }
 
@@ -65,8 +64,10 @@ export function VoiceBar({ onclick }: { onclick: () => void }) {
         <>
             <div className="flex w-full h-fit flex-row items-center justify-between">
                 <MenuCard title="All voice rooms" />
-                <SearchInput />
-                <CreateRoomButton name="Start a room" onclick={onclick} />
+                <span className="hidden md:flex md:w-2/6 lg:w-1/4 ">
+                    <SearchInput />
+                </span>
+                <CreateRoomButton name="Start room" onclick={onclick} />
             </div>
         </>
     )

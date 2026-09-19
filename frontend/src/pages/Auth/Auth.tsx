@@ -8,7 +8,7 @@ import './Auth.module.css'
 import { Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { activate } from "../../http";
+import { activateUser } from "../../http";
 import { updateUserProfile } from "../../store/authSlice";
 import { selectActivate, selectAvatar, selectName, selectUsername } from "../../store/activateSelectors";
 import { setAvatar, setName, setUsername } from "../../store/activateSlice";
@@ -39,7 +39,7 @@ export function Auth() {
         setIsUpdating(true);
 
         try {
-            const res = await activate(currentActiveState);
+            const res = await activateUser(currentActiveState);
             //@ts-ignore
             const updatedUser = res.data.user;
 
@@ -104,7 +104,7 @@ export const MainCard = memo(
             <div className="relative w-full h-full flex flex-col items-center justify-center ">
                 <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
                 </div>
-                <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
+                <div className="absolute inset-0 z-10 w-[80%]mx-auto flex flex-col items-center py-5">
                     <LighttitleCard title="What Should We Call You?" />
                     <AuthInput label="name" value={localName} field="name" placeholder="Enter Your Name" handleChange={handleChange} />
                     <div className="my-6 w-full flex flex-row justify-center w-[80%]">
@@ -125,7 +125,7 @@ export const MainCard = memo(
 export const Step2Card = memo(({ setStep }: { setStep: React.Dispatch<React.SetStateAction<number>> }) => {
     const name = useSelector(selectName)
     const dispatch = useDispatch()
-    const initialState = useSelector(selectAvatar) ?? './profile.png'
+    const initialState = useSelector(selectAvatar) ?? '/profile.png'
     const [image, setImage] = useState(initialState)
     const displayString = `Okay ${name}, how's this avatar?`
     function captureImage(e: any) {
@@ -144,7 +144,7 @@ export const Step2Card = memo(({ setStep }: { setStep: React.Dispatch<React.SetS
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
             <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
             </div>
-            <div className="absolute inset-0 z-10 w-[80.67%] h-[75%] max-h-[400px] md:max-h-[300px]  mx-auto flex flex-col items-center justify-around ">
+            <div className="absolute inset-0 z-10 w-[80.67%] h-[75%] max-h-[400px] md:max-h-[300px]  mx-auto flex flex-col items-center justify-around py-5">
                 <LighttitleCard title={displayString} />
                 <div className="flex flex-col items-center justify-evenly w-full">
                     <AvatarComponent img={image} />
@@ -180,7 +180,7 @@ export const Step3Card = memo(({ setStep }: StepProps) => {
         <div className="relative w-full h-full flex flex-col items-center justify-center ">
             <div className="w-[80.67%] h-[75%] bg-[#0B1D23] rounded-2xl mx-auto absolute inset-0 z-0 blur-lg">
             </div>
-            <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center ">
+            <div className="absolute inset-0 z-10 w-[80.67%] h-[50%] mx-auto flex flex-col items-center py-5 ">
                 <LighttitleCard title="Pick a username" />
                 <AuthInput label="Username" value={localusername} field="username" placeholder="Choose your username" handleChange={handleChange} />
                 <div className="my-6 w-full flex flex-row justify-center w-[80%]">
