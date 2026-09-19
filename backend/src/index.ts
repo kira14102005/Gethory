@@ -33,7 +33,7 @@ app.use(cors({
 }))
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
-app.use("/storage", express.static(path.join(__dirname, "/storage"))); app.use(cookieParser())
+app.use("/api/storage", express.static(path.join(__dirname, "/storage"))); app.use(cookieParser())
 app.get("/error", catchError(async (req: Request, res: Response, next: NextFunction) => {
     console.log("Hello")
     throw new Error("booo");

@@ -1,7 +1,7 @@
 import { CookieOptions, Response } from "express"
 import { NODE_ENV } from "../constants/env"
 import { get30daysfromNow, getOneHourFromNow } from "./date"
-export const REFRESH_PATH = '/auth/refresh'
+export const REFRESH_PATH = '/api/auth/refresh'
 
 type Params = {
     res: Response,
