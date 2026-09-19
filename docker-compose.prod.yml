@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mongodb:
-    image: mongo:latest
+    image: mongo:6.0
     container_name: mongodb
     restart: always
     volumes:
@@ -25,8 +25,8 @@ services:
 
   frontend:
     build:
-      context: .
-      dockerfile: ./Dockerfile.prod
+      context: ./frontend
+      dockerfile: Dockerfile.prod
     container_name: frontend
     restart: always
     ports:
