@@ -8,6 +8,7 @@ const catchError = (control: AsyncController): AsyncController => {
         try {
             await control(req, res, next)
         } catch (error) {
+            console.error("Error in async controller:", error);
             next(error)
         }
     }

@@ -7,7 +7,9 @@ import { UpdateUserSchema } from "./user.schema";
 
 export const getUserController = catchError(async (req, res, next) => {
     const { userId, sessionId } = req
+    console.log("User Controller1 : ", userId, sessionId)
     const user = await User.findById(userId)
+    console.log("User Controller2 : ", userId, sessionId, user)
     appAssert(user, HTTP.NOT_FOUND, "User Not Exists");
     res.json({
         msg: "Your Details",
