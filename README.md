@@ -76,12 +76,71 @@ sequenceDiagram
     SignalingServer-->>ClientA: Joined
     ClientB->>SignalingServer: Join Room
     SignalingServer-->>ClientB: Joined
-    SignalingServer->>ClientA: New Peer (ClientB)
+    SignalingServer-->>ClientA: New Peer (ClientB)
     ClientA->>ClientB: Offer (SDP)
     ClientB->>ClientA: Answer (SDP)
     ClientA->>ClientB: ICE Candidate
     ClientB->>ClientA: ICE Candidate
-    ClientA<->>ClientB: Peer-to-Peer Audio Stream
+    ClientA<<->>ClientB: Peer-to-Peer Audio Stream
+```
+
+## NGINX -- Single Public Entrypoint
+
+```text
+                    Internet / Browser
+                           │
+                           │ HTTPS :443
+                           │ HTTP  :80
+                           ▼
+                 ┌───────────────────┐
+                 │   NGINX           │
+                 │   frontend        │
+                 │                   │
+                 │  Single Entry     │
+                 │     Point         │
+                 └─────────┬─────────┘
+                           │
+              ┌────────────┼─────────────┐
+              │            │             │
+              ▼            ▼             ▼
+         Static files     API       WebSocket
+         / /assets        /api       /socket.io
+              │            │             │
+              ▼            ▼             ▼
+         /var/www/html  backend:3000  backend:3000
+                           │
+                           ▼
+                       MongoDB
+                    mongodb:27017
+```
+
+### HTTPS Client Request
+
+```text
+Browser
+   │
+   │ https://kira14102005.dpdns.org
+   ▼
+VPS :443
+   │
+   ▼
+frontend :443
+   │
+   ▼
+Nginx
+```
+
+### Docker Network Management
+
+```text
+             Docker Compose network
+        ┌──────────────────────────────┐
+        │                              │
+        │ frontend ───► backend ───► mongodb
+        │     │                        │
+        │     └── Nginx                │
+        │                              │
+        └──────────────────────────────┘
 ```
 
 ## Tech Stack
