@@ -9,7 +9,7 @@ export function Profile() {
             <div className='absolute text-white z-10 grid grid-cols-1 md:grid-cols-2 justify-between p-4 mt-5' >
                 <ProfileBox avatar={user?.avatar ?? '/profile.png'} name={user?.name ?? 'Default_User'} username={user?.username ?? "default_user1"} followers={15} following={12} />
                 <FollowersBox followers={12} following={33} />
-                <UserDescBox desc='Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium cumque dignissimos architecto minima ea adipisci ex sequi dolorum. Consectetur, vitae.' />
+                <UserDescBox desc={`This is the description for the user. User Name: ${user?.name ?? 'Default_User'}\nUsername: ${user?.username ?? 'default_user1'}`} />
             </div>
         </Section>
     </>
