@@ -57,7 +57,7 @@ export function Register() {
                             <form onSubmit={handleSubmit} className="flex flex-col space-y-4 w-[75%]">
                                 <div className="flex flex-col space-y-1">
                                     <SigninInput value={'email'} setValue={setUserinfo} label="Email" id="101" placeholder="Enter your email" />
-                                    <SigninInput value={'password'} setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
+                                    <SigninInput value={'password'} setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" type="password"/>
                                 </div>
                                 <LoginSubmitButton name="Register" onclick={() => { }} />
                             </form>

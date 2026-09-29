@@ -112,7 +112,7 @@ export function Signin() {
 
                         <form onSubmit={handleSignin} className="flex flex-col space-y-4 w-[75%]">
                             <div className="flex flex-col space-y-1"><SigninInput setValue={setUserinfo} label="Email" id="101" placeholder="Enter your email" value="email" />
-                                <SigninInput value="password" setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" />
+                                <SigninInput value="password" setValue={setUserinfo} label="Password" id="102" placeholder="Enter your password" type="password" />
                             </div>
                             <LoginSubmitButton name="Login" onclick={() => { }} />
                         </form>
