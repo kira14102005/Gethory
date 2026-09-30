@@ -1,3 +1,7 @@
+import { useState } from "react";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 interface InputProps<T> {
     label?: string,
     placeholder?: string,
@@ -13,6 +17,8 @@ export interface UserInfoInterface {
 }
 
 export function SigninInput(props: InputProps<UserInfoInterface>) {
+    const [showPassword, setShowPassword] = useState(false);
+    const isPassword = props.type === "password";
     function handleUserInfoChange(e: any) {
         const field = props.value ?? ''
         props.setValue((u: UserInfoInterface) => {
@@ -22,8 +28,20 @@ export function SigninInput(props: InputProps<UserInfoInterface>) {
     return <>
         <div className="flex flex-col ">
             <label className="text-black text-[22px]" htmlFor={props.label}>{props.label}</label>
-            <input type={props.type || "text"} name={props.label} id={props.id}
-                onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] rounded-md text-black text-[16px] font-100" />
+            <div className="relative w-full">
+                <input type={isPassword ? (showPassword ? "text" : "password") : (props.type || "text")} name={props.label} id={props.id}
+                    onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] rounded-md text-black text-[16px] font-100 pr-10" />
+                {isPassword && (
+                    <button
+                        type="button"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        onClick={() => setShowPassword((v) => !v)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-[#4A5568] hover:text-black focus:outline-none"
+                    >
+                        {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                    </button>
+                )}
+            </div>
         </div>
     </>
 
