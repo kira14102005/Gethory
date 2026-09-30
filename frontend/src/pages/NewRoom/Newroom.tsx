@@ -25,6 +25,8 @@ const Newroom = () => {
   const navigate = useNavigate()
   const [room, setRoom] = useState<RoomInterface | null>(null)
   const { id: roomId } = useParams()
+  // ponytail: absolute raised state lives here so re-emits are idempotent; Joinee only forwards it to the socket
+  const [raised, setRaised] = useState(false)
 
   const handleManualLeave = () => {
     navigate('/rooms', { replace: true });
@@ -51,26 +53,29 @@ const Newroom = () => {
       <div className="flex flex-col py-4 space-y-2 px-5 w-full">
         <div className="flex justify-between ">
           <MenuCard title={room?.topic ?? ""} />
-          <div className="flex space-x-3">  <ButtonWithLogo name="Raise hand" logo={FrontHandIcon} onclick={handleManualLeave} />
+          <div className="flex space-x-3">  <ButtonWithLogo name={raised ? "Lower hand" : "Raise hand"} logo={FrontHandIcon} onclick={() => setRaised(r => !r)} />
             <ButtonWithLogo name="Leave Quietly" logo={ExitToAppIcon} onclick={handleManualLeave} />
 
           </div>
         </div>
         <div>
-          <Joinee roomId={roomId} />
+          <Joinee roomId={roomId} raised={raised} />
         </div>
       </div>
     </div>
   )
 }
-const Joinee = ({ roomId }: { roomId: string | undefined }) => {
+const Joinee = ({ roomId, raised }: { roomId: string | undefined, raised: boolean }) => {
   const user = useSelector(selectUser)
   //@ts-ignore
-  const { clients, provideRef, handleMute } = useWebRTCVersion2(roomId, user)
+  const { clients, provideRef, handleMute, handleRaiseHand } = useWebRTCVersion2(roomId, user)
   const [isMute, setMute] = useState(true)
   useEffect(() => {
     handleMute(isMute, user?._id)
   }, [isMute])
+  useEffect(() => {
+    handleRaiseHand(raised, user?._id)
+  }, [raised])
 
   const handleMuteClick = (clientId: string) => {
 
@@ -88,6 +93,7 @@ const Joinee = ({ roomId }: { roomId: string | undefined }) => {
             <img className={styles.userAvatar}
               //@ts-ignore
               src={client.avatar} alt="" />
+            {client.raised && <span className={styles.raisedHand} role="img" aria-label="hand raised">👋</span>}
             <button onClick={() => { handleMuteClick(client._id) }} className={styles.micBtn}>{client.muted ? <MicOffIcon fontSize="inherit" /> : <MicIcon fontSize="inherit" />}</button>
           </div>
           <h4 className="text-sm text-center">{client.name?.split(' ')[0]}</h4>

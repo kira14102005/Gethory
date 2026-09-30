@@ -53,6 +53,23 @@
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+/* ponytail: emoji + CSS keyframes instead of a lottie/rive dep; swap if a richer animation matters */
+.raisedHand {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 28px;
+    line-height: 1;
+    transform-origin: bottom center;
+    animation: wave 1.2s ease-in-out infinite;
+}
+
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(20deg); }
+    75% { transform: rotate(-12deg); }
+}
+
 
 @media screen and (min-width: 0px) and (max-width: 500px) {
     .userHead {

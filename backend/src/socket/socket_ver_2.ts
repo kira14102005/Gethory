@@ -56,6 +56,17 @@ export const socketHandlerV2 = (socket: Socket) => {
         });
     });
 
+    socket.on(ACTIONS.RAISE_HAND, ({ roomId, userId, raised }) => {
+        const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+        clients.forEach((clientId) => {
+            io.to(clientId).emit(ACTIONS.RAISE_HAND, {
+                peerId: socket.id,
+                userId,
+                raised,
+            });
+        });
+    });
+
     socket.on(ACTIONS.MUTE_INFO, ({ userId, roomId, isMute }) => {
         const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
         clients.forEach((clientId) => {

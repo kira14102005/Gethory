@@ -5,7 +5,7 @@ import { socketInit } from "../sockets";
 import { ACTIONS } from "../sockets/actions";
 import { getIceServers } from "../store/getIceServers";
 
-export interface ClientInterface extends User { muted: boolean }
+export interface ClientInterface extends User { muted: boolean, raised: boolean }
 const joineeDummyData: ClientInterface[] = []
 
 export interface AudioInterface {
@@ -46,7 +46,7 @@ export const useWebRTCVersion2 = (roomId: string, user: User) => {
         const initChat = async () => {
             socket.current = socketInit();
             await captureMedia();
-            addNewClient({ ...user, muted: true }, () => {
+            addNewClient({ ...user, muted: true, raised: false }, () => {
                 const localElement = audioElements.current[user._id];
                 if (localElement) {
                     localElement.volume = 0;
@@ -66,6 +66,10 @@ export const useWebRTCVersion2 = (roomId: string, user: User) => {
             });
             socket.current.on(ACTIONS.UNMUTE, ({ userId }: { peerId: string, userId: string }) => {
                 handleSetMute(false, userId);
+            });
+            // ponytail: no RAISE_INFO sync for late joiners (unlike MUTE_INFO); they see hands on next toggle, add if it matters
+            socket.current.on(ACTIONS.RAISE_HAND, ({ userId, raised }: { peerId: string, userId: string, raised: boolean }) => {
+                handleSetRaised(raised, userId);
             });
             socket.current.emit(ACTIONS.JOIN, {
                 roomId,
@@ -107,7 +111,7 @@ export const useWebRTCVersion2 = (roomId: string, user: User) => {
                 connections.current[peerId].ontrack = ({
                     streams: [remoteStream],
                 }) => {
-                    addNewClient({ ...remoteUser, muted: true }, () => {
+                    addNewClient({ ...remoteUser, muted: true, raised: false }, () => {
                         // get current users mute info
                         const currentUser = clientsRef.current?.find(
                             (client) => client._id === user._id
@@ -215,6 +219,18 @@ export const useWebRTCVersion2 = (roomId: string, user: User) => {
                     setClients(allConnectedClients);
                 }
             }
+            async function handleSetRaised(raised: boolean, userId: any) {
+                const clientIdx = clientsRef.current
+                    ?.map((client) => client._id)
+                    .indexOf(userId);
+                const allConnectedClients = JSON.parse(
+                    JSON.stringify(clientsRef.current)
+                );
+                if (clientIdx !== undefined && clientIdx > -1) {
+                    allConnectedClients[clientIdx].raised = raised;
+                    setClients(allConnectedClients);
+                }
+            }
         };
 
         initChat();
@@ -233,6 +249,7 @@ export const useWebRTCVersion2 = (roomId: string, user: User) => {
             socket.current?.off(ACTIONS.SESSION_DESCRIPTION);
             socket.current?.off(ACTIONS.MUTE);
             socket.current?.off(ACTIONS.UNMUTE);
+            socket.current?.off(ACTIONS.RAISE_HAND);
         };
     }, []);
 
@@ -267,9 +284,21 @@ export const useWebRTCVersion2 = (roomId: string, user: User) => {
         }
     };
 
+    // ponytail: emits absolute raised state (not a toggle) so re-fires are idempotent
+    const handleRaiseHand = (raised: boolean, userId: any) => {
+        if (userId === user._id) {
+            socket.current?.emit(ACTIONS.RAISE_HAND, {
+                roomId,
+                userId: user._id,
+                raised,
+            });
+        }
+    };
+
     return {
         clients,
         provideRef,
         handleMute,
+        handleRaiseHand,
     };
 };
