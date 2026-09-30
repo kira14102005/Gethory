@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { type ClientInterface } from "./useWebRTC"
-export const useStateWithCallback = (initialState : any)=>{
-    const [state , setState] = useState<ClientInterface[]>(initialState)
+// ponytail: generic over caller state; was hard-coded to v1 ClientInterface which broke v2's extra fields
+export const useStateWithCallback = <T,>(initialState : T)=>{
+    const [state , setState] = useState<T>(initialState)
     const cbRef  = useRef<undefined | Function>(null)
     const updateState = useCallback((newState : any , cb ?: ()=>any)=>{
         cbRef.current  = cb
