@@ -37,7 +37,13 @@ export function Signin() {
         }
     }, [error, navigate]);
 
-    // ponytail: full-page redirect to backend OAuth (no SPA/popup/token logic); add backend /auth/google|github routes first, currently 404 until then
+    // ponytail: surfaces backend ?oauth=failed redirect; Register needs none (failURL always lands here)
+    useEffect(() => {
+        if (new URLSearchParams(window.location.search).get("oauth") === "failed")
+            setError("Social login failed. Please try again or use email.");
+    }, []);
+
+    // ponytail: full-page redirect to backend OAuth (no SPA/popup/token logic); needs provider keys in backend .env
     const handleOAuth = (p: "google" | "github") => { window.location.href = `${baseURL}/auth/${p}`; };
 
     function handleSignin(e: FormEvent<HTMLFormElement>) {        e.preventDefault()

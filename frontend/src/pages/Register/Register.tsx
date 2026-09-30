@@ -16,7 +16,7 @@ export function Register() {
     })
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    // ponytail: full-page redirect to backend OAuth (no SPA/popup/token logic); add backend /auth/google|github routes first, currently 404 until then
+    // ponytail: full-page redirect to backend OAuth (no SPA/popup/token logic); needs provider keys in backend .env
     const handleOAuth = (p: "google" | "github") => { window.location.href = `${baseURL}/auth/${p}`; };
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()

@@ -14,6 +14,8 @@ const failURL = `${APP_ORIGIN}/signin?oauth=failed`;
 // ponytail: no `state` CSRF check; add signed state cookie if forged-login becomes a threat
 export const oauthStartController = (provider: Provider) =>
   catchError(async (_req, res) => {
+    // ponytail: fail fast to signin when provider keys unconfigured instead of bouncing off a provider error page
+    if ((provider === "google" && !GOOGLE_CLIENT_ID) || (provider === "github" && !GITHUB_CLIENT_ID)) return res.redirect(failURL);
     const redirect = callbackURL(provider);
     const url =
       provider === "google"
