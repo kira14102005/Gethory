@@ -30,15 +30,15 @@ export function SigninInput(props: InputProps<UserInfoInterface>) {
             <label className="text-black text-[22px]" htmlFor={props.label}>{props.label}</label>
             <div className="relative w-full">
                 <input type={isPassword ? (showPassword ? "text" : "password") : (props.type || "text")} name={props.label} id={props.id}
-                    onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border -[#A0AEC0] rounded-md text-black text-[16px] font-100 pr-10" />
+                    onChange={handleUserInfoChange} placeholder={props.placeholder} className="p-1 px-2 w-full border border-[#A0AEC0] rounded-md text-black text-[16px] font-100 pr-10" />
                 {isPassword && (
                     <button
                         type="button"
                         aria-label={showPassword ? "Hide password" : "Show password"}
                         onClick={() => setShowPassword((v) => !v)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-[#4A5568] hover:text-black focus:outline-none"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-[#7d7e7f] hover:text-black focus:outline-none"
                     >
-                        {showPassword ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+                        <span className="bottom-px relative" >{showPassword ? <VisibilityOffIcon sx={{ fill: "#abacad" }} fontSize="inherit" />: <VisibilityIcon sx={{ fill: '#abacad' }}  fontSize="inherit" />}</span>
                     </button>
                 )}
             </div>
