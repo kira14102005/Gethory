@@ -16,12 +16,13 @@ export const updateUser = async (
     let imgPath: string | undefined;
 
     if (avatar) {
-        const buffer = Buffer.from(avatar.split(",")[1], "base64");
-        const image = await Jimp.read(buffer);
+        const [header, data] = avatar.split(",");
+        const buffer = Buffer.from(data, "base64");
+        // ponytail: ext from client-sent mime, allowlisted so it only ever picks a static-served image suffix
+        const sub = (header.split(";")[0].split(":")[1] ?? "image/png").split("/")[1]?.split("+")[0] ?? "png";
+        const ext = ["png", "jpg", "jpeg", "gif", "webp", "bmp"].includes(sub) ? sub : "png";
 
-        image.resize(150, Jimp.AUTO);
-
-        imgPath = `${Date.now()}.${Math.floor(Math.random() * 1e6)}.png`;
+        imgPath = `${Date.now()}.${Math.floor(Math.random() * 1e6)}.${ext}`;
 
         const storageDir = path.join(process.cwd(), "storage");
 
@@ -31,7 +32,14 @@ export const updateUser = async (
 
         console.log("Saving avatar to:", filePath);
 
-        await image.writeAsync(filePath);
+        try {
+            const image = await Jimp.read(buffer);
+            image.resize(150, Jimp.AUTO);
+            await image.writeAsync(filePath);
+        } catch {
+            // ponytail: Jimp can't decode webp and friends, stores original unresized; add sharp if uniform 150px for all formats matters
+            await fs.promises.writeFile(filePath, buffer);
+        }
     }
 
     const updateObject: any = {
