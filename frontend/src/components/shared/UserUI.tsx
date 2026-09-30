@@ -56,7 +56,7 @@ export function ProfileBox(props: UserInfo) {
         <div className="w-full flex flex-col">
             <div className="w-full flex flex-row md:justify-around justify-evenly">
                 <div className="w-[20vw] h-[20vw] md:w-[10vw] md:h-[10vw]  border-[3px] border-[#4A5568] bg-[#DB9C50] rounded-full flex items-center justify-center ">
-                    <div className="w-[90%] h-[90%] overflow-hidden rounded-full"> <img src={props.avatar} alt="" className="cover" />
+                    <div className="w-[90%] h-[90%] overflow-hidden rounded-full"> <img src={props.avatar} alt="" className="w-full h-full cover" />
                     </div>
                 </div>
                 <div className="h-full flex flex-col justify-center ">
