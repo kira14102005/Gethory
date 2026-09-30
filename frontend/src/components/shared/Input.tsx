@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 interface InputProps<T> {
     label?: string,
@@ -38,7 +38,7 @@ export function SigninInput(props: InputProps<UserInfoInterface>) {
                         onClick={() => setShowPassword((v) => !v)}
                         className="absolute right-2 top-1/2 -translate-y-1/2 text-[#4A5568] hover:text-black focus:outline-none"
                     >
-                        {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                        {showPassword ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
                     </button>
                 )}
             </div>
