@@ -6,7 +6,7 @@ import { LightNavbar } from "../../components/shared/Navigation";
 import styles from './Signin.module.css'
 import { TitleCard } from "../../components/shared/Card";
 import { useState, type FormEvent, useEffect } from "react";
-import { api } from "../../http";
+import { api, baseURL } from "../../http";
 import { Errorpopup } from "../../components/shared/Error";
 import { setUser, type User } from "../../store/authSlice";
 import { useDispatch } from "react-redux";
@@ -37,8 +37,10 @@ export function Signin() {
         }
     }, [error, navigate]);
 
-    function handleSignin(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault()
+    // ponytail: full-page redirect to backend OAuth (no SPA/popup/token logic); add backend /auth/google|github routes first, currently 404 until then
+    const handleOAuth = (p: "google" | "github") => { window.location.href = `${baseURL}/auth/${p}`; };
+
+    function handleSignin(e: FormEvent<HTMLFormElement>) {        e.preventDefault()
 
         setError(null);
         setShowError(false);
@@ -99,10 +101,10 @@ export function Signin() {
                     <div className="flex flex-col w-full" >
                         <TitleCard subtitle="Log in to your account to continue" title="WELCOME BACK" />
                         <div className="my-3">
-                            <SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
+                            <SigninButton name="GitHub" path="/github.png" onclick={() => handleOAuth("github")} />
                         </div>
 
-                        <SigninButton name="Google" path="/google.png" onclick={() => { }} />
+                        <SigninButton name="Google" path="/google.png" onclick={() => handleOAuth("google")} />
 
                         <div className="w-[80%]  flex flex-row mt-2 items-center">
                             <div className="w-[44%] h-[1px] border border-black"></div>

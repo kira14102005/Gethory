@@ -6,7 +6,7 @@ import { LightNavbar } from "../../components/shared/Navigation";
 import styles from './Register.module.css'
 import { TitleCard } from "../../components/shared/Card";
 import { useState, type FormEvent } from "react";
-import { api } from "../../http";
+import { api, baseURL } from "../../http";
 import { setUser, type User } from "../../store/authSlice";
 import { useDispatch } from "react-redux";
 export function Register() {
@@ -16,6 +16,8 @@ export function Register() {
     })
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    // ponytail: full-page redirect to backend OAuth (no SPA/popup/token logic); add backend /auth/google|github routes first, currently 404 until then
+    const handleOAuth = (p: "google" | "github") => { window.location.href = `${baseURL}/auth/${p}`; };
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
         console.log(userInfo)
@@ -40,10 +42,10 @@ export function Register() {
                         <div className="flex flex-col w-full" >
                             <TitleCard title="WELCOME" subtitle="Create your account here!" />
                             <div className="my-3">
-                                <SigninButton name="GitHub" path="/github.png" onclick={() => { }} />
+                                <SigninButton name="GitHub" path="/github.png" onclick={() => handleOAuth("github")} />
                             </div>
 
-                            <SigninButton name="Google" path="/google.png" onclick={() => { }} />
+                            <SigninButton name="Google" path="/google.png" onclick={() => handleOAuth("google")} />
 
                             <div className="w-[80%]  flex flex-row mt-2 items-center">
                                 <div className="w-[44%] h-[1px] border border-black">

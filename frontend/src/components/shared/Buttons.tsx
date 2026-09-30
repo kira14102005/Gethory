@@ -55,7 +55,7 @@ export function ButtonWithLogo(
 
 export function SigninButton(props: ButtonProps) {
     return <>
-        <button className="bg-[#D9D9D9] hover: border border-black p-1 rounded-md flex flex-row justify-center items-center w-[75%]">
+        <button onClick={props.onclick} className="bg-[#D9D9D9] hover: border border-black p-1 rounded-md flex flex-row justify-center items-center w-[75%]">
             <div className="flex flex-row w-fit items-center ">
                 <img className="w-[24px] h-[24px] mx-2" src={props.path} alt="" />
                 <span className="text-[#1A202C]">{props.name}</span>
