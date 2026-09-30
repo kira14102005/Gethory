@@ -20,3 +20,7 @@ export const ACCESS_TOKEN_EXPIRY : SignOptions['expiresIn'] = getEnv('ACCESS_TOK
 export const BACKEND_URL = getEnv('BACKEND_URL' , 'http://localhost:3000')
 export const MJ_APIKEY_PUBLIC = getEnv('MJ_APIKEY_PUBLIC' , 'mailjet-public-key')
 export const MJ_APIKEY_PRIVATE = getEnv('MJ_APIKEY_PRIVATE' , 'mailjet-private-key')
+export const GOOGLE_CLIENT_ID = getEnv('GOOGLE_CLIENT_ID', '')
+export const GOOGLE_CLIENT_SECRET = getEnv('GOOGLE_CLIENT_SECRET', '')
+export const GITHUB_CLIENT_ID = getEnv('GITHUB_CLIENT_ID', '')
+export const GITHUB_CLIENT_SECRET = getEnv('GITHUB_CLIENT_SECRET', '')
